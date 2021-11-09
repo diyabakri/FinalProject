@@ -35,8 +35,6 @@ int main()
 
     FILE *results_f = fopen(RES_PATH, "w");
 
-    printf("%E\n",CHARGE);
-
     double l_sqr = calc_l_sqr(MASS, CHARGE, BOHR_R); //~1.1117*10^-54
 
     long begin_time = clock();
@@ -63,8 +61,9 @@ void sim_ele(FILE *res_f, double l_sqr, sim_init *config)
     double n = 2;
     double i = 0;
 
-    double lco = (n-i);// n = 2 i = 1 loc = 1
-    lco*=lco;// 1*1 = 1
+    double H_mult = (n-i);// n = 2 i = 1 loc = 1 loc => L coeff
+    L*=H_mult;
+    H_mult*=H_mult;// 1*1 = 1
 
     double* rMinMax = clac_rmin_rmax(n,i);
 
@@ -73,7 +72,7 @@ void sim_ele(FILE *res_f, double l_sqr, sim_init *config)
     T = 0;
     R = R_MAX;
     R_DOT = 0;
-    R_DOT_DOT = calc_R_dot_dot(MASS, R, CHARGE, lco*l_sqr) * T_INTERVAL;
+    R_DOT_DOT = calc_R_dot_dot(MASS, R, CHARGE, H_mult*l_sqr) * T_INTERVAL;
     THETA = 0;
     THETA_DOT = calc_theta_dot(L, MASS, R) * T_INTERVAL;
 
@@ -92,7 +91,7 @@ void sim_ele(FILE *res_f, double l_sqr, sim_init *config)
         R_DOT*=T_INTERVAL;
         R = R+R_DOT;
         THETA = THETA + THETA_DOT;
-        R_DOT_DOT = calc_R_dot_dot(MASS, R, CHARGE,lco* l_sqr) * T_INTERVAL;
+        R_DOT_DOT = calc_R_dot_dot(MASS, R, CHARGE,H_mult* l_sqr) * T_INTERVAL;
         THETA_DOT = calc_theta_dot(L, MASS, R) * T_INTERVAL ;
 
         if (THETA > 2 * PI)

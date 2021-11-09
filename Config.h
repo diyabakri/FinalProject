@@ -6,21 +6,29 @@
 #include <string.h>
 #include "Reads.h"
 #include "strParce.h"
-#define CONFIG_PATH "config.ini"
+#define CONFIG_PATH "config.ini" // url of where the values are saved
 
 
 typedef struct sim_init{
 
-    int itrs;
-    double init_r;
-    double electron_charge;
-    double electron_mass;
-    double time_intervolt;
-    double l;
-    char* results_path; 
+    int itrs; // number of iteration to run
+    double init_r; // statring value of R in cm
+    double electron_charge; // electron charge value = 4.803e-10 esu
+    double electron_mass;  // electron maxx value = 9.109383e-28 g
+    double time_intervolt; // time elapsed between each iteration  
+    double l; // inital value of l if needes to be changed
+    char* results_path; // url for the results to saved in
 
 }sim_init;
+/*
 
+    Reads the inital configration values from the config.ini file and stores them in sim_init var 
+
+    @params ()
+    @return sim_init* config which contains all the base values to start the simulation 
+
+
+*/
 sim_init* getInitVals();
 
 #endif // CONFIG_H_
