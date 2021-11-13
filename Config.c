@@ -11,18 +11,22 @@ sim_init* getInitVals(){
     sim_init* config = (sim_init*)malloc(sizeof(sim_init));
    
 
-    config->itrs = parceInt(configLines[0],strlen(configLines[0]));
-    config->init_r = parceDouble(configLines[1],strlen(configLines[1]));
-    config->electron_charge = parceDouble(configLines[2],strlen(configLines[2]));
-    config->electron_mass = parceDouble(configLines[3],strlen(configLines[3]));
-    config->time_intervolt = parceDouble(configLines[4],strlen(configLines[4]));
-    config->l = parceDouble(configLines[5],strlen(configLines[5])); 
-    config->results_path = get_filepath(configLines[6]);
+    config->itrs = parceInt(configLines[0]);
+    config->init_r = parceDouble(configLines[1]);
+    config->electron_charge = parceDouble(configLines[2]);
+    config->electron_mass = parceDouble(configLines[3]);
+    config->time_intervolt = parceDouble(configLines[4]);
+    config->l = parceDouble(configLines[5]); 
+    config->n = parceInt(configLines[6]);
+    config->log_p = parceInt(configLines[7]);
+    config->results_path = get_filepath(configLines[8]);
 
     for(int i = 0 ; i <length ; i++){
         free(configLines[i]);
     }
     free(configLines);
+
+    fclose(config_f);
 
     return config;
 

@@ -7,15 +7,18 @@ char* get_filepath(char* str){
     int length = strlen(str);
 
     for(int i = 0 ; i < length ; i++){
+        
         if(str[i] == '='){
             i+=2;
             int pathlength = strlen((str+i));
-            path = (char*)malloc(pathlength);
+            path = (char*)malloc(pathlength+1);
             strcpy(path,(str+i));
-            for(int j = pathlength-1 ; j> 0 ; j--){
+        
+            for(int j = pathlength ; j> 0 ; j--){
+        
                 if(path[j]=='\"'){
-                path[j] = '\0';
-                break;
+                    path[j] = '\0';
+                    break;
                 }
             }
             return path;

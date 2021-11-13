@@ -1,39 +1,63 @@
+from typing import List
 import numpy as np
 import matplotlib.pyplot as plt
 import subprocess as sp
 
-def get_R_Theta(currLine):
+def get_R_Theta(currLine):# extracts the value of "r" and "theta" from string
+
     r_index = currLine.find("r= ")+3
     th_index = currLine.find("th= ")+4
     
     r_val = currLine[r_index:]
     th_val = currLine[th_index:]
     
-
     r = (float)(r_val[:r_val.find("\t")])
     th = (float)(th_val[:th_val.find("\t")])
 
     return (tuple)([th,r])
 
+def getInitVals():
+
+    config = open("config.ini","r")
+    configLines = config.readlines()
+    itrs = (int)(configLines[0][configLines[0].find("=")+1:])
+    file_num = (int)(configLines[6][configLines[6].find("=")+1:])
+    log_p = (int)(configLines[7][configLines[7].find("=")+1:])
+    result_path =configLines[8][configLines[8].find("\"")+1:-2]
+    itrs = (int)(itrs/log_p)
+    return tuple([itrs,file_num,result_path])
+
 def main():
 
-    prog = sp.Popen(['./con'],stdout = sp.PIPE , stderr = sp.PIPE)
+    prog = sp.Popen(['./electronSimulation'])
     o,e = prog.communicate()
-    print(o.decode("ascii"))
+    # print(o.decode("ascii"))
 
+    colors = ['b.','g.','r.','c.','m.','y.','k.','w.']# ploting colors
+
+    plt.figure()
     plt.axes(projection = 'polar')
-    result_f = open("result.txt","r")
     
-    itrs = open("config.ini")
-    itrs = itrs.readline()
-    itrs = (int)(itrs[itrs.find("=")+1:])
-    for i in range(itrs):
-        currLine = result_f.readline()
-        curr_values = get_R_Theta(currLine)
-        plt.plot(curr_values[0],curr_values[1],'g.')
-    plt.show()
-    # plt.draw()
-    # plt.pause(5)
+    itrs , file_num , result_path = getInitVals()
+    
+    for i in range(file_num): 
+        
+        result_f = open(result_path+(str)(i)+".txt","r")
+    
+        for j in range(itrs):
+            currLine = result_f.readline()
+            curr_values = get_R_Theta(currLine)
+
+            if j < itrs-1:
+                plt.polar(curr_values[0],curr_values[1],colors[i%8])
+            else:#add lable to the final point of a simulation
+                plt.polar(curr_values[0],curr_values[1],colors[i%8],label = ('l = '+(str)(file_num-i)+'*H_BAR'))
+
+        result_f.close()
+
+    plt.legend(frameon=True, loc='lower center', ncol=3)
+    plt.draw()
+    plt.waitforbuttonpress(0)
     
 if(__name__ == "__main__"):
     main()

@@ -1,8 +1,9 @@
 #include "strParce.h"
 
 
-int parceInt(char* str ,  int n){
-    
+int parceInt(char* str){
+
+    int n = strlen(str);
     int num = 0;
     short sig = 1;
     for(int i = 0 ; i < n ; i++){
@@ -20,7 +21,9 @@ int parceInt(char* str ,  int n){
     return num;
 }
 
-long parceLong(char* str, int n){
+long parceLong(char* str){
+
+    int n = strlen(str);
     long num = 0;
     short sig = 1;
     for(int i = 0 ; i < n ; i++){
@@ -38,7 +41,9 @@ long parceLong(char* str, int n){
     return num;
 }
 
-short parceShort(char* str , int n){
+short parceShort(char* str){
+
+    int n = strlen(str);
     short num = 0;
     short sig = 1;
     for(int i = 0 ; i < n ; i++){
@@ -56,7 +61,9 @@ short parceShort(char* str , int n){
     return num;
 }
 
-float parceFloat(char* str ,  int n){
+float parceFloat(char* str){
+
+    int n = strlen(str);
     float num = 0;
     short sig = 1;
     short disp = 0;
@@ -72,8 +79,8 @@ float parceFloat(char* str ,  int n){
         }
         int curr_num = (int)(str[i]);
 
-        if(str[i]== 'E' || str[i]== 'e'){
-            powoft += parceInt((str+i),strlen((str+i)));
+        if(str[i]== 'E'){
+            powoft += parceInt((str+i));
             break;
         }else if((curr_num >= 0x30 && curr_num <= 0x39) || disp == 1){
             if(disp){
@@ -88,7 +95,9 @@ float parceFloat(char* str ,  int n){
     return num*pow(10,powoft);
 }
 
-double parceDouble(char* str , int n){
+double parceDouble(char* str){
+    
+    int n = strlen(str);
     double num = 0;
     short sig = 1;
     short disp = 0;
@@ -104,8 +113,8 @@ double parceDouble(char* str , int n){
         }
         int curr_num = (int)(str[i]);
 
-        if(str[i]== 'E'|| str[i]== 'e'){
-            powoft += parceInt((str+i),strlen((str+i)));
+        if(str[i]== 'E'){
+            powoft += parceInt((str+i));
             break;
         }else if((curr_num >= 0x30 && curr_num <= 0x39) || disp == 1){
             if(disp){

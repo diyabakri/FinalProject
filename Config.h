@@ -17,6 +17,8 @@ typedef struct sim_init{
     double electron_mass;  // electron maxx value = 9.109383e-28 g
     double time_intervolt; // time elapsed between each iteration  
     double l; // inital value of l if needes to be changed
+    int n; //the number of orbits to simulate.
+    int log_p; // the number of ittrations to skip before logging 
     char* results_path; // url for the results to saved in
 
 }sim_init;
