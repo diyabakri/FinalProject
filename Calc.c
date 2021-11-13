@@ -7,31 +7,20 @@ double calc_theta_dot(double l,double m,double r){
 
 double calc_R_dot_dot(double m , double r , double e , double l_sqr){
 
-    // printf("m = %E ,r = %E , e = %E  l = %E  \n",m,r,,l);
     double arg1,arg2;
     
     double r_sq = r*r; 
-
     
-    // printf("r = %E,rsqr = %E , rqubic = %E\n",r,r_sq,r*r_sq);
     arg1 = l_sqr;
     arg1/= m*r_sq*r;
     
-    // printf("arg1 %.*e\n",DECIMAL_DIG,arg1);
-
     arg2 = e*e;
     arg2/= r_sq;
     
-    // printf("arg2 %.*e\n",DECIMAL_DIG,arg2);
-
-
     arg1 = arg1-arg2;
 
-    // printf("arg1 %.*e\n",DECIMAL_DIG,arg1);
-
-    // printf("arg 1 = %.*E \n ",arg1,DECIMAL_DIG);
-    // printf("arg1 %E\n",0.000000007935);
     arg1/= m;
+
     return arg1;
 }
 
@@ -56,6 +45,7 @@ double* clac_rmin_rmax(double n , double i ){
     results[0] = results[1] = a;
     results[0]-= dis;
     results[1]+= dis;
+    
     results[0]*=BOHR_R;
     results[1]*=BOHR_R;
 
