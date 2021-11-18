@@ -1,5 +1,4 @@
 from typing import List
-import numpy as np
 import matplotlib.pyplot as plt
 import subprocess as sp
 
@@ -37,6 +36,7 @@ def main():
 
     plt.figure()
     plt.axes(projection = 'polar')
+
     
     itrs , file_num , result_path = getInitVals()
     
@@ -51,13 +51,13 @@ def main():
             if j < itrs-1:
                 plt.polar(curr_values[0],curr_values[1],colors[i%8])
             else:#add lable to the final point of a simulation
-                plt.polar(curr_values[0],curr_values[1],colors[i%8],label = ('l = '+(str)(file_num-i)+'*H_BAR'))
+                plt.polar(curr_values[0],curr_values[1],colors[i%8],label = ('l = '+(str)(file_num-i)+'$\hbar$'))
 
         result_f.close()
 
     plt.legend(frameon=True, loc='lower center', ncol=3)
     plt.draw()
     plt.waitforbuttonpress(0)
-    
+
 if(__name__ == "__main__"):
     main()
