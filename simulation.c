@@ -29,7 +29,6 @@ void sim_ele(FILE **result_files, sim_init *config){
 
         double* rMinMax = clac_rmin_rmax(ORBITS,i);
 
-        double simulation_matrix[6];
         
         T(curr_itr) = 0;
         R(curr_itr) = R_MIN;
