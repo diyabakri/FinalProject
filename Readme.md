@@ -57,5 +57,5 @@ compile using the [gcc](https://gcc.gnu.org/) compiler with the command
 
 
 ```bash
-gcc Calc.c Config.c Ellipse.c  strParce.c Reads.c <any other added files to be compiled> -o electronSimulation -lm
+gcc Calc.c Config.c Ellipse.c  strParce.c Reads.c simulation.c <any other added files to be compiled> -o electronSimulation -lm
 ```
