@@ -53,9 +53,12 @@ python3 plot.py
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 note for each change in any of the .c files there is a need to recompile the code before the changes are applied
-compile using the [gcc](https://gcc.gnu.org/) compiler with the command 
+compile using the [gcc](https://gcc.gnu.org/) compiler with the use of makefile any added files need to be also added 
+to the makefile
 
 
 ```bash
-gcc Calc.c Config.c Ellipse.c  strParce.c Reads.c simulation.c <any other added files to be compiled> -o electronSimulation -lm
+1.make
+2.make clean
+
 ```
