@@ -27,8 +27,8 @@ def getInitVals():
     return tuple([itrs,file_num,result_path])
 
 def main():
-
-    prog = sp.Popen(['./electronSimulation'])
+    
+    prog = sp.Popen(['make','make clean','./electronSimulation'])
     o,e = prog.communicate()
     # print(o.decode("ascii"))
 
