@@ -17,7 +17,7 @@ def get_R_Theta(currLine):# extracts the value of "r" and "theta" from string
 
 def getInitVals():
 
-    config = open("config.ini","r")
+    config = open("config/config.ini","r")
     configLines = config.readlines()
     itrs = (int)(configLines[0][configLines[0].find("=")+1:])
     file_num = (int)(configLines[6][configLines[6].find("=")+1:])
@@ -34,30 +34,34 @@ def main():
 
     colors = ['b.','g.','r.','c.','m.','y.','k.','w.']# ploting colors
 
-    plt.figure()
-    plt.axes(projection = 'polar')
+    # plt.figure()
+    # plt.axes(projection = 'polar')
 
     
     itrs , file_num , result_path = getInitVals()
     
-    for i in range(file_num): 
+    for i in range(1,file_num+1): 
+        plt.figure()
+        plt.axes(projection = 'polar')
+        for j in range(i):
+            
+            curr_file_p = result_path%(i,j)
+            result_f = open(curr_file_p,"r")
         
-        result_f = open(result_path+(str)(i)+".txt","r")
-    
-        for j in range(itrs):
-            currLine = result_f.readline()
-            curr_values = get_R_Theta(currLine)
+            for k in range(itrs):
+                currLine = result_f.readline()
+                curr_values = get_R_Theta(currLine)
 
-            if j < itrs-1:
-                plt.polar(curr_values[0],curr_values[1],colors[i%8])
-            else:#add lable to the final point of a simulation
-                plt.polar(curr_values[0],curr_values[1],colors[i%8],label = ('l = '+(str)(file_num-i)+'$\hbar$'))
+                if k < itrs-1:
+                    plt.polar(curr_values[0],curr_values[1],colors[j%8])
+                else:#add lable to the final point of a simulation
+                    plt.polar(curr_values[0],curr_values[1],colors[j%8],label = ('l = '+(str)(i-j)+'$\hbar$'))
+            result_f.close()
 
-        result_f.close()
-
-    plt.legend(frameon=True, loc='lower center', ncol=3)
-    plt.draw()
+        plt.legend(frameon=True, loc='lower center', ncol=3)
+    plt.show(block = False)
     plt.waitforbuttonpress(0)
+    plt.close('all')
 
 if(__name__ == "__main__"):
     main()

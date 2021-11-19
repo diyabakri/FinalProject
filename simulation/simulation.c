@@ -19,7 +19,7 @@ void sim_ele(FILE **result_files, sim_init *config){
     next_itr = (simItr*)malloc(sizeof(simItr));
 
     double l_sqr = calc_l_sqr(MASS,CHARGE,BOHR_R);
-   
+    
     for (int i = 0 ; i <ORBITS ; i++){
 
         FILE* res_f = result_files[i];
@@ -57,6 +57,7 @@ void sim_ele(FILE **result_files, sim_init *config){
             curr_itr = next_itr;
             next_itr = temp;
         }
+
         logItration(res_f,curr_itr);
 
         free(rMinMax);

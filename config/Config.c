@@ -14,7 +14,6 @@ sim_init* getInitVals(){
     char** configLines = readLines(config_f,&length);
     sim_init* config = (sim_init*)malloc(sizeof(sim_init));
    
-
     config->itrs = parceInt(configLines[0]);
     config->init_r = parceDouble(configLines[1]);
     config->electron_charge = parceDouble(configLines[2]);
