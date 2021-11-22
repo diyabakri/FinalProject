@@ -29,23 +29,19 @@ def getInitVals():
 def main():
     compile = sp.Popen(['make'])
     o,e = compile.communicate()
-    clean = sp.Popen(['make','clean'])
-    o,e = clean.communicate()    
-    prog = sp.Popen(['./electronSimulation'])
+    prog = sp.Popen(['make','run'])
     o,e = prog.communicate()
     # print(o.decode("ascii"))
-
+    unit = 1e-8
     colors = ['b.','g.','r.','c.','m.','y.','k.','w.']# ploting colors
-
-    # plt.figure()
-    # plt.axes(projection = 'polar')
-
     
     itrs , file_num , result_path = getInitVals()
     
     for i in range(1,file_num+1): 
         plt.figure()
-        plt.axes(projection = 'polar')
+        plt.axes(projection = 'polar',)
+        plt.xlabel("R:$\AA$")
+
         for j in range(i):
             
             curr_file_p = result_path%(i,j)
@@ -54,11 +50,10 @@ def main():
             for k in range(itrs):
                 currLine = result_f.readline()
                 curr_values = get_R_Theta(currLine)
-
                 if k < itrs-1:
-                    plt.polar(curr_values[0],curr_values[1],colors[j%8])
+                    plt.polar(curr_values[0],curr_values[1]/unit,colors[j%8])
                 else:#add lable to the final point of a simulation
-                    plt.polar(curr_values[0],curr_values[1],colors[j%8],label = ('l = '+(str)(i-j)+'$\hbar$'))
+                    plt.polar(curr_values[0],curr_values[1]/unit,colors[j%8],label = ('l = '+(str)(i-j)+'$\hbar$'))
             result_f.close()
 
         plt.legend(frameon=True, loc='lower center', ncol=3)
