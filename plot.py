@@ -57,6 +57,7 @@ def main():
             result_f.close()
 
         plt.legend(frameon=True, loc='lower center', ncol=3)
+        
     plt.show(block = False)
     plt.waitforbuttonpress(0)
     plt.close('all')
