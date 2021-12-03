@@ -40,7 +40,7 @@ def main():
     for i in range(1,file_num+1): 
         plt.figure()
         plt.axes(projection = 'polar',)
-        plt.xlabel("R:$\AA$")
+        plt.xlabel("R($\AA$)")
 
         for j in range(i):
             
@@ -49,6 +49,9 @@ def main():
         
             for k in range(itrs):
                 currLine = result_f.readline()
+                # if currLine == '':
+                #     plt.polar(curr_values[0],curr_values[1]/unit,colors[j%8],label = ('l = '+(str)(i-j)+'$\hbar$'))
+                #     break
                 curr_values = get_R_Theta(currLine)
                 if k < itrs-1:
                     plt.polar(curr_values[0],curr_values[1]/unit,colors[j%8])

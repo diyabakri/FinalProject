@@ -27,7 +27,7 @@ void sim_ele(FILE **result_files, sim_init *config){
         double curr_l = L*H_mult;
         H_mult*=H_mult;
 
-        double* rMinMax = clac_rmin_rmax(ORBITS,i);
+        double* rMinMax = calc_rmin_rmax(ORBITS,i);
 
         
         T(curr_itr) = 0;

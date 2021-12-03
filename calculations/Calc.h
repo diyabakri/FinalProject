@@ -7,7 +7,7 @@
 
 #define PI 3.14159265358979323846
 #define BOHR_R 0.00000000529//5.29*10^-9 = a_0 bohr radios
-
+#define C 29979245800
 
 /*
     Calculates R_dot_dot "acceleration" of and electron
@@ -70,8 +70,13 @@ double calc_l_sqr(double m ,double e ,double r );
     @return double result[2] containing the r_min at index 0 and r_max at index 1
 
 */  
-double* clac_rmin_rmax(double n , double i );
+double* calc_rmin_rmax(double n , double i );
 
+double calc_rel_thetat_dot(double l , double gamma , double r , double m);
+
+double calc_rel_gamma(double l , double m , double r, double r_dot);
+
+double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , double e , double r_dot);
 
 
 #endif // CALC_H_

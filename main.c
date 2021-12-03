@@ -10,6 +10,7 @@ int main()
     sim_init *config = getInitVals();
     int energy_level = 1;
     int max_energy_level = ORBITS;
+    double ex_factor = 3;
     while( energy_level <= max_energy_level){
 
         FILE *results_f[energy_level]; 
@@ -39,10 +40,13 @@ int main()
             fclose(results_f[i]);
         }
 
-        printf("finished calculation for energy level = %d time = %f s \n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC);
+        printf("finished calculation for energy level = %d time = %f s  with %d itrations\n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC ,config->itrs);
         energy_level++;
-        config->itrs*=3;
-        LOG_P*=3;
+        if(energy_level == 5 ){
+            ex_factor = 2;
+        }
+        config->itrs*=ex_factor;
+        LOG_P*=ex_factor;
     }
     free(RES_PATH);
 

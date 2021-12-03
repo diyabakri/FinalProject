@@ -28,7 +28,7 @@ double calc_l_sqr(double m ,double e ,double r){
     return e*e*m*r;
 }
 
-double* clac_rmin_rmax(double n , double i ){
+double* calc_rmin_rmax(double n , double i ){
     
     
     double a = n*n;//4
@@ -51,4 +51,58 @@ double* clac_rmin_rmax(double n , double i ){
 
     return results;
 
+}
+
+double calc_rel_thetat_dot(double l , double gamma , double r , double m){
+    
+    r*=r;
+    
+    double arg1 = gamma * m;
+    arg1 *= r;
+    
+    return(l/arg1);
+
+}
+
+double calc_rel_gamma(double l , double m , double r, double r_dot){
+   
+    double arg1 = C;
+    arg1 *= m*r;
+    arg1 = l/arg1; 
+    arg1*=arg1;
+    arg1++;
+
+    double arg2 = C;
+    arg2 = r_dot/arg2;
+    arg2*=arg2;
+    arg2++;
+
+    arg1 = sqrt(arg1/arg2);
+
+    return arg1;
+}
+
+double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , double e , double r_dot){
+    
+    double arg1,arg2,arg3;
+    
+    double r_sq = r*r; 
+    
+    arg1 = l_sqr;
+    arg1/= gamma*m*r_sq*r;
+    
+    arg2 = e*e;
+    arg2/= r_sq;
+    
+    arg3 = r_dot/C;
+    arg3*= arg3;
+    arg3 = 1-arg3;
+
+    arg2 *= arg3;
+
+    arg1 = arg1-arg2;
+
+    arg1/= gamma*m;
+
+    return arg1;
 }
