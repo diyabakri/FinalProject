@@ -1,5 +1,4 @@
 #include "Calc.h"
-#include <float.h>
 
 double calc_theta_dot(double l,double m,double r){
     return(l/(m*r*r));
@@ -105,4 +104,51 @@ double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , do
     arg1/= gamma*m;
 
     return arg1;
+}
+
+double calc_rel_w(double energy_level , double h_mult_sqr , double m){
+
+    energy_level =0;
+    
+    double alpha_sqr = (FSC*FSC);
+
+    double arg1 = (h_mult_sqr - alpha_sqr);
+    arg1 = sqrt(arg1);
+    arg1 += energy_level;
+
+    arg1 = alpha_sqr/arg1;
+    arg1++;
+
+    arg1 = sqrt(arg1);
+    arg1 = 1/arg1;
+
+    double arg2 = m*C*C;
+
+    arg1--;
+
+    return(arg1*arg2);
+}
+
+double calc_rel_psi(double h_bar , double e, double r , double H_mult){
+    
+    double arg1 = h_bar*C*H_mult;
+    arg1 = (e*e)/arg1;
+    arg1*=arg1;
+    arg1 = 1-arg1;
+
+    return(sqrt(arg1));
+
+
+}
+
+double calc_polar_distance(double r1,  double r2, double theta1 , double theta2){
+    
+    double arg1 = r1*r1;
+    arg1 += r2*r2;
+
+    double arg2 = (2.0)*r1*r2;
+    arg2 *= cos(theta2-theta1);
+
+    return (sqrt(arg1 - arg2));
+
 }

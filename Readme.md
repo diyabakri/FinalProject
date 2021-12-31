@@ -34,20 +34,24 @@ t =1E-21
 # the base value of l to be used in the equations
 l =1.05435246E-27
 # the number of orbits to simulate
-n = 3
+energy_levels =2
+# the spific orbit to simulate if set to 0 all orbits will be simulated note: this value also effects the ploting of the results
+subLevel =0
+# flag for which equations to use 0 regular equations 1 relativity equations 
+reltive =0
 # the logging for how many itrations to actually store in the results files
 logPerod =10000
-# what to name the result files
-results_path ="result"
+# path and sub path for all result files must be in c format
+results_path ="results/result_n%d/result%d.txt"
 
 ```
 
 ## Run
 
-Run the python script "plot.py" through the terminal 
+Run the python script to plot the results through the terminal 
 
 ```bash
-python3 plot.py
+make plot
 ```
 
 ## Contributing
@@ -59,6 +63,6 @@ to the makefile
 
 ```bash
 1.make
-2.make clean
-
+2.make run
+3.make plot
 ```

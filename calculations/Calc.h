@@ -8,7 +8,7 @@
 #define PI 3.14159265358979323846
 #define BOHR_R 0.00000000529//5.29*10^-9 = a_0 bohr radios
 #define C 29979245800
-
+#define FSC (1.0/137.0) // fine structur constant aprox
 /*
     Calculates R_dot_dot "acceleration" of and electron
     Calculations are done acording to Atomic Structure And Spectral Lines Vol. I by Arnold Sommerfeld 
@@ -78,5 +78,10 @@ double calc_rel_gamma(double l , double m , double r, double r_dot);
 
 double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , double e , double r_dot);
 
+double calc_rel_w(double energy_level , double h_mult_sqr , double m);
+
+double calc_rel_psi(double h_bar , double e, double r , double energy_level);
+
+double calc_polar_distance(double r1,  double r2, double theta1 , double theta2);
 
 #endif // CALC_H_

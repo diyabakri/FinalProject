@@ -8,9 +8,13 @@ int main()
 {
     
     sim_init *config = getInitVals();
+    
+    createResultPath(RES_PATH,ORBITS);
+
     int energy_level = 1;
     int max_energy_level = ORBITS;
     double ex_factor = 3;
+    
     while( energy_level <= max_energy_level){
 
         FILE *results_f[energy_level]; 
@@ -30,9 +34,15 @@ int main()
         ORBITS = energy_level;
 
         long begin_time = clock();
+        if(config->reltive){
 
-        sim_ele(results_f, config);  
+            sim_rel_ele(results_f, config);  
+        
+        }else{
 
+            sim_ele(results_f,config);
+            
+        }
         long end_time = clock();
 
         // close results.txt file

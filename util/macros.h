@@ -10,10 +10,11 @@
     #define MASS        (config->electron_mass) 
     #define CHARGE      (config->electron_charge)
     #define T_INTERVAL  (config->time_intervolt)
-    #define L           (config->l)
+    #define L           (config->Hbar)
     #define INIT_R      (config->init_r)
     #define RES_PATH    (config->results_path)
     #define ORBITS      (config->n)
+    #define SUBORBIT    (config->i)
     #define LOG_P       (config->log_p)
     //---------Result mactros------
     #define R_MIN       (rMinMax[0])

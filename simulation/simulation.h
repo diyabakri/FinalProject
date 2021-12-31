@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
 #include "../config/Config.h"
 #include "../calculations/Calc.h"
 #include "../util/macros.h"
-
 
 typedef struct {
     double t;
@@ -17,9 +17,11 @@ typedef struct {
     double theta_dot;
 }simItr;
 
-void logItration(FILE *result_f ,simItr* itr);
 
 void sim_ele(FILE **result_files, sim_init *config);
 
+void sim_rel_ele(FILE **result_files , sim_init *config);
+
+void logItration(FILE *result_f ,simItr* itr ,double gamma , double deltaPhi);
 
 #endif //SIMULATION_H_
