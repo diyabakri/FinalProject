@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 /*
 
@@ -53,5 +55,10 @@ float parceFloat(char* str);
     @return double the value of the number inside the string
 */
 double parceDouble(char* str);
+
+int* parceIntArray(char* str);
+
+double* parceDoubleArray(char* str);
+
 
 #endif // STRPARCE_H_
