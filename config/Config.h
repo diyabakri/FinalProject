@@ -20,7 +20,8 @@ typedef struct sim_init{
     double time_intervolt; // time elapsed between each iteration  
     double Hbar; // inital value of l if needes to be changed
     int n; //the eneregy level to simulate.
-    int i; //the spific orbit to simulate if set to 0 all orbits will be simulated
+    int*i; //the spific orbits to simulate if set to 0 all orbits will be simulated format ex: 1,2,3
+    int so_size; // number of the orbits to simulate
     int reltive; // idicator to the type of equations to use 0 use regular 1 use reletivity 
     int log_p; // the number of ittrations to skip before logging 
     char* results_path; // url for the results to saved in

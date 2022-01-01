@@ -161,16 +161,19 @@ double parceDouble(char* str){
     return num*pow(10,powoft);
 }
 
-int* parceIntArray(char* str){
+int* parceIntArray(char* str,int* size){
 
-    if(((int)str[0]) < 0x30 ||((int)str[0])>0x39){
-        return NULL;
-    }
+    
     int* arr = NULL;    
     int j = 0;
+    while ((int)str[j]< 0x30 || (int)str[j]< 0x30)
+    {
+        j++;
+    }
+    
     int n = strlen(str);
     int numCount = 0;
-    for(int i = 0 ; i < n ; i++){
+    for(int i = j ; i < n ; i++){
         if(str[i]==',' || i == n-1){
             numCount++;
             if(numCount == 1){
@@ -182,11 +185,12 @@ int* parceIntArray(char* str){
             j = i+1;
         }
     }
+    *size = numCount;
     return arr;
 
 }
 
-double* parceDoubleArray(char* str){
+double* parceDoubleArray(char* str,int* size){
 
     if(((int)str[0]) < 0x30 ||((int)str[0])>0x39){
         return NULL;
@@ -207,19 +211,7 @@ double* parceDoubleArray(char* str){
             j = i+1;
         }
     }
+    (*size)= numCount;
     return arr;
 
 }
-
-// void main(){
-//     double * arr = parceDoubleArray("0.2E-1,-3,0");
-//     if(arr == NULL){
-//         perror("wrong format");
-//         exit(EXIT_FAILURE);
-//     }
-//     printf("%E ,",arr[0]);
-//     printf("%E ,",arr[1]);
-//     printf("%E \n",arr[2]);
-
-
-// }

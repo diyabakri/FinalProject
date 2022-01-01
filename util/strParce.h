@@ -56,9 +56,9 @@ float parceFloat(char* str);
 */
 double parceDouble(char* str);
 
-int* parceIntArray(char* str);
+int* parceIntArray(char* str ,int* n);
 
-double* parceDoubleArray(char* str);
+double* parceDoubleArray(char* str ,int* n);
 
 
 #endif // STRPARCE_H_

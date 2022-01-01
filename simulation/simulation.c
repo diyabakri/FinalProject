@@ -32,10 +32,20 @@ void sim_ele(FILE **result_files, sim_init *config){
 
     double l_sqr = calc_l_sqr(MASS,CHARGE,BOHR_R);
     
-    for (int i = SUBORBIT-1 ; i <ORBITS ; i++){
+    for (int i = 0 ; i <ORBITS ; i++){
+        if(SOSIZE > 0){
         
-        if(i == -1){
-            continue;
+            bool isSimulated = false;
+            
+            for(int j = 0 ; j < SOSIZE ; j++){
+                if(SUBORBITS[j] == i+1 ){
+                    isSimulated = true;
+                    break;
+                }
+            }
+            if(isSimulated==false){
+                continue;
+            }
         }
         
         FILE* res_f = result_files[i];
@@ -78,9 +88,6 @@ void sim_ele(FILE **result_files, sim_init *config){
 
         free(rMinMax);
 
-        if(SUBORBIT != 0){
-            break;
-        }
     }
 
     free(curr_itr);
@@ -101,10 +108,21 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
     // reached peak of the eclipse
     bool at_max = true;
     // start calculationg
-    for (int i = SUBORBIT-1 ; i <ORBITS ; i++){
+    for (int i = 0 ; i <ORBITS ; i++){
         
-        if(i == -1){
-            continue;
+        if(SOSIZE > 0){
+        
+            bool isSimulated = false;
+            
+            for(int j = 0 ; j < SOSIZE ; j++){
+                if(SUBORBITS[j] == i+1 ){
+                    isSimulated = true;
+                    break;
+                }
+            }
+            if(isSimulated==false){
+                continue;
+            }
         }
         
         FILE* res_f = result_files[i];
@@ -185,10 +203,6 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
 
         free(rMinMax);
         logItration(res_f,curr_itr,gamma,d);
-
-        if(SUBORBIT != 0){
-            break;
-        }
 
     }
 
