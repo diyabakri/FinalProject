@@ -50,7 +50,7 @@ int main()
             fclose(results_f[i]);
         }
 
-        printf("finished calculation for energy level = %d time = %f s  with %d itrations\n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC ,config->itrs);
+        printf("finished calculation for energy level = %d time = %f s  with %d itrations\n\n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC ,config->itrs);
         energy_level++;
         if(energy_level == 5 ){
             ex_factor = 2;

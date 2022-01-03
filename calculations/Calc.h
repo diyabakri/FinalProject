@@ -7,7 +7,7 @@
 
 #define PI 3.14159265358979323846
 #define BOHR_R 0.00000000529//5.29*10^-9 = a_0 bohr radios
-#define C 29979245800
+#define C (double)(29979245800)
 #define FSC (1.0/137.0) // fine structur constant aprox
 /*
     Calculates R_dot_dot "acceleration" of and electron
@@ -77,6 +77,14 @@ double calc_rel_thetat_dot(double l , double gamma , double r , double m);
 double calc_rel_gamma(double l , double m , double r, double r_dot);
 
 double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , double e , double r_dot);
+
+double calc_rel_rmin(double a , double b , double c);
+
+double calc_rel_A(double m , double w);
+
+double calc_rel_B(double m , double e , double w);
+
+double calc_rel_C(double l_sqr , double e);
 
 double calc_rel_w(double energy_level , double h_mult_sqr , double m);
 

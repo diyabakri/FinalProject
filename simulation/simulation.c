@@ -133,6 +133,20 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
         H_mult*=H_mult;
         // Hmult^2 for l_sqr
         double* rMinMax = calc_rmin_rmax(ORBITS,i);
+
+        double w = calc_rel_w(ORBITS,H_mult,MASS);
+
+        double a = calc_rel_A(MASS,w);
+
+        double b = calc_rel_B(MASS,CHARGE,w);
+
+        double c = calc_rel_C(H_mult*l_sqr,CHARGE);
+
+        double rel_rmin = calc_rel_rmin(a,b,c);
+
+        printf("relativistic rmin = %E ,non relativistic rmin = %E\n\n",rel_rmin,R_MIN);
+
+        // return;
         
         double d = 0;
 
@@ -144,7 +158,7 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
         }
         
         T(curr_itr) = 0;
-        R(curr_itr) = R_MIN;
+        R(curr_itr) = rel_rmin;
         R_DOT(curr_itr) = 0;
         double gamma = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
         R_DOT_DOT(curr_itr) = calc_rel_r_dot_dot(H_mult*l_sqr,MASS,gamma,R(curr_itr),CHARGE,R_DOT(curr_itr));
@@ -176,7 +190,8 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
                             THETA(curr_itr) = THETA(curr_itr) - _2_PI;
                         }
                         if(prevTh != 0){
-                            d = calc_polar_distance(R(curr_itr),prevR,prevTh,THETA(curr_itr));
+                            d = THETA(curr_itr) - prevTh;
+                            printf("calculated %E, acurrate %E \n",d, ((2*PI)/psi)-2*PI);
                         }
                                                     
                         prevR = R(curr_itr);

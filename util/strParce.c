@@ -163,7 +163,8 @@ double parceDouble(char* str){
 
 int* parceIntArray(char* str,int* size){
 
-    
+
+
     int* arr = NULL;    
     int j = 0;
     while ((int)str[j]< 0x30 || (int)str[j]< 0x30)
@@ -186,6 +187,9 @@ int* parceIntArray(char* str,int* size){
         }
     }
     *size = numCount;
+    if(arr[0] == 0 && numCount == 1){
+        *size = 0;
+    }
     return arr;
 
 }

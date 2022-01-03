@@ -106,9 +106,58 @@ double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , do
     return arg1;
 }
 
+double calc_rel_rmin(double a , double b , double c){
+
+    double arg1 = b*b;
+    
+    arg1-=(a*c);
+
+    arg1 = sqrt(arg1);
+
+    double arg2 = -1*b;
+
+    arg2-=arg1;
+
+    return(arg2/a);
+
+}
+
+double calc_rel_A(double m , double w){
+
+    printf("w = %E\n",w);
+
+    double arg1 = w*w;
+    arg1 /= (C*C);
+
+    double arg2 = 2*m*w;
+
+    return(arg1 + arg2);
+}
+
+double calc_rel_B(double m , double e , double w){
+
+    double e_sqr = e*e;
+    double arg1 = e_sqr*w;
+    arg1 /= (C*C);
+
+    double arg2 = m*e_sqr;
+
+    return(arg1 +arg2);
+
+}
+
+double calc_rel_C(double l_sqr , double e){
+    
+    double arg1 = pow(e,4);
+    arg1/= (C*C);
+
+
+    return(arg1 - l_sqr);
+
+}
+
 double calc_rel_w(double energy_level , double h_mult_sqr , double m){
 
-    energy_level =0;
     
     double alpha_sqr = (FSC*FSC);
 
