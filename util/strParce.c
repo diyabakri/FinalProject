@@ -187,9 +187,6 @@ int* parceIntArray(char* str,int* size){
         }
     }
     *size = numCount;
-    if(arr[0] == 0 && numCount == 1){
-        *size = 0;
-    }
     return arr;
 
 }

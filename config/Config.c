@@ -1,6 +1,6 @@
 #include "Config.h"
 
-sim_init* getInitVals(){
+Config* getInitVals(){
     
 
     FILE* config_f = fopen(CONFIG_PATH,"r");
@@ -14,7 +14,7 @@ sim_init* getInitVals(){
     
     char** configLines = readLines(config_f,&length);
 
-    sim_init* config = (sim_init*)malloc(sizeof(sim_init));
+    Config* config = (Config*)malloc(sizeof(Config));
    
     config->itrs = parceInt(configLines[0]);
     config->init_r = parceDouble(configLines[1]);

@@ -21,7 +21,7 @@ void logItration(FILE *result_f ,simItr* itr ,double gamma , double deltaPhi){
     fprintf(result_f, "\n");
 }
 
-void sim_ele(FILE **result_files, sim_init *config){
+void sim_ele(FILE **result_files, Config *config){
     
     double _2_PI =  2 * PI;
 
@@ -33,7 +33,7 @@ void sim_ele(FILE **result_files, sim_init *config){
     double l_sqr = calc_l_sqr(MASS,CHARGE,BOHR_R);
     
     for (int i = 0 ; i <ORBITS ; i++){
-        if(SOSIZE > 0){
+        if(SUBORBITS[0]!= 0 || SOSIZE !=1){
         
             bool isSimulated = false;
             
@@ -95,7 +95,7 @@ void sim_ele(FILE **result_files, sim_init *config){
 
 }
 
-void sim_rel_ele(FILE **result_files , sim_init *config){
+void sim_rel_ele(FILE **result_files , Config *config){
 
     double _2_PI =  2 * PI;
     
@@ -110,7 +110,7 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
     // start calculationg
     for (int i = 0 ; i <ORBITS ; i++){
         
-        if(SOSIZE > 0){
+        if(SUBORBITS[0]!= 0 || SOSIZE !=1){
         
             bool isSimulated = false;
             
@@ -130,11 +130,13 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
         double H_mult = (ORBITS-i);
         // L is the value of H_Bar
         double curr_l = L*H_mult;
+        
+        double w = calc_rel_w(ORBITS,H_mult,MASS);
+
         H_mult*=H_mult;
         // Hmult^2 for l_sqr
         double* rMinMax = calc_rmin_rmax(ORBITS,i);
 
-        double w = calc_rel_w(ORBITS,H_mult,MASS);
 
         double a = calc_rel_A(MASS,w);
 
@@ -163,7 +165,7 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
         double gamma = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
         R_DOT_DOT(curr_itr) = calc_rel_r_dot_dot(H_mult*l_sqr,MASS,gamma,R(curr_itr),CHARGE,R_DOT(curr_itr));
         THETA(curr_itr) = 0;
-        THETA_DOT(curr_itr) = calc_rel_thetat_dot(curr_l,gamma,R(curr_itr),MASS);
+        THETA_DOT(curr_itr) = calc_rel_theta_dot(curr_l,gamma,R(curr_itr),MASS);
 
         for (int j = 1; j < config->itrs; j++){
                 
@@ -175,13 +177,14 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
                 THETA(next_itr) = THETA(next_itr) - _2_PI;
             }
             R_DOT_DOT(next_itr) = calc_rel_r_dot_dot(H_mult*l_sqr,MASS,gamma,R(curr_itr),CHARGE,R_DOT(curr_itr));
-            THETA_DOT(next_itr) = calc_rel_thetat_dot(curr_l,gamma,R(curr_itr),MASS);
+            THETA_DOT(next_itr) = calc_rel_theta_dot(curr_l,gamma,R(curr_itr),MASS);
             
             if(i > 0){
 
                 if (R_DOT(curr_itr)*R_DOT(next_itr) <= 0){
                     at_max = !(at_max);
                     if(at_max){
+                        
                         double  psi = calc_rel_psi(L,CHARGE,R(curr_itr),(double)(ORBITS-i));
                         // prevR += ((2*PI)/psi)-2*PI;
                         
@@ -190,7 +193,7 @@ void sim_rel_ele(FILE **result_files , sim_init *config){
                             THETA(curr_itr) = THETA(curr_itr) - _2_PI;
                         }
                         if(prevTh != 0){
-                            d = THETA(curr_itr) - prevTh;
+                            d += THETA(curr_itr) - prevTh;
                             printf("calculated %E, acurrate %E \n",d, ((2*PI)/psi)-2*PI);
                         }
                                                     

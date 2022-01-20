@@ -11,7 +11,7 @@
 #define CONFIG_PATH "config/config.ini" // url of where the values are saved
 
 
-typedef struct sim_init{
+typedef struct Config{
 
     int itrs; // number of iteration to run
     double init_r; // statring value of R in cm
@@ -26,18 +26,26 @@ typedef struct sim_init{
     int log_p; // the number of ittrations to skip before logging 
     char* results_path; // url for the results to saved in
 
-}sim_init;
-/*
+}Config;
+/**
 
     Reads the inital configration values from the config.ini file and stores them in sim_init var 
 
-    @params ()
+    @param ()
     @return sim_init* config which contains all the base values to start the simulation 
 
 
 */
-sim_init* getInitVals();
+Config* getInitVals();
+/**
 
+    Creates the needed diractories in order to save the results
+
+    @param char* path = "file path format" ,int orbits = number of files to create   
+    @return int 0 if succesful -1 if faild 
+
+
+*/
 int createResultPath(char* path , int orbits);
 
 #endif // CONFIG_H_

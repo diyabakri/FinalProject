@@ -7,7 +7,7 @@
 int main()
 {
     
-    sim_init *config = getInitVals();
+    Config *config = getInitVals();
     
     createResultPath(RES_PATH,ORBITS);
 
@@ -16,7 +16,8 @@ int main()
     double ex_factor = 3;
     
     while( energy_level <= max_energy_level){
-
+        
+        //---------- OPEN RESULT FILES ------------
         FILE *results_f[energy_level]; 
         
         for(int i = 0 ; i < energy_level ; i++){
@@ -30,7 +31,9 @@ int main()
                 exit(EXIT_FAILURE);
             }
         }
+        //-----------------------------------------
 
+        //------------ BEGIN SIMULATION -----------
         ORBITS = energy_level;
 
         long begin_time = clock();
@@ -44,6 +47,7 @@ int main()
             
         }
         long end_time = clock();
+        //-----------------------------------------
 
         // close results.txt file
         for(int i  = 0 ; i < energy_level ; i++){
@@ -52,12 +56,15 @@ int main()
 
         printf("finished calculation for energy level = %d time = %f s  with %d itrations\n\n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC ,config->itrs);
         energy_level++;
+
         if(energy_level == 5 ){
             ex_factor = 2;
         }
+        
         config->itrs*=ex_factor;
         LOG_P*=ex_factor;
     }
+    
     free(RES_PATH);
 
     free(config);
