@@ -23,7 +23,7 @@ Config* getInitVals(){
     config->time_intervolt = parceDouble(configLines[4]);
     config->Hbar = parceDouble(configLines[5]); 
     config->n = parceInt(configLines[6]);
-    config->i = parceIntArray(configLines[7],&(config->so_size));
+    config->k_list = parceIntArray(configLines[7],&(config->k_size));
     config->reltive = parceInt(configLines[8]);
     config->log_p = parceInt(configLines[9]);
     config->results_path = get_filepath(configLines[10]);

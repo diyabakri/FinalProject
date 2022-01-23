@@ -132,7 +132,7 @@ double calc_rel_w(double energy_level , double h_mult , double m, double alpha){
     return(arg1*arg2);
 }
 
-double calc_rel_psi(double h_bar , double e, double r , double H_mult){
+double calc_rel_chi(double h_bar , double e, double r , double H_mult){
     
     double arg1 = h_bar*C*H_mult;
     arg1 = (e*e)/arg1;

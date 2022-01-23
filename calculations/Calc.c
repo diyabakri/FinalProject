@@ -26,7 +26,7 @@ double calc_R_dot_dot(double m , double r , double e , double l_sqr){
     return arg1;
 }
 
-double calc_l_sqr(double m ,double e ,double r){    
+double calc_Hbar_sqr(double m ,double e ,double r){    
     return e*e*m*r;
 }
 

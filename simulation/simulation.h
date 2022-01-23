@@ -17,6 +17,8 @@ typedef struct {// struct simItr (simulation itration) to hold the current and n
     double r_dot_dot;// itration movment acceleration
     double theta;// itration angle
     double theta_dot;// itration angleular speed
+    double gamma;//itration rel mass mult
+    double delataphi;//itration angle of the perahelion
 }simItr;
 /**
 
@@ -47,6 +49,6 @@ void sim_rel_ele(FILE **result_files , Config *config);
 
 
 */
-void logItration(FILE *result_f ,simItr* itr ,double gamma , double deltaPhi);
+void logItration(FILE *result_f ,simItr* itr);
 
 #endif //SIMULATION_H_

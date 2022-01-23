@@ -42,17 +42,17 @@ double calc_theta_dot(double l,double m,double r);
 
 /**
 
-    Calculates l squared with enought precision to cancle the deviation of rounding 
+    Calculates Hbar squared with enought precision to cancle the deviation of rounding 
     where   
 
-        l_sqr = (e^2)*m*r 
+        Hbar_sqr = (e^2)*m*r 
 
     @param double m = 9.109383e-28 double e = 4.803 e-10  r = BOHR_R
-    @return double l_sqr which is acually (H-)^2 which the coefficient is added later in the code
+    @return double Hbar_sqr 
 
 
 */
-double calc_l_sqr(double m ,double e ,double r );
+double calc_Hbar_sqr(double m ,double e ,double r );
 
 
 /**

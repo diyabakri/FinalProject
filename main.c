@@ -9,10 +9,10 @@ int main()
     
     Config *config = getInitVals();
     
-    createResultPath(RES_PATH,ORBITS);
+    createResultPath(RES_PATH,N);
 
     int energy_level = 1;
-    int max_energy_level = ORBITS;
+    int max_energy_level = N;
     double ex_factor = 3;
     
     while( energy_level <= max_energy_level){
@@ -34,7 +34,7 @@ int main()
         //-----------------------------------------
 
         //------------ BEGIN SIMULATION -----------
-        ORBITS = energy_level;
+        N = energy_level;
 
         long begin_time = clock();
         if(config->reltive){
