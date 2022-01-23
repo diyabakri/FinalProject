@@ -62,12 +62,11 @@ double calc_rel_rmin(double a , double b , double c){
     double arg1 = b*b;
     
     arg1-=(a*c);
-
     arg1 = sqrt(arg1);
 
     double arg2 = -1*b;
 
-    arg2-=arg1;
+    arg2+=arg1;
 
     return(arg2/a);
 
@@ -105,11 +104,10 @@ double calc_rel_C(double l_sqr , double e){
     return(arg1 - l_sqr);
 
 }
-// line 121 unsertanty  
-double calc_rel_w(double energy_level , double h_mult , double m){
 
-    
-    double alpha_sqr = (FSC*FSC);
+double calc_rel_w(double energy_level , double h_mult , double m, double alpha){
+
+    double alpha_sqr = (alpha*alpha);
     
     double h_mult_sqr = h_mult * h_mult;
 
@@ -118,7 +116,7 @@ double calc_rel_w(double energy_level , double h_mult , double m){
     arg1 = sqrt(arg1);
 
     arg1 += (energy_level-h_mult);
-    arg1 *=arg1; 
+    arg1 *=arg1;
 
     arg1 = alpha_sqr/arg1;
     arg1++;
@@ -144,4 +142,10 @@ double calc_rel_psi(double h_bar , double e, double r , double H_mult){
     return(sqrt(arg1));
 
 
+}
+
+double calc_alpha(double charge , double hbar ){
+    double e_sqr = charge*charge;
+    double arg1 = hbar*C;
+    return(e_sqr/arg1); 
 }

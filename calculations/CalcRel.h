@@ -93,11 +93,11 @@ double calc_rel_C(double l_sqr , double e);
     @return double W
 
 */
-double calc_rel_w(double energy_level , double h_mult , double m);
+double calc_rel_w(double energy_level , double h_mult , double m , double alpha );
 
 double calc_rel_psi(double h_bar , double e, double r , double energy_level);
 
-
+double calc_alpha(double charge , double hbar );
 
 
 #endif//CALCREL_H_

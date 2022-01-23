@@ -130,8 +130,8 @@ void sim_rel_ele(FILE **result_files , Config *config){
         double H_mult = (ORBITS-i);
         // L is the value of H_Bar
         double curr_l = L*H_mult;
-        
-        double w = calc_rel_w(ORBITS,H_mult,MASS);
+        double alpha = calc_alpha(CHARGE,L);
+        double w = calc_rel_w(ORBITS,H_mult,MASS,alpha);
 
         H_mult*=H_mult;
         // Hmult^2 for l_sqr
@@ -153,6 +153,7 @@ void sim_rel_ele(FILE **result_files , Config *config){
         double d = 0;
 
         double prevTh = 0;
+        double prevMaxTh= PI;
         double prevR = 0;
         
         if (i == 0){
@@ -186,24 +187,27 @@ void sim_rel_ele(FILE **result_files , Config *config){
                     if(at_max){
                         
                         double  psi = calc_rel_psi(L,CHARGE,R(curr_itr),(double)(ORBITS-i));
-                        // prevR += ((2*PI)/psi)-2*PI;
+                        // double test += ((2*PI)/psi)-2*PI;
                         
                         if (THETA(curr_itr) > _2_PI)
                         {
                             THETA(curr_itr) = THETA(curr_itr) - _2_PI;
                         }
                         if(prevTh != 0){
-                            d += THETA(curr_itr) - prevTh;
-                            printf("calculated %E, acurrate %E \n",d, ((2*PI)/psi)-2*PI);
+                            d = THETA(curr_itr) - prevMaxTh;
+                            printf("curr THeta = %E , prev Theta  = %E \t",THETA(curr_itr),prevTh);
+                            printf(" currMaxth - prevMAxth  %E, acurrate %E \n",d, (((2*PI)/psi)-2*PI));
                         }
                                                     
                         prevR = R(curr_itr);
-                        prevTh = THETA(curr_itr);
+                        prevMaxTh = THETA(curr_itr);
+
                     }
 
                 }
 
             }
+            prevTh = THETA(curr_itr);
             
             gamma = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
 
