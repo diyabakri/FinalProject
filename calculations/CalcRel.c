@@ -24,8 +24,8 @@ double calc_rel_gamma(double l , double m , double r, double r_dot){
 
     double arg2 = C;
     arg2 = r_dot/arg2;
-    arg2*=arg2;
-    arg2++;
+    arg2*= arg2;
+    arg2 = 1-arg2;
 
     arg1 = sqrt(arg1/arg2);
 

@@ -1,5 +1,7 @@
 #include "simulation.h"
 
+#include <float.h>
+
 
 void logItration(FILE *result_f ,simItr* itr){
     
@@ -108,6 +110,10 @@ void sim_rel_ele(FILE **result_files , Config *config){
     next_itr = (simItr*)malloc(sizeof(simItr));
     // Hbar_sqr is the value of hbar squared
     double Hbar_sqr = calc_Hbar_sqr(MASS,CHARGE,BOHR_R);
+    printf("calc HBAR_sqr = %.*E",sqrt(Hbar_sqr),DECIMAL_DIG);
+    Hbar_sqr = HBAR*HBAR;
+    printf("\tHbar_sqr^2 = %.*E\n",sqrt(Hbar_sqr),DECIMAL_DIG);
+
     // reached peak of the eclipse
     bool at_max = true;
     // start calculationg
@@ -149,7 +155,7 @@ void sim_rel_ele(FILE **result_files , Config *config){
 
         double rel_rmin = calc_rel_rmin(a,b,c);
 
-        printf("relativistic rmin = %E ,non relativistic rmin = %E\n\n",rel_rmin,R_MIN);
+        // printf("relativistic rmin = %E ,non relativistic rmin = %E\n\n",rel_rmin,R_MIN);
 
         // return;
         
@@ -158,9 +164,9 @@ void sim_rel_ele(FILE **result_files , Config *config){
         double prevMaxTh= PI;
         double prevR = 0;
         
-        if (i == 0){
-            prevTh =-1;
-        }
+        // if (i == 0){
+        //     prevTh =-1;
+        // }
         
         T(curr_itr) = 0;
         R(curr_itr) = rel_rmin;
@@ -183,7 +189,7 @@ void sim_rel_ele(FILE **result_files , Config *config){
             R_DOT_DOT(next_itr) = calc_rel_r_dot_dot(K*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
             THETA_DOT(next_itr) = calc_rel_theta_dot(curr_l,GAMMA(curr_itr),R(curr_itr),MASS);
             
-            if(i > 0){
+            if(i >= 0){
 
                 if (R_DOT(curr_itr)*R_DOT(next_itr) <= 0){
                     at_max = !(at_max);
@@ -197,9 +203,9 @@ void sim_rel_ele(FILE **result_files , Config *config){
                             THETA(curr_itr) = THETA(curr_itr) - _2_PI;
                         }
                         if(prevTh != 0){
-                            DELTAPHI(curr_itr) = THETA(curr_itr) - prevMaxTh;
-                            printf("curr THeta = %E , prev Theta  = %E \t",THETA(curr_itr),prevTh);
-                            printf(" currMaxth - prevMAxth  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
+                            DELTAPHI(curr_itr) += THETA(curr_itr) - prevMaxTh;
+                            // printf("curr THeta = %.*E , prev Theta  = %.*E \t",THETA(curr_itr),DECIMAL_DIG,prevTh,DECIMAL_DIG);
+                            // printf(" currMaxth - prevMAxth  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
                         }
                                                     
                         prevR = R(curr_itr);

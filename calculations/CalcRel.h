@@ -2,7 +2,6 @@
 #define CALCREL_H_
 
 #define C (double)(29979245800)
-#define FSC (1.0/137.0) // fine structur constant approximation
 
 /*
 *************************************************************************************************************

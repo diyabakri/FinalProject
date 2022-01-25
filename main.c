@@ -27,7 +27,7 @@ int main()
             results_f[i] = fopen(str,"w");
 
             if (results_f[i]== NULL){
-                perror("ERROR creating restult files");
+                perror("ERROR creating restult files"); 
                 exit(EXIT_FAILURE);
             }
         }
