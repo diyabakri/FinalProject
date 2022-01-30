@@ -4,7 +4,7 @@
 
 
 #define PI 3.14159265358979323846
-#define BOHR_R 0.00000000529//5.29*10^-9 = a_0 bohr radios
+#define BOHR_R 0.00000000529//5.29*10^-9 = a_0 bohr radios 0.0000000052977210903
 
 /*
 *************************************************************************************************************
@@ -63,13 +63,13 @@ double calc_Hbar_sqr(double m ,double e ,double r );
         (2) r_min*max = b^2
 
         where a = n^2 * BOHR_R 
-        and   b = (n-i)/n * a
+        and   b = k/n * a
 
-    @param double n double i
+    @param double n double k
     @return double result[2] containing the r_min at index 0 and r_max at index 1
 
 */  
-double* calc_rmin_rmax(double n , double i );
+double* calc_rmin_rmax(double n , double k );
 
 
 

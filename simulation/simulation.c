@@ -36,6 +36,7 @@ void sim_ele(FILE **result_files, Config *config){
     double Hbar_sqr = calc_Hbar_sqr(MASS,CHARGE,BOHR_R);
     
     for (int i = 0 ; i <N ; i++){
+
         if(K_LIST[0]!= 0 || K_SIZE !=1){
         
             bool isSimulated = false;
@@ -51,18 +52,18 @@ void sim_ele(FILE **result_files, Config *config){
             }
         }
         
-        FILE* res_f = result_files[i];
-        double K = (N-i);
+        FILE* res_f = result_files[N-i-1];
+        double K = (i+1);
+        double* rMinMax = calc_rmin_rmax(N,K);
         double curr_l = HBAR*K;
-        K*=K;
+        double K_sqr = K*K;
 
-        double* rMinMax = calc_rmin_rmax(N,i);
 
         
         T(curr_itr) = 0;
         R(curr_itr) = R_MIN;
         R_DOT(curr_itr) = 0;
-        R_DOT_DOT(curr_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE, K*Hbar_sqr);
+        R_DOT_DOT(curr_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE, K_sqr*Hbar_sqr);
         THETA(curr_itr) = 0;
         THETA_DOT(curr_itr) = calc_theta_dot(curr_l, MASS, R(curr_itr));
         GAMMA(curr_itr) = -1;
@@ -110,9 +111,9 @@ void sim_rel_ele(FILE **result_files , Config *config){
     next_itr = (simItr*)malloc(sizeof(simItr));
     // Hbar_sqr is the value of hbar squared
     double Hbar_sqr = calc_Hbar_sqr(MASS,CHARGE,BOHR_R);
-    printf("calc HBAR_sqr = %.*E",sqrt(Hbar_sqr),DECIMAL_DIG);
+    // printf("calc HBAR_sqr = %.*E",sqrt(Hbar_sqr),DECIMAL_DIG);
     Hbar_sqr = HBAR*HBAR;
-    printf("\tHbar_sqr^2 = %.*E\n",sqrt(Hbar_sqr),DECIMAL_DIG);
+    // printf("\tHbar_sqr^2 = %.*E\n",sqrt(Hbar_sqr),DECIMAL_DIG);
 
     // reached peak of the eclipse
     bool at_max = true;
@@ -134,28 +135,28 @@ void sim_rel_ele(FILE **result_files , Config *config){
             }
         }
         
-        FILE* res_f = result_files[i];
+        FILE* res_f = result_files[N-i-1];
         // The multiplier of H_BAR
-        double K = (N-i);
+        double K = (i+1);
+        double* rMinMax = calc_rmin_rmax(N,K);
         // L is the value of H_Bar
         double curr_l = HBAR*K;
         double alpha = calc_alpha(CHARGE,HBAR);
         double w = calc_rel_w(N,K,MASS,alpha);
 
-        K*=K;
+        double K_sqr=K*K;
         // K^2 for Hbar_sqr
-        double* rMinMax = calc_rmin_rmax(N,i);
 
 
         double a = calc_rel_A(MASS,w);
 
         double b = calc_rel_B(MASS,CHARGE,w);
 
-        double c = calc_rel_C(K*Hbar_sqr,CHARGE);
+        double c = calc_rel_C(K_sqr*Hbar_sqr,CHARGE);
 
         double rel_rmin = calc_rel_rmin(a,b,c);
 
-        // printf("relativistic rmin = %E ,non relativistic rmin = %E\n\n",rel_rmin,R_MIN);
+        printf("relativistic rmin = %E ,non relativistic rmin = %E\n\n",rel_rmin,R_MIN);
 
         // return;
         
@@ -172,7 +173,7 @@ void sim_rel_ele(FILE **result_files , Config *config){
         R(curr_itr) = rel_rmin;
         R_DOT(curr_itr) = 0;
         GAMMA(curr_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
-        R_DOT_DOT(curr_itr) = calc_rel_r_dot_dot(K*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
+        R_DOT_DOT(curr_itr) = calc_rel_r_dot_dot(K_sqr*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
         THETA(curr_itr) = 0;
         THETA_DOT(curr_itr) = calc_rel_theta_dot(curr_l,GAMMA(curr_itr),R(curr_itr),MASS);
         DELTAPHI(curr_itr) = 0;
@@ -186,7 +187,7 @@ void sim_rel_ele(FILE **result_files , Config *config){
             if (THETA(next_itr) > _2_PI){
                 THETA(next_itr) = THETA(next_itr) - _2_PI;
             }
-            R_DOT_DOT(next_itr) = calc_rel_r_dot_dot(K*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
+            R_DOT_DOT(next_itr) = calc_rel_r_dot_dot(K_sqr*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
             THETA_DOT(next_itr) = calc_rel_theta_dot(curr_l,GAMMA(curr_itr),R(curr_itr),MASS);
             
             if(i >= 0){
@@ -195,7 +196,7 @@ void sim_rel_ele(FILE **result_files , Config *config){
                     at_max = !(at_max);
                     if(at_max){
                         
-                        double  chi = calc_rel_chi(HBAR,CHARGE,R(curr_itr),(double)(N-i));
+                        double  chi = calc_rel_chi(HBAR,CHARGE,R(curr_itr),(double)(K));
                         // double test += ((2*PI)/chi)-2*PI;
                         
                         if (THETA(curr_itr) > _2_PI)
@@ -203,9 +204,9 @@ void sim_rel_ele(FILE **result_files , Config *config){
                             THETA(curr_itr) = THETA(curr_itr) - _2_PI;
                         }
                         if(prevTh != 0){
-                            DELTAPHI(curr_itr) += THETA(curr_itr) - prevMaxTh;
+                            DELTAPHI(curr_itr) = THETA(curr_itr) - prevMaxTh;
                             // printf("curr THeta = %.*E , prev Theta  = %.*E \t",THETA(curr_itr),DECIMAL_DIG,prevTh,DECIMAL_DIG);
-                            // printf(" currMaxth - prevMAxth  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
+                            printf(" currMaxth - prevMAxth  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
                         }
                                                     
                         prevR = R(curr_itr);

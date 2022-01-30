@@ -30,11 +30,11 @@ double calc_Hbar_sqr(double m ,double e ,double r){
     return e*e*m*r;
 }
 
-double* calc_rmin_rmax(double n , double i ){
+double* calc_rmin_rmax(double n , double k ){
     
     
-    double a = n*n;//4
-    double b = (n-i)/n;//2
+    double a = n*n;
+    double b = k/n;
     b*=a;
 
     double dis = a*a;

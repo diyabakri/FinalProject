@@ -62,6 +62,7 @@ double calc_rel_rmin(double a , double b , double c){
     double arg1 = b*b;
     
     arg1-=(a*c);
+    printf("arg1 = %E\n",arg1);
     arg1 = sqrt(arg1);
 
     double arg2 = -1*b;
