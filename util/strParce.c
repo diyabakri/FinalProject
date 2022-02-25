@@ -1,6 +1,5 @@
 #include "strParce.h"
 
-
 int parceInt(char* str){
 
     int n = strlen(str);

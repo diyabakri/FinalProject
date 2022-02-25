@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-double calc_theta_dot(double l,double m,double r){
+double calc_phi_dot(double l,double m,double r){
     return(l/(m*r*r));
 }
 
@@ -24,10 +24,6 @@ double calc_R_dot_dot(double m , double r , double e , double l_sqr){
     arg1/= m;
 
     return arg1;
-}
-
-double calc_Hbar_sqr(double m ,double e ,double r){    
-    return e*e*m*r;
 }
 
 double* calc_rmin_rmax(double n , double k ){

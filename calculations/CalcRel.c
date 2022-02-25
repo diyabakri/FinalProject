@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <float.h>
+
 // Valid
-double calc_rel_theta_dot(double l , double gamma , double r , double m){
+double calc_rel_phi_dot(double l , double gamma , double r , double m){
     
     r*=r;
     
@@ -57,15 +59,19 @@ double calc_rel_r_dot_dot(double l_sqr , double m , double gamma , double r , do
     return arg1;
 }
 // Valid
-double calc_rel_rmin(double a , double b , double c){
+long double calc_rel_rmin(long double a ,long double b , long double c){
 
-    double arg1 = b*b;
+    
+    long double arg1 = b*b;
     
     arg1-=(a*c);
-    printf("arg1 = %E\n",arg1);
-    arg1 = sqrt(arg1);
+    if(arg1 < 0){
+        printf("WARNING negative under sqrt with value = %LE\n\n",arg1);
+        arg1 = 0;   
+    }
+    arg1 = sqrtl(arg1);
 
-    double arg2 = -1*b;
+    long double arg2 = -1*b;
 
     arg2+=arg1;
 
@@ -73,32 +79,32 @@ double calc_rel_rmin(double a , double b , double c){
 
 }
 // Valid
-double calc_rel_A(double m , double w){
+long double calc_rel_A(long double m ,long  double w){
 
 
-    double arg1 = w*w;
+    long double arg1 = w*w;
     arg1 /= (C*C);
 
-    double arg2 = 2*m*w;
+    long double arg2 = 2*m*w;
 
     return(arg1 + arg2);
 }
 // Valid
-double calc_rel_B(double m , double e , double w){
+long double calc_rel_B(long double m , long double e , long double w){
 
-    double e_sqr = e*e;
-    double arg1 = e_sqr*w;
+    long double e_sqr = e*e;
+    long double arg1 = e_sqr*w;
     arg1 /= (C*C);
 
-    double arg2 = m*e_sqr;
+    long double arg2 = m*e_sqr;
 
     return(arg1 +arg2);
 
 }
 // Valid
-double calc_rel_C(double l_sqr , double e){
+long double calc_rel_C(long double l_sqr , long double e){
     
-    double arg1 = pow(e,4);
+    long double arg1 = powl(e,4);
     arg1/= (C*C);
 
 
@@ -106,15 +112,16 @@ double calc_rel_C(double l_sqr , double e){
 
 }
 
-double calc_rel_w(double energy_level , double h_mult , double m, double alpha){
+long double calc_rel_w(long double energy_level ,long double h_mult ,long double m ,long double alpha ){
 
-    double alpha_sqr = (alpha*alpha);
+
+    long double alpha_sqr = (alpha*alpha);
     
-    double h_mult_sqr = h_mult * h_mult;
+    long double h_mult_sqr = h_mult * h_mult;
 
-    double arg1 = (h_mult_sqr - alpha_sqr);
+    long double arg1 = (h_mult_sqr - alpha_sqr);
 
-    arg1 = sqrt(arg1);
+    arg1 = sqrtl(arg1);
 
     arg1 += (energy_level-h_mult);
     arg1 *=arg1;
@@ -122,20 +129,20 @@ double calc_rel_w(double energy_level , double h_mult , double m, double alpha){
     arg1 = alpha_sqr/arg1;
     arg1++;
 
-    arg1 = sqrt(arg1);
+    arg1 = sqrtl(arg1);
     arg1 = 1/arg1;
 
     arg1--;
 
-    double arg2 = m*C*C;
-
-
+    long double arg2 = m*C*C;
     return(arg1*arg2);
 }
 
-double calc_rel_chi(double h_bar , double e, double r , double H_mult){
+double calc_rel_chi(double h_bar ,double e,double r ,double energy_level)
+{
     
-    double arg1 = h_bar*C*H_mult;
+
+    double arg1 = h_bar*C*energy_level;
     arg1 = (e*e)/arg1;
     arg1*=arg1;
     arg1 = 1-arg1;
@@ -145,8 +152,8 @@ double calc_rel_chi(double h_bar , double e, double r , double H_mult){
 
 }
 
-double calc_alpha(double charge , double hbar ){
-    double e_sqr = charge*charge;
-    double arg1 = hbar*C;
+long double calc_alpha(long double charge ,long double hbar ){
+    long double e_sqr = charge*charge;
+    long double arg1 = hbar*C;
     return(e_sqr/arg1); 
 }

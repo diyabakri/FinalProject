@@ -24,9 +24,11 @@ Config* getInitVals(){
     config->Hbar = parceDouble(configLines[5]); 
     config->n = parceInt(configLines[6]);
     config->k_list = parceIntArray(configLines[7],&(config->k_size));
-    config->reltive = parceInt(configLines[8]);
-    config->log_p = parceInt(configLines[9]);
-    config->results_path = get_filepath(configLines[10]);
+    config->m_list = parceIntArray(configLines[8],&(config->m_size));
+    config->reltive = parceInt(configLines[9]);
+    config->spherical = parceInt(configLines[10]);
+    config->log_p = parceInt(configLines[11]);
+    config->results_path = get_filepath(configLines[12]);
 
     for(int i = 0 ; i <length ; i++){
         free(configLines[i]);
@@ -43,27 +45,60 @@ int createResultPath(char* path , int orbits){
     
     char tempPath[strlen(path)+1];
     strcpy(tempPath,path);
-    char* maindir = strtok(tempPath,"/");
-    char* seconddir = strtok(NULL,"/");
-    char commmandbuffer[107];
-    memset(commmandbuffer,0,100);
+    
+    char* nDir = strtok(tempPath,"/");
+    char* kDir = strtok(NULL,"/");
+    char* mDir = strtok(NULL,"/");
+    int sysReturn;
+    char commmandbuffer[157];
+
+    memset(commmandbuffer,0,150);
     struct stat s;
     
-    sprintf(commmandbuffer,"mkdir %s",maindir);
+    sprintf(commmandbuffer,"mkdir %s",nDir);
     
-    if(stat(maindir,&s)!=0){
-        system(commmandbuffer);
+    if(stat(nDir,&s)!=0){
+        sysReturn = system(commmandbuffer);
+        if(sysReturn < 0){
+            exit(EXIT_FAILURE);
+        }
     }
 
-    for(int i = 0 ; i < orbits ; i++){
-            char tempcom[100];
-            sprintf(tempcom,"%s/%s",maindir,seconddir);
-            sprintf(tempcom,tempcom,(i+1));
-        if(stat(tempcom,&s)!=0){
+    for(int i = 1 ; i <= orbits ; i++){
+        
+        char NFileCommand[100];
+            sprintf(NFileCommand,"%s/%s",nDir,kDir);
+            sprintf(NFileCommand,NFileCommand,i);
 
-            sprintf(commmandbuffer,"mkdir %s",tempcom);
-            system(commmandbuffer);
-        }   
+            if(stat(NFileCommand,&s)!=0){
+
+                sprintf(commmandbuffer,"mkdir %s",NFileCommand);
+                sysReturn = system(commmandbuffer);
+                if(sysReturn < 0){
+                    exit(EXIT_FAILURE);
+                }
+
+            }   
+
+        for(int j = 1 ; j <= i ; j++){
+            
+            char KFileCommand[150];
+            sprintf(KFileCommand,"%s/%s",NFileCommand,mDir);
+            
+            sprintf(KFileCommand,KFileCommand,j);
+        
+            if(stat(KFileCommand,&s)!=0){
+
+                sprintf(commmandbuffer,"mkdir %s",KFileCommand);
+                sysReturn = system(commmandbuffer);
+                if(sysReturn < 0){
+                    exit(EXIT_FAILURE);
+                }
+
+            }   
+
+        }
+
     }
 
     return 1;

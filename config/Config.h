@@ -22,7 +22,10 @@ typedef struct Config{
     int n; //the eneregy level to simulate.
     int*k_list; //the spific energy_levels to simulate if set to 0 all energy_levels will be simulated format ex: 1,2,3
     int k_size; // number of the energy_levels to simulate
+    int*m_list;
+    int m_size;
     int reltive; // idicator to the type of equations to use 0 use regular 1 use reletivity 
+    int spherical; // idicator to the type of equations to use 0 use polar 1 use spherical
     int log_p; // the number of ittrations to skip before logging 
     char* results_path; // url for the results to saved in
 

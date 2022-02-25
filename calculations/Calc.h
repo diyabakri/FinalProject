@@ -2,9 +2,12 @@
 #define CALC_H_
 
 
+#ifndef SPHERE_CALC_H_
 
-#define PI 3.14159265358979323846
-#define BOHR_R 0.00000000529//5.29*10^-9 = a_0 bohr radios 0.0000000052977210903
+    #define PI 3.14159265358979323846
+    #define BOHR_R 0.0000000052977210903//5.29*10^-9 = a_0 bohr radios 0.0000000052977210903
+
+#endif
 
 /*
 *************************************************************************************************************
@@ -30,29 +33,15 @@ double calc_R_dot_dot(double m , double r , double e , double l_sqr);
     Calculates the angel change rate of the electron movment
     where   
 
-        theta_dot = L / m*(r^2)
+        phi_dot = L / m*(r^2)
 
     @param double m = 9.109383e-28 double e = 4.803 e-10  r = r of the currnt itration
-    @return double THETA_dot 
+    @return double phi_dot 
 
 
 */
-double calc_theta_dot(double l,double m,double r);
+double calc_phi_dot(double l,double m,double r);
 
-
-/**
-
-    Calculates Hbar squared with enought precision to cancle the deviation of rounding 
-    where   
-
-        Hbar_sqr = (e^2)*m*r 
-
-    @param double m = 9.109383e-28 double e = 4.803 e-10  r = BOHR_R
-    @return double Hbar_sqr 
-
-
-*/
-double calc_Hbar_sqr(double m ,double e ,double r );
 
 
 /**

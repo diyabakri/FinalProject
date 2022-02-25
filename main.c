@@ -4,6 +4,15 @@
 #include <time.h>
 #include "simulation/simulation.h"
 
+int getFileNum(int n){
+    n++;
+    int sum = n*(n+1);
+    sum/=2;
+    sum--;
+
+    return sum;
+}
+
 int main()
 {
     
@@ -18,42 +27,86 @@ int main()
     while( energy_level <= max_energy_level){
         
         //---------- OPEN RESULT FILES ------------
-        FILE *results_f[energy_level]; 
-        
-        for(int i = 0 ; i < energy_level ; i++){
-            char str[50];
-            
-            sprintf(str,RES_PATH,energy_level,i);
-            results_f[i] = fopen(str,"w");
+        FILE **results_f;
+        int fileCount = 0;
+        //---------- SPHERICAL SIMULATION ---------
+        if(config->spherical){
 
-            if (results_f[i]== NULL){
-                perror("ERROR creating restult files"); 
-                exit(EXIT_FAILURE);
+            fileCount = getFileNum(energy_level);
+
+            results_f = (FILE**)malloc(sizeof(FILE*)*fileCount);
+
+            int fileIndex = 0; 
+
+            for(int i = 1 ; i <= energy_level ; i++){
+                
+                for(int j = 0 ; j <= i; j++){
+                    
+                    char str[100];
+                    
+                    sprintf(str,RES_PATH,energy_level,i,j);
+
+                    results_f[fileIndex] = fopen(str,"w");
+                    if (results_f[fileIndex] == NULL){
+                        perror("ERROR creating result files"); 
+                        exit(EXIT_FAILURE);
+                    }
+                    fileIndex++;
+
+                }
+
             }
+            
+        }else{
+            //---------- POLAR SIMULATION ------------
+            fileCount = energy_level;
+
+            results_f = (FILE**)malloc(sizeof(FILE*)*fileCount);
+
+            for(int i = 1 ; i <= energy_level ; i++){
+                
+                char str[100];
+                
+                sprintf(str,RES_PATH,energy_level,i,0);
+                results_f[i-1] = fopen(str,"w");
+
+                if (results_f[i-1] == NULL){
+                    perror("ERROR creating result files"); 
+                    exit(EXIT_FAILURE);
+                }
+
+            }
+
         }
+        // return 0;
+        
         //-----------------------------------------
 
         //------------ BEGIN SIMULATION -----------
         N = energy_level;
-
+        // start timer
         long begin_time = clock();
-        if(config->reltive){
+        if(config->reltive && !(config->spherical)){
 
-            sim_rel_ele(results_f, config);  
+            polar_sim_rel_ele(results_f, config);  
         
+        }else if (!(config->spherical)){
+
+            polar_sim_ele(results_f,config);
+            
         }else{
 
-            sim_ele(results_f,config);
-            
+            spherical_sim_ele(results_f,config);
         }
+        // stop timer
         long end_time = clock();
         //-----------------------------------------
 
         // close results.txt file
-        for(int i  = 0 ; i < energy_level ; i++){
+        for(int i  = 0 ; i < fileCount ; i++){
             fclose(results_f[i]);
         }
-
+        free(results_f);
         printf("finished calculation for energy level = %d time = %f s  with %d itrations\n\n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC ,config->itrs);
         energy_level++;
 
