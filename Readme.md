@@ -26,23 +26,27 @@ itrs =10000000
 # bohrs radios this line is only needed to determine the unit of  distance
 r =5.29E-9
 # used as the value of the charge of the electron in every equation
-ch =4.803E-10
+charge =4.803E-10
 # used as the value of the mass of the electron in every equation
 mass =9.109383E-28
 # used as the time interval for between each itration
 t =1E-21
 # the base value of l to be used in the equations
-l =1.05435246E-27
+Hbar =1.05435246E-27
 # the number of orbits to simulate
-energy_levels =2
+N =2
 # the spific orbit to simulate if set to 0 all orbits will be simulated note: this value also effects the ploting of the results
-subLevel =0
+K_LIST =1,2,3
+# the spific angle to simulate if set to 0 all orbits will be simulated note: this value also effects the ploting of the results
+M_LIST =1,2,3
 # flag for which equations to use 0 regular equations 1 relativity equations 
 reltive =0
+# flag for which equations to use 0 2d polar projection 1 3d Spherical projection 
+Spherical =0
 # the logging for how many itrations to actually store in the results files
 logPerod =10000
 # path and sub path for all result files must be in c format
-results_path ="results/result_n%d/result%d.txt"
+results_path ="results/result_n%d/result_k%d/result_m%d.txt"
 
 ```
 
