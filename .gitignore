@@ -148,3 +148,4 @@ __pycache__/Config.cpython-38.pyc
 __pycache__/plot.cpython-38.pyc
 __pycache__/ResultsReader.cpython-38.pyc
 .gitignore
+source/Python/__pycache__
