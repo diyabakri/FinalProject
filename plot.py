@@ -4,9 +4,8 @@ from typing import List
 import matplotlib.pyplot as plt
 import subprocess as sp
 import numpy as np
-from Config import Config
-from ResultsReader import ResultsReader
-from mpl_toolkits.mplot3d import Axes3D
+from source.Python.Config import Config
+from source.Python.ResultsReader import ResultsReader
 
 def convertToSpherical(results:ArrayType):
     X_list = results[2]*np.cos(results[0])*np.sin(results[1])
@@ -56,9 +55,9 @@ def sphericalPlot(config:Config , reader: ResultsReader):
 
         fig = plt.figure()
         ax = plt.axes(projection = '3d')
-        ax.set_xlabel("Theta($rad$)")
-        ax.set_ylabel("Phi($rad$)")
-        ax.set_zlabel("R($\AA$)")
+        ax.set_xlabel("X($\AA$)")
+        ax.set_ylabel("Y($\AA$)")
+        ax.set_zlabel("Z($\AA$)")
 
         for k in range(1,n+1):
         
@@ -68,8 +67,8 @@ def sphericalPlot(config:Config , reader: ResultsReader):
             for m in range(k+1):
                 results = reader.getResultsByNKM(n,k,m)
                 convertedResults = convertToSpherical(results) 
-                ax.plot(convertedResults[0]/unit,convertedResults[1]/unit,convertedResults[2]/unit)
-            # plt.legend(frameon=True, loc='lower center', ncol=3)
+                ax.plot(convertedResults[0]/unit,convertedResults[1]/unit,convertedResults[2]/unit,label = ('m = %d')%m)
+                plt.legend(frameon=True, loc='lower center', ncol=3)
         
     plt.show()
     plt.waitforbuttonpress(0)
@@ -82,7 +81,7 @@ def main():
     prog = sp.Popen(['make','run'])
     o,e = prog.communicate()
     
-    config = Config("./config/config.ini")
+    config = Config("config.ini")
     reader =  ResultsReader(config)
     
     if config.spherical:

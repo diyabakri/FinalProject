@@ -1,4 +1,4 @@
-#include "SphericalCalc.h"
+#include "../../../header/calculations/SphericalCalc.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +33,9 @@ double sphere_calc_theta_dot(double Nphi, double Hbar , double phi_dot , double 
     double arg3 = (Nphi*Hbar*phi_dot);
 
     arg2 = arg3/arg2;
+
     double final = arg1 - arg2 ;
+    
     if(final < 0 ){
         // printf("Warning : negative value under square root in Theta Dot\n");
         return 0;

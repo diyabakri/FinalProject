@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "simulation/simulation.h"
+#include "../../header/simulation/simulation.h"
 
 int getFileNum(int n){
     n++;

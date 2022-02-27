@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include "../util/Reads.h"
 #include "../util/strParce.h"
-#define CONFIG_PATH "config/config.ini" // url of where the values are saved
+#define CONFIG_PATH "config.ini" // url of where the values are saved
 
 
 typedef struct Config{

@@ -1,4 +1,4 @@
-#include "simulation.h"
+#include "../../../header/simulation/simulation.h"
 
 #include <float.h>
 
@@ -312,13 +312,15 @@ void spherical_sim_ele(FILE **result_files , Config *config){
         double curr_l = HBAR*K;
         double K_sqr = K*K;
 
-
+        double* rMinMax = calc_rmin_rmax(N,K);
         for(double m = 0 ; m <= K ; m++){
+            
+            double sign = 1;
 
             double Nphi = K-m;
-            // printf("Nphi %E\n",Nphi);
 
             double thetamin= sphere_calc_theta_min(Nphi,K);
+            
             FILE* res_f = result_files[fileIndex];
             
             if(M_LIST[0]!= 0 || M_SIZE !=1){
@@ -339,7 +341,7 @@ void spherical_sim_ele(FILE **result_files , Config *config){
             }
             
             T(curr_itr) = 0;
-            R(curr_itr) = BOHR_R;
+            R(curr_itr) = R_MAX;
             R_DOT(curr_itr) = 0;
             R_DOT_DOT(curr_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE, K_sqr*Hbar_sqr);
             THETA(curr_itr) = thetamin;
@@ -350,13 +352,12 @@ void spherical_sim_ele(FILE **result_files , Config *config){
             DELTAPHI(curr_itr)= -1.0;
 
             T(next_itr) = 0;
-            R(next_itr) = BOHR_R;
+            R(next_itr) = R_MAX;
             R_DOT(next_itr) = 0;
             R_DOT_DOT(next_itr)=0;
             PHI(next_itr) = 0;
             PHI_DOT(next_itr) = 0;
             THETA(next_itr) = thetamin;
-            // printf("theta min = %E m = %E , k =%E\n",THETA(next_itr),m,K);
             THETA_DOT(next_itr)=0;
             GAMMA(next_itr) = -1.0;
             DELTAPHI(next_itr)= -1.0;
@@ -369,16 +370,22 @@ void spherical_sim_ele(FILE **result_files , Config *config){
                 R_DOT_DOT(next_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE,K_sqr* Hbar_sqr);
                 PHI(next_itr) = PHI(curr_itr) + (PHI_DOT(curr_itr)* T_INTERVAL);
                 PHI_DOT(next_itr) = sphere_calc_phi_dot(Nphi,HBAR,MASS,R(curr_itr),THETA(curr_itr));
-                THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL); 
+                THETA(next_itr) = THETA(curr_itr)+ (sign*THETA_DOT(curr_itr)*T_INTERVAL); 
                 THETA_DOT(next_itr) = sphere_calc_theta_dot(Nphi,HBAR,PHI_DOT(curr_itr),CHARGE,MASS,R(curr_itr));
-                // break;
+                
                 if (PHI(curr_itr) > _2_PI)
                 {
                     PHI(curr_itr) = PHI(curr_itr) - _2_PI;
                 }
+                
                 if (PHI(next_itr) > _2_PI)
                 {
                     PHI(next_itr) = PHI(next_itr) - _2_PI;
+                }
+                if (PHI(curr_itr)>PI){
+                    sign = -1;
+                }else{
+                    sign = 1;
                 }
                 if(it % LOG_P == 0){
                     logItration(res_f,curr_itr);
@@ -394,6 +401,8 @@ void spherical_sim_ele(FILE **result_files , Config *config){
 
 
         }
+
+        free(rMinMax);
 
     }
     

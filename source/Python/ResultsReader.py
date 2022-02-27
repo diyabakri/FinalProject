@@ -1,5 +1,5 @@
 import numpy as np
-from Config import Config
+from source.Python.Config import Config
 
 class ResultsReader:
 

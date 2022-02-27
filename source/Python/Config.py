@@ -43,6 +43,7 @@ class Config:
                 self.createListFiles(currLine[valueIndex+1:-2])
 
     def parceIntArray(self,str:str):
+        
         numList = []
         start_index = str.find("=")+1
         numberStr = str[start_index:]
@@ -57,6 +58,7 @@ class Config:
         return np.array(numList)
 
     def createListFiles(self,str:str):
+
         for n in range(1,self.energyLevel+1):
             if self.kList[0] != 0 :
                 if n < np.min(self.kList):

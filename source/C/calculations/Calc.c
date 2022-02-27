@@ -1,4 +1,4 @@
-#include "Calc.h"
+#include "../../../header/calculations/Calc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

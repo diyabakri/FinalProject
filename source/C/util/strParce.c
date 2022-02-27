@@ -1,4 +1,4 @@
-#include "strParce.h"
+#include "../../../header/util/strParce.h"
 
 int parceInt(char* str){
 
