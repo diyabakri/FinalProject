@@ -42,8 +42,8 @@ Config* getInitVals(){
 }
 
 int createResultPath(char* path , int orbits){
-    
-    char tempPath[strlen(path)+1];
+    int size = strlen(path)+1;
+    char tempPath[size];
     strcpy(tempPath,path);
     
     char* nDir = strtok(tempPath,"/");
@@ -67,7 +67,14 @@ int createResultPath(char* path , int orbits){
     for(int i = 1 ; i <= orbits ; i++){
         
         char NFileCommand[100];
-            sprintf(NFileCommand,"%s/%s",nDir,kDir);
+            #ifdef _WIN32 // make dir for windows
+                sprintf(NFileCommand,"%s\\%s",nDir,kDir);
+            #endif
+
+            #ifndef _WIN32
+                sprintf(NFileCommand,"%s/%s",nDir,kDir);
+            #endif
+
             sprintf(NFileCommand,NFileCommand,i);
 
             if(stat(NFileCommand,&s)!=0){
@@ -83,8 +90,15 @@ int createResultPath(char* path , int orbits){
         for(int j = 1 ; j <= i ; j++){
             
             char KFileCommand[150];
-            sprintf(KFileCommand,"%s/%s",NFileCommand,mDir);
-            
+
+            #ifdef _WIN32 // make dir for windows
+                sprintf(KFileCommand,"%s\\%s",NFileCommand,mDir);
+            #endif
+
+            #ifndef _WIN32
+                sprintf(KFileCommand,"%s/%s",NFileCommand,mDir);
+            #endif
+
             sprintf(KFileCommand,KFileCommand,j);
         
             if(stat(KFileCommand,&s)!=0){

@@ -6,6 +6,7 @@ import subprocess as sp
 import numpy as np
 from source.Python.Config import Config
 from source.Python.ResultsReader import ResultsReader
+import platform
 
 def convertToSpherical(results:ArrayType):
     X_list = results[2]*np.cos(results[0])*np.sin(results[1])
@@ -65,6 +66,8 @@ def sphericalPlot(config:Config , reader: ResultsReader):
             if k not in config.kList and config.kList.all()!= 0:
                 continue
             for m in range(k+1):
+                if m not in config.mList and config.mList.all()!= -1:
+                    continue
                 results = reader.getResultsByNKM(n,k,m)
                 convertedResults = convertToSpherical(results) 
                 ax.plot(convertedResults[0]/unit,convertedResults[1]/unit,convertedResults[2]/unit,label = ('m = %d')%m)
@@ -75,10 +78,17 @@ def sphericalPlot(config:Config , reader: ResultsReader):
     plt.close('all')
 
 def main():
-
-    compile = sp.Popen(['make'])
+    
+    OS_name = platform.system()
+    makeCMD = ""
+    if(OS_name == "Windows"):
+        makeCMD = "mingw32-make"
+    else:
+        makeCMD = "make"
+    
+    compile = sp.Popen([makeCMD])
     o,e = compile.communicate()
-    prog = sp.Popen(['make','run'])
+    prog = sp.Popen([makeCMD,'run'])
     o,e = prog.communicate()
     
     config = Config("config.ini")
