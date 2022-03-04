@@ -1,7 +1,13 @@
 CC = gcc
 EXE = electronSimulation
 CFLAGS = -mhard-float -O3 -lm 
-RUN_P = python plot.py 
+
+ifeq ($(OS),Windows_NT)
+RUN_P = python plot.py
+else
+RUN_P = python3 plot.py
+endif
+
 SOURCE_P = source/C/
 
 config_path = $(SOURCE_P)config/
@@ -17,8 +23,6 @@ main_file = $(SOURCE_P)main.c
 
 source_files = $(calculations_files) $(config_files) $(main_file) $(simulation_files) $(util_files)
 
-test:
-		$(OS)
 
 defult: 
 	$(CC) $(CFLAGS) $(source_files) -lm -o $(EXE)
