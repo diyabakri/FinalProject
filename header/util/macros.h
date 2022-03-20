@@ -8,9 +8,11 @@
     #define R_DOT_DOT(itr)      (itr->r_dot_dot)
     #define PHI(itr)            (itr->phi)
     #define PHI_DOT(itr)        (itr->phi_dot)
+    #define PHI_DOT_DOT(itr)    (itr->phi_dot_dot)
     #define DELTAPHI(itr)       (itr->delataphi)
     #define THETA(itr)          (itr->theta)
     #define THETA_DOT(itr)      (itr->theta_dot)
+    #define THETA_DOT_DOT(itr)  (itr->theta_dot_dot)
     #define GAMMA(itr)          (itr->gamma)
     //--------config macros--------
     #define MASS                (config->electron_mass) 

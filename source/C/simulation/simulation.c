@@ -2,6 +2,44 @@
 
 #include <float.h>
 
+typedef enum{
+
+    POLAR,
+    REL_POLAR,
+    SPHERICAL,
+    REL_SPHERICAL
+
+}simType;
+
+void initItrations(simItr* itr , simType type){
+    
+    T(itr) = 0;
+    R(itr) = 0;
+    R_DOT(itr) = 0;
+    R_DOT_DOT(itr) = 0;
+    PHI(itr) = 0;
+    PHI_DOT(itr) = 0;
+    PHI_DOT_DOT(itr) = -1.0;
+    GAMMA(itr) = -1.0;
+    DELTAPHI(itr)= -1.0;
+    THETA(itr) = -1.0;
+    THETA_DOT(itr)=-1.0;
+    THETA_DOT_DOT(itr)=-1.0;
+    
+    if(type == REL_POLAR || type == REL_SPHERICAL){
+        GAMMA(itr) = 0;
+        DELTAPHI(itr) = 0;
+    }
+
+    if(type == SPHERICAL || type == REL_SPHERICAL){
+        THETA(itr) = 0;
+        THETA_DOT(itr) = 0;
+        THETA_DOT_DOT(itr) = 0;
+        PHI_DOT_DOT(itr) = 0;
+    }
+    
+}
+
 void logItration(FILE *result_f ,simItr* itr){
     
     fprintf(result_f, "t= %E\t", T(itr) );
@@ -14,29 +52,23 @@ void logItration(FILE *result_f ,simItr* itr){
     fprintf(result_f, "phi= %E\t", PHI(itr) );
     fprintf(result_f, "phi'= %E\t", PHI_DOT(itr));
 
+    if(PHI_DOT_DOT(itr) != -1.0){
+        fprintf(result_f, "phi''= %E\t", PHI_DOT_DOT(itr));
+    }
     if(THETA(itr) != -1.0){
-
         fprintf(result_f,"theta= %E\t",THETA(itr));
-    
     }
     if(THETA_DOT(itr) != -1.0){
-    
         fprintf(result_f,"theta'= %E\t",THETA_DOT(itr));
-    
     }
-
-
+    if(THETA_DOT_DOT(itr) != -1.0){
+        fprintf(result_f,"theta''= %E\t",THETA_DOT_DOT(itr));
+    }
     if (GAMMA(itr) != -1.0){ 
-    
         fprintf(result_f, "gamma= %E\t", GAMMA(itr));
-    
     }
-    
-    
     if(DELTAPHI(itr) != -1.0){
-    
         fprintf(result_f, "deltaPhi= %E\t", DELTAPHI(itr));
-    
     }
 
     fprintf(result_f, "\n");
@@ -72,28 +104,18 @@ void polar_sim_ele(FILE **result_files, Config *config){
         }
         
         FILE* res_f = result_files[N-i];
+
         double K = i;
         double* rMinMax = calc_rmin_rmax(N,K);
         double curr_l = HBAR*K;
         double K_sqr = K*K;
 
-
+        initItrations(curr_itr,POLAR);
+        initItrations(next_itr,POLAR);
         
-        T(curr_itr) = 0;
         R(curr_itr) = R_MIN;
-        R_DOT(curr_itr) = 0;
         R_DOT_DOT(curr_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE, K_sqr*Hbar_sqr);
-        PHI(curr_itr) = 0;
         PHI_DOT(curr_itr) = calc_phi_dot(curr_l, MASS, R(curr_itr));
-        
-        GAMMA(curr_itr) = -1.0;
-        DELTAPHI(curr_itr)= -1.0;
-        THETA(curr_itr) = -1.0;
-        THETA_DOT(curr_itr)=-1.0;
-        GAMMA(next_itr) = -1.0;
-        DELTAPHI(next_itr)= -1.0;
-        THETA(next_itr) = -1.0;
-        THETA_DOT(next_itr)=-1.0;
 
         for (int j = 1; j < config->itrs; j++){
                 
@@ -132,6 +154,7 @@ void polar_sim_ele(FILE **result_files, Config *config){
 }
 
 void polar_sim_rel_ele(FILE **result_files , Config *config){
+    
     double _2_PI =  2 * PI;
     
     simItr *curr_itr , *next_itr;
@@ -193,21 +216,16 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
         double prevMaxPhi= 0;
         double prevR = 0;
         
-        
-        T(curr_itr) = 0;
-        R(curr_itr) = rel_rmin;
-        R_DOT(curr_itr) = 0;
-        GAMMA(curr_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
-        R_DOT_DOT(curr_itr) = calc_rel_r_dot_dot(K_sqr*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
-        PHI(curr_itr) = 0;
-        PHI_DOT(curr_itr) = calc_rel_phi_dot(curr_l,GAMMA(curr_itr),R(curr_itr),MASS);
-        DELTAPHI(curr_itr) = 0;
+        initItrations(curr_itr,REL_POLAR);
+        initItrations(next_itr,REL_POLAR);
 
-        DELTAPHI(next_itr) = 0;
-        THETA(curr_itr) = -1.0;
-        THETA(next_itr) = -1.0;
-        THETA_DOT(curr_itr) = -1.0;
-        THETA_DOT(next_itr) = -1.0;
+        R(curr_itr) = rel_rmin;
+
+        GAMMA(curr_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
+
+        R_DOT_DOT(curr_itr) = calc_rel_r_dot_dot(K_sqr*Hbar_sqr,MASS,GAMMA(curr_itr),R(curr_itr),CHARGE,R_DOT(curr_itr));
+
+        PHI_DOT(curr_itr) = calc_rel_phi_dot(curr_l,GAMMA(curr_itr),R(curr_itr),MASS);
 
 
         for (int j = 1; j < config->itrs; j++){
@@ -313,6 +331,7 @@ void spherical_sim_ele(FILE **result_files , Config *config){
         double K_sqr = K*K;
 
         double* rMinMax = calc_rmin_rmax(N,K);
+
         for(double m = 0 ; m <= K ; m++){
             
             double sign = 1;
@@ -323,7 +342,7 @@ void spherical_sim_ele(FILE **result_files , Config *config){
             
             FILE* res_f = result_files[fileIndex];
             
-            if(M_LIST[0]!= 0 || M_SIZE !=1){
+            if(M_LIST[0]!= -1 || M_SIZE !=1){
         
             bool isSimulated = false;
             
@@ -340,39 +359,45 @@ void spherical_sim_ele(FILE **result_files , Config *config){
                 }
             }
             
-            T(curr_itr) = 0;
-            R(curr_itr) = R_MAX;
-            R_DOT(curr_itr) = 0;
-            R_DOT_DOT(curr_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE, K_sqr*Hbar_sqr);
+            initItrations(curr_itr,SPHERICAL);
+            initItrations(next_itr,SPHERICAL);
+
+
+            if(m == K){
+            
+                PHI(next_itr) = PI/2;
+                PHI(curr_itr) = PI/2;
+
+            }
+
+            R(curr_itr) = R_MIN;
             THETA(curr_itr) = thetamin;
-            THETA_DOT(curr_itr)=0;
-            PHI(curr_itr) = 0;
-            PHI_DOT(curr_itr) =sphere_calc_phi_dot(Nphi,HBAR,MASS,R(curr_itr),THETA(curr_itr));
-            GAMMA(curr_itr) = -1.0;
-            DELTAPHI(curr_itr)= -1.0;
 
-            T(next_itr) = 0;
-            R(next_itr) = R_MAX;
-            R_DOT(next_itr) = 0;
-            R_DOT_DOT(next_itr)=0;
-            PHI(next_itr) = 0;
-            PHI_DOT(next_itr) = 0;
+            PHI_DOT(curr_itr) = sphere_calc_init_phi_dot(K,HBAR,Nphi,MASS,R(curr_itr));
+            R_DOT_DOT(curr_itr) = sphere_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),MASS,CHARGE);
+
+            PHI_DOT_DOT(curr_itr) = sphere_calc_phi_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr));
+            THETA_DOT_DOT(curr_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
+
+            R(next_itr) = R_MIN;
             THETA(next_itr) = thetamin;
-            THETA_DOT(next_itr)=0;
-            GAMMA(next_itr) = -1.0;
-            DELTAPHI(next_itr)= -1.0;
-
+            
+            // logItration(res_f,curr_itr);
+            // return;
             for (int it = 1; it < config->itrs; it++){
                     
                 T(next_itr) += T_INTERVAL;
                 R(next_itr) = R(curr_itr)+(R_DOT(curr_itr)* T_INTERVAL);
                 R_DOT(next_itr) = R_DOT(curr_itr) + (R_DOT_DOT(curr_itr) * T_INTERVAL);
-                R_DOT_DOT(next_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE,K_sqr* Hbar_sqr);
                 PHI(next_itr) = PHI(curr_itr) + (PHI_DOT(curr_itr)* T_INTERVAL);
-                PHI_DOT(next_itr) = sphere_calc_phi_dot(Nphi,HBAR,MASS,R(curr_itr),THETA(curr_itr));
-                THETA(next_itr) = THETA(curr_itr)+ (sign*THETA_DOT(curr_itr)*T_INTERVAL); 
-                THETA_DOT(next_itr) = sphere_calc_theta_dot(Nphi,HBAR,PHI_DOT(curr_itr),CHARGE,MASS,R(curr_itr));
-                
+                PHI_DOT(next_itr) = PHI_DOT(curr_itr)+(PHI_DOT_DOT(curr_itr)*T_INTERVAL);
+                THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL);
+                THETA_DOT(next_itr) = THETA_DOT(curr_itr)+(THETA_DOT_DOT(curr_itr)*T_INTERVAL);
+
+                R_DOT_DOT(next_itr) = sphere_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),MASS,CHARGE);
+                PHI_DOT_DOT(next_itr) = sphere_calc_phi_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr));
+                THETA_DOT_DOT(next_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
+
                 if (PHI(curr_itr) > _2_PI)
                 {
                     PHI(curr_itr) = PHI(curr_itr) - _2_PI;

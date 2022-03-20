@@ -43,7 +43,7 @@ def plotPolar(config:Config , reader :ResultsReader):
     plt.waitforbuttonpress(0)
     plt.close('all')
 
-def sphericalPlot(config:Config , reader: ResultsReader):
+def sphericalPlot(config:Config , reader:ResultsReader):
 
     unit = 1e-8
 
@@ -66,7 +66,8 @@ def sphericalPlot(config:Config , reader: ResultsReader):
             if k not in config.kList and config.kList.all()!= 0:
                 continue
             for m in range(k+1):
-                if m not in config.mList and config.mList.all()!= -1:
+                if m not in config.mList and config.mList[0]!= -1:
+                    print(config.mList)
                     continue
                 results = reader.getResultsByNKM(n,k,m)
                 convertedResults = convertToSpherical(results) 
