@@ -313,3 +313,9 @@ results/result_n9/result_k9/result_m6.txt
 results/result_n9/result_k9/result_m7.txt
 results/result_n9/result_k9/result_m8.txt
 results/result_n9/result_k9/result_m9.txt
+source/C/util/Utiltester.c
+header/util/LinkedList.h
+source/C/util/LinkedList.c
+source/C/util/test
+filter.ini
+uiTest.py

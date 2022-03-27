@@ -1,4 +1,6 @@
+// #include "../../../header/util/LinkedList.h"
 #include "../../../header/util/strParce.h"
+
 
 int parceInt(char* str){
 
@@ -215,3 +217,53 @@ double* parceDoubleArray(char* str,int* size){
     return arr;
 
 }
+
+// void* parceBytes(char* str,int* size){
+    
+// }
+
+// LinkedList* parceIntLinkedList(char* str){
+    
+//     int size = strlen(str);
+//     bool leftBrakit;
+//     LinkedList* list = NULL;
+
+//     for(int i = 0 ; i < size ; i++){
+        
+
+//         if(str[i] == '[' && !leftBrakit){
+//             leftBrakit = true;
+//             list = newLinkedList();
+        
+//         }else if(str[i] == '['){
+        
+//             LinkedList_append(list,parceIntLinkedList(str+i));
+            
+//             while (str[i] == '\0'){
+//                 i++;
+//             }
+//             i--;
+        
+//         }else if((int)str[i] >= 0x30 && (int)str[i] <= 0x39){
+            
+//             int numData = parceInt(str+i);
+//             int* nodeData = (int*) malloc(sizeof(int));
+//             *nodeData = numData; 
+//             LinkedList_append(list,nodeData);
+
+//             while ((int)str[i] >= 0x30 && (int)str[i] <= 0x39)
+//             {
+//                 str[i] = '\0';
+//                 i++;
+//             }
+//             i--;
+            
+//         }else if(str[i] == ']' && leftBrakit){
+//             str[i] = '\0';
+//             return list;
+        
+//         }
+//         str[i] = '\0';
+//     }
+
+// }

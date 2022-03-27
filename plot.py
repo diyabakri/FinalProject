@@ -82,6 +82,7 @@ def main():
     
     OS_name = platform.system()
     makeCMD = ""
+    
     if(OS_name == "Windows"):
         makeCMD = "mingw32-make"
     else:
@@ -102,8 +103,6 @@ def main():
     else:
 
         plotPolar(config,reader)
-        
-        
     
 
 if(__name__ == "__main__"):

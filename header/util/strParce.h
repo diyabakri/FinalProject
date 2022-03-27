@@ -74,6 +74,19 @@ int* parceIntArray(char* str ,int* n);
     the retruned pointer needs to be fread to avoid memory leaks  
 */
 double* parceDoubleArray(char* str ,int* n);
+/**
+    @brief 
+    @param str 
+    @param size 
+    @return void* 
+ */
+void* parceBytes(char* str,int* size);
+/**
+    @brief 
 
+    @param str 
+    @return LinkedList* 
+ */
+// LinkedList* parceIntLinkedList(char* str);
 
 #endif // STRPARCE_H_

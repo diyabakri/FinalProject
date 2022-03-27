@@ -298,6 +298,7 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
 
 void spherical_sim_ele(FILE **result_files , Config *config){
 
+    
     double _2_PI =  2 * PI;
 
     simItr *curr_itr , *next_itr;
@@ -363,26 +364,37 @@ void spherical_sim_ele(FILE **result_files , Config *config){
             initItrations(next_itr,SPHERICAL);
 
 
+
+            R(curr_itr) = R_MIN;
+            THETA(curr_itr) = thetamin;
+           
             if(m == K){
             
                 PHI(next_itr) = PI/2;
                 PHI(curr_itr) = PI/2;
+                
+                THETA_DOT(curr_itr) = sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr));
+                THETA_DOT(next_itr) = THETA_DOT(curr_itr);
+                
+                R_DOT_DOT(curr_itr) = sphere_calc_spc_case_r_dot_dot(R(curr_itr),THETA_DOT(curr_itr),CHARGE,MASS);
+                PHI_DOT(curr_itr) = 0;
+                PHI_DOT_DOT(curr_itr) = 0;
+                THETA_DOT_DOT(curr_itr) = 0;
 
+
+            }else{
+
+                PHI_DOT(curr_itr) = sphere_calc_init_phi_dot(K,HBAR,Nphi,MASS,R(curr_itr));
+                R_DOT_DOT(curr_itr) = sphere_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),MASS,CHARGE);
+                PHI_DOT_DOT(curr_itr) = sphere_calc_phi_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr));
+                THETA_DOT_DOT(curr_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
             }
 
-            R(curr_itr) = R_MIN;
-            THETA(curr_itr) = thetamin;
-
-            PHI_DOT(curr_itr) = sphere_calc_init_phi_dot(K,HBAR,Nphi,MASS,R(curr_itr));
-            R_DOT_DOT(curr_itr) = sphere_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),MASS,CHARGE);
-
-            PHI_DOT_DOT(curr_itr) = sphere_calc_phi_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr));
-            THETA_DOT_DOT(curr_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
 
             R(next_itr) = R_MIN;
             THETA(next_itr) = thetamin;
             
-            // logItration(res_f,curr_itr);
+            logItration(res_f,curr_itr);
             // return;
             for (int it = 1; it < config->itrs; it++){
                     
@@ -393,10 +405,14 @@ void spherical_sim_ele(FILE **result_files , Config *config){
                 PHI_DOT(next_itr) = PHI_DOT(curr_itr)+(PHI_DOT_DOT(curr_itr)*T_INTERVAL);
                 THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL);
                 THETA_DOT(next_itr) = THETA_DOT(curr_itr)+(THETA_DOT_DOT(curr_itr)*T_INTERVAL);
-
-                R_DOT_DOT(next_itr) = sphere_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),MASS,CHARGE);
-                PHI_DOT_DOT(next_itr) = sphere_calc_phi_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr));
-                THETA_DOT_DOT(next_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
+                if(m == K){
+                    R_DOT_DOT(next_itr) = sphere_calc_spc_case_r_dot_dot(R(curr_itr),THETA_DOT(curr_itr),CHARGE,MASS);
+                    THETA_DOT(next_itr) = sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr));
+                }else{
+                    R_DOT_DOT(next_itr) = sphere_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),MASS,CHARGE);
+                    PHI_DOT_DOT(next_itr) = sphere_calc_phi_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr));
+                    THETA_DOT_DOT(next_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
+                }
 
                 if (PHI(curr_itr) > _2_PI)
                 {

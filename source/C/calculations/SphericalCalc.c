@@ -59,7 +59,7 @@ double sphere_calc_r_dot_dot(double r , double theta , double theta_dot, double 
     arg1 *= r;
 
     double arg2 = (charge * charge);
-    arg2 /= mass*r;
+    arg2 /= (mass*r*r);
 
     return (arg1 - arg2);
 
@@ -102,3 +102,28 @@ double sphere_calc_init_phi_dot(double K, double Hbar , double Nphi , double mas
     return(arg1/arg2);
 
 }
+
+
+double sphere_calc_spc_case_r_dot_dot(double r, double theta_dot , double charge , double mass){
+
+    double arg1 = r*theta_dot*theta_dot;
+
+    double arg2 = charge*charge;
+    
+    arg2/= (mass*r*r);
+
+    return arg1 - arg2;
+
+}
+
+double sphere_calc_spc_case_theta_dot(double k , double Hbar , double mass , double r){
+
+    double arg1 = k*k*Hbar*Hbar;
+
+    double arg2 = r*r*mass;
+
+    return(arg1/arg2);
+    
+    
+}
+
