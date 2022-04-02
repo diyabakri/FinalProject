@@ -31,9 +31,9 @@ class Config:
                 self.mList = self.parceIntArray(currLine)
             elif "logPerod" in currLine:
                 self.log_p = (int)(currLine[valueIndex:])
-            elif "Spherical" in currLine:
+            elif "Type" in currLine:
                 b = (int)(currLine[valueIndex:])
-                if b == 1:
+                if b > 2:
                     self.spherical = True
                 else:
                     self.spherical =False

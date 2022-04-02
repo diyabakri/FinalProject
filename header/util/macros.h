@@ -27,6 +27,7 @@
     #define M_LIST              (config->m_list)
     #define M_SIZE              (config->m_size)
     #define LOG_P               (config->log_p)
+    #define TYPE                (config->type)
     //---------Result mactros------
     #define R_MIN               (rMinMax[0])
     #define R_MAX               (rMinMax[1])

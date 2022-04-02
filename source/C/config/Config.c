@@ -25,10 +25,9 @@ Config* getInitVals(){
     config->n = parceInt(configLines[6]);
     config->k_list = parceIntArray(configLines[7],&(config->k_size));
     config->m_list = parceIntArray(configLines[8],&(config->m_size));
-    config->reltive = parceInt(configLines[9]);
-    config->spherical = parceInt(configLines[10]);
-    config->log_p = parceInt(configLines[11]);
-    config->results_path = get_filepath(configLines[12]);
+    config->type = parceInt(configLines[9]);
+    config->log_p = parceInt(configLines[10]);
+    config->results_path = get_filepath(configLines[11]);
 
     for(int i = 0 ; i <length ; i++){
         free(configLines[i]);

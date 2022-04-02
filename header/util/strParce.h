@@ -1,6 +1,8 @@
 #ifndef STRPARCE_H_
 #define STRPARCE_H_
 
+#include "types.h"
+#include "linkedList.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -56,6 +58,7 @@ float parceFloat(char* str);
 */
 double parceDouble(char* str);
 
+LinkedList* parceIntLinkedList(char* str);
 /**
 
     converts string to int* array
@@ -80,13 +83,5 @@ double* parceDoubleArray(char* str ,int* n);
     @param size 
     @return void* 
  */
-void* parceBytes(char* str,int* size);
-/**
-    @brief 
-
-    @param str 
-    @return LinkedList* 
- */
-// LinkedList* parceIntLinkedList(char* str);
 
 #endif // STRPARCE_H_

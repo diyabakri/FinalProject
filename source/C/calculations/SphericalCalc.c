@@ -118,7 +118,7 @@ double sphere_calc_spc_case_r_dot_dot(double r, double theta_dot , double charge
 
 double sphere_calc_spc_case_theta_dot(double k , double Hbar , double mass , double r){
 
-    double arg1 = k*k*Hbar*Hbar;
+    double arg1 = k*Hbar;
 
     double arg2 = r*r*mass;
 

@@ -30,7 +30,7 @@ int main()
         FILE **results_f;
         int fileCount = 0;
         //---------- SPHERICAL SIMULATION ---------
-        if(config->spherical){
+        if(TYPE == SPHERICAL || TYPE == REL_SPHERICAL){
 
             fileCount = getFileNum(energy_level);
 
@@ -78,7 +78,6 @@ int main()
             }
 
         }
-        // return 0;
         
         //-----------------------------------------
 
@@ -86,17 +85,21 @@ int main()
         N = energy_level;
         // start timer
         long begin_time = clock();
-        if(config->reltive && !(config->spherical)){
+        switch (TYPE)
+        {
+            case POLAR:
 
-            polar_sim_rel_ele(results_f, config);  
-        
-        }else if (!(config->spherical)){
+                polar_sim_ele(results_f,config);
 
-            polar_sim_ele(results_f,config);
-            
-        }else{
+            break;
+            case REL_POLAR:
 
-            spherical_sim_ele(results_f,config);
+                polar_sim_rel_ele(results_f, config);  
+
+            break;
+            case SPHERICAL:
+                spherical_sim_ele(results_f,config);
+            break;
         }
         // stop timer
         long end_time = clock();

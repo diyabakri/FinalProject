@@ -5,6 +5,7 @@
 #ifndef SPHERE_CALC_H_
 
     #define PI 3.14159265358979323846
+    #define _2_PI  2 * PI
     #define BOHR_R 0.0000000052977210903//5.29*10^-9 = a_0 bohr radios 0.0000000052977210903
 
 #endif

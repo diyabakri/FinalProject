@@ -8,6 +8,18 @@ from source.Python.Config import Config
 from source.Python.ResultsReader import ResultsReader
 import platform
 
+def getlimits(N):
+
+    a = N**4
+    b = N**2
+
+    c = (a-b)**0.5
+
+    a = N**2 + c
+    b = N**2 - c
+
+    return (-a*0.52977210903 , a * 0.52977210903)
+
 def convertToSpherical(results:ArrayType):
     X_list = results[2]*np.cos(results[0])*np.sin(results[1])
     Y_list = results[2]*np.sin(results[0])*np.sin(results[1])
@@ -59,7 +71,10 @@ def sphericalPlot(config:Config , reader:ResultsReader):
         ax.set_xlabel("X($\AA$)")
         ax.set_ylabel("Y($\AA$)")
         ax.set_zlabel("Z($\AA$)")
-
+        lim = getlimits(n)
+        ax.set_xlim(lim)
+        ax.set_ylim(lim)
+        ax.set_zlim(lim)
         for k in range(1,n+1):
         
             
@@ -71,7 +86,7 @@ def sphericalPlot(config:Config , reader:ResultsReader):
                     continue
                 results = reader.getResultsByNKM(n,k,m)
                 convertedResults = convertToSpherical(results) 
-                ax.plot(convertedResults[0]/unit,convertedResults[1]/unit,convertedResults[2]/unit,label = ('m = %d')%m)
+                ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('m = %d')%m)
                 plt.legend(frameon=True, loc='lower center', ncol=3)
         
     plt.show()

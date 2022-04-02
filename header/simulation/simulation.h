@@ -10,21 +10,9 @@
 #include "../calculations/CalcRel.h"
 #include "../calculations/SphericalCalc.h"
 #include "../util/macros.h"
+#include "../util/types.h"
 
-typedef struct {// struct simItr (simulation itration) to hold the current and next itration values
-    double t;// itration time
-    double r;// itration distance
-    double r_dot;// itration movment speed
-    double r_dot_dot;// itration movment acceleration
-    double phi;// itration angle
-    double phi_dot;// itration angleular speed
-    double phi_dot_dot;// itration angleular acceleration
-    double gamma;//itration rel mass mult
-    double delataphi;//itration angle of the perahelion
-    double theta;
-    double theta_dot;
-    double theta_dot_dot;
-}simItr;
+
 
 /**
  * @brief runs the simualtion using the non-relativistic equations in Calc.h

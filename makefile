@@ -17,7 +17,7 @@ calculations_path = $(SOURCE_P)calculations/
 
 calculations_files = $(calculations_path)Calc.c $(calculations_path)SphericalCalc.c $(calculations_path)CalcRel.c
 simulation_files = $(simulation_path)simulation.c
-util_files = $(util_path)Reads.c $(util_path)strParce.c
+util_files = $(util_path)Reads.c $(util_path)strParce.c $(util_path)linkedList.c
 config_files = $(config_path)Config.c
 main_file = $(SOURCE_P)main.c
 
