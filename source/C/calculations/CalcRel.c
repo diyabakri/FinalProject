@@ -11,7 +11,6 @@ double calc_rel_phi_dot(double l , double gamma , double r , double m){
     
     double arg1 = gamma * m;
     arg1 *= r;
-    
     return(l/arg1);
 
 }

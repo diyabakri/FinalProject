@@ -9,6 +9,7 @@
 #include "../calculations/Calc.h"
 #include "../calculations/CalcRel.h"
 #include "../calculations/SphericalCalc.h"
+#include "../calculations/RelSphericalCalc.h"
 #include "../util/macros.h"
 #include "../util/types.h"
 
@@ -41,6 +42,8 @@ void spherical_sim_ele(FILE **result_files , Config *config);
  * @param result_f 
  * @param itr 
  */
+void rel_spherical_sim_ele(FILE **result_files , Config *config);
+
 void logItration(FILE *result_f ,simItr* itr);
 
 #endif //SIMULATION_H_

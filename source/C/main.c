@@ -100,6 +100,9 @@ int main()
             case SPHERICAL:
                 spherical_sim_ele(results_f,config);
             break;
+            case REL_SPHERICAL:
+                rel_spherical_sim_ele(results_f,config);
+            break;
         }
         // stop timer
         long end_time = clock();

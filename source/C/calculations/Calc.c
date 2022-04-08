@@ -7,13 +7,13 @@ double calc_phi_dot(double l,double m,double r){
     return(l/(m*r*r));
 }
 
-double calc_R_dot_dot(double m , double r , double e , double l_sqr){
+double calc_R_dot_dot(double m , double r , double e , double k_sqr, double Hbar_sqr ){
 
     double arg1,arg2;
     
     double r_sq = r*r; 
     
-    arg1 = l_sqr;
+    arg1 = k_sqr*Hbar_sqr;
     arg1/= m*r_sq*r;
     
     arg2 = e*e;

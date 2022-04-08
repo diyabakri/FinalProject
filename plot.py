@@ -71,7 +71,9 @@ def sphericalPlot(config:Config , reader:ResultsReader):
         ax.set_xlabel("X($\AA$)")
         ax.set_ylabel("Y($\AA$)")
         ax.set_zlabel("Z($\AA$)")
+
         lim = getlimits(n)
+        
         ax.set_xlim(lim)
         ax.set_ylim(lim)
         ax.set_zlim(lim)
@@ -82,11 +84,10 @@ def sphericalPlot(config:Config , reader:ResultsReader):
                 continue
             for m in range(k+1):
                 if m not in config.mList and config.mList[0]!= -1:
-                    print(config.mList)
                     continue
                 results = reader.getResultsByNKM(n,k,m)
                 convertedResults = convertToSpherical(results) 
-                ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('m = %d')%m)
+                ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m))
                 plt.legend(frameon=True, loc='lower center', ncol=3)
         
     plt.show()

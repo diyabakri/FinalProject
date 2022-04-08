@@ -40,7 +40,6 @@ typedef struct {// struct simItr (simulation itration) to hold the current and n
     double r_dot_dot;// itration movment acceleration
     double phi;// itration angle
     double phi_dot;// itration angleular speed
-    double phi_dot_dot;// itration angleular acceleration
     double gamma;//itration rel mass mult
     double delataphi;//itration angle of the perahelion
     double theta;

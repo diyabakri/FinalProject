@@ -1,8 +1,9 @@
 #ifndef CALCREL_H_
 #define CALCREL_H_
 
-#define C (double)(29979245800)
-
+#ifndef REL_SPHERE_CALC_H_ 
+    #define C (double)(29979245800)
+#endif
 /*
 *************************************************************************************************************
 *** All calculations are done acording to Atomic Structure And Spectral Lines Vol. I by Arnold Sommerfeld ***
