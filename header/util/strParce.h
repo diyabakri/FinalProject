@@ -58,7 +58,10 @@ float parceFloat(char* str);
 */
 double parceDouble(char* str);
 
-LinkedList* parceIntLinkedList(char* str);
+#ifdef LINKEDLIST_H_
+    LinkedList* parceIntLinkedList(char* str);
+#endif
+
 /**
 
     converts string to int* array

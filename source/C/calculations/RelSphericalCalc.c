@@ -4,7 +4,6 @@
 #include <math.h>
 #include <float.h>
 
-
 double rel_sphere_calc_r_dot_dot(double k_sqr ,double Hbar_sqr , double mass , double gamma , double r , double charge , double r_dot){
         
     double arg1,arg2,arg3;
@@ -104,4 +103,39 @@ double rel_sphere_calc_spc_case_theta_dot(double k , double Hbar , double mass ,
 
     return(arg1/arg2);
     
+}
+
+double rel_sphere_calc_deltaPhi(double* currMaxVec , double* prevMaxVec, double rMax){
+
+    double arg1 = sclarMult(currMaxVec , prevMaxVec, 3);
+
+    arg1 /= (rMax*rMax);
+    
+    return(acos(arg1));
+
+}
+
+double* stoc(double roh ,double phi ,double theta){
+
+    double* cords = (double*)malloc(sizeof(double)*3);
+
+    double x = roh*cos(phi)*sin(theta);
+    double y = roh*sin(phi)*sin(theta);
+    double z = roh*cos(theta);
+
+    cords[0] = x;
+    cords[1] = y;
+    cords[2] = z;
+    
+    return cords;
+}
+
+double sclarMult(double* v1 , double* v2 , int size){
+    double sum = 0;
+    for(int i = 0 ; i < size; i++){
+        
+        sum+=(v1[i]*v2[i]);
+        
+    }
+    return sum;
 }

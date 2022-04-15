@@ -1,7 +1,6 @@
 #ifndef REL_SPHERE_CALC_H_
 #define REL_SPHERE_CALC_H_
 
-
 #ifndef CALCREL_H_
     #define C (double)(29979245800)
 #endif
@@ -20,5 +19,10 @@ double rel_sphere_calc_spc_case_r_dot_dot(double r, double theta_dot , double ch
 
 double rel_sphere_calc_spc_case_theta_dot(double k , double Hbar , double mass , double r , double gamma);
 
+double rel_sphere_calc_deltaPhi(double* currMaxVec , double* prevMaxVec,double rMax);
+
+double* stoc(double roh ,double phi ,double theta);
+
+double sclarMult(double* v1 , double* v2, int size);
 
 #endif//REL_SPHERE_CALC_H_

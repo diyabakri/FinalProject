@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 
-
 double sphere_calc_theta_min(double Nphi , double k){
 
     double arg1 = Nphi/k;
@@ -94,4 +93,5 @@ double sphere_calc_spc_case_theta_dot(double k , double Hbar , double mass , dou
     
     
 }
+
 

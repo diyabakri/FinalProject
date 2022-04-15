@@ -1,7 +1,6 @@
 #ifndef SPHERE_CALC_H_
 #define SPHERE_CALC_H_
 
-
 #ifndef CALC_H_
     #define PI 3.14159265358979323846
     #define _2_PI  2 * PI

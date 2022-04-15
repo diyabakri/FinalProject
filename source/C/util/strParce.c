@@ -217,7 +217,9 @@ double* parceDoubleArray(char* str,int* size){
 
 }
 
+#ifdef LINKEDLIST_H_
 LinkedList* parceIntLinkedList(char* str){
+
     
     int size = strlen(str);
     bool leftBrakit;
@@ -262,3 +264,4 @@ LinkedList* parceIntLinkedList(char* str){
     }
 
 }
+#endif

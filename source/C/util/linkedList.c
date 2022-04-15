@@ -21,6 +21,7 @@ typedef struct _linkedList{
 LinkedList* newLinkedList(){
 
     LinkedList* list = (LinkedList*)malloc(sizeof(LinkedList));
+    
     if(list == NULL){
         return NULL;
     }

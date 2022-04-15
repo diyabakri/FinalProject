@@ -220,7 +220,7 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
         
 
         double prevPhi = 0;
-        double prevMaxPhi= 0;
+        double prevMaxVec= 0;
         double prevR = 0;
         
         initItrations(curr_itr,TYPE);
@@ -253,15 +253,15 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
                     {
                         PHI(curr_itr) = PHI(curr_itr) - _2_PI;
                     }
-                    if(prevMaxPhi != 0){
+                    if(prevMaxVec != 0){
 
-                        DELTAPHI(curr_itr) = PHI(curr_itr) - prevMaxPhi;
+                        DELTAPHI(curr_itr) = PHI(curr_itr) - prevMaxVec;
                         // printf("curr PHI = %.*E , prev PHI  = %.*E \t",PHI(curr_itr),DECIMAL_DIG,prevPhi,DECIMAL_DIG);
-                        printf(" currMaxth - prevMAxPhi  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
+                        printf(" currMaxth - prevMaxVec  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
                     }
                                                 
                     prevR = R(curr_itr);
-                    prevMaxPhi = PHI(curr_itr);
+                    prevMaxVec = PHI(curr_itr);
 
                 }
 
@@ -487,8 +487,10 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
                     continue;
                 }
             }
+            
             double prevPhi = 0;
-            double prevMaxPhi= 0;
+            double* prevMaxVec= NULL;
+            double* currMaxVec= NULL;
             double prevR = 0;
             bool at_max = true;
             
@@ -508,7 +510,7 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
             GAMMA(curr_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
 
             THETA(curr_itr) = thetamin;
-            printf("theta min  = %e \n ",thetamin);
+
             if(m == K){
             
                 PHI(next_itr) = PI/2;
@@ -548,28 +550,21 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
                     at_max = !(at_max);
                     if(at_max){
                         
-                        
-                        if(prevMaxPhi != 0){
-                            if( m==0 ){
-                                DELTAPHI(curr_itr) = PHI(curr_itr) - prevMaxPhi;
-                            }else if(m == K){
-                                DELTAPHI(curr_itr) = THETA(curr_itr) - prevMaxPhi;
-                            }
+                        currMaxVec = stoc(R(curr_itr),PHI(curr_itr),THETA(curr_itr));
+     
+                        if(prevMaxVec != NULL){
+                            
+                            DELTAPHI(curr_itr) = rel_sphere_calc_deltaPhi(currMaxVec,prevMaxVec,R_MAX);
                             DELTAPHI(next_itr) = DELTAPHI(curr_itr);
+
+                            free(prevMaxVec);
                             // printf("curr PHI = %.*E , prev PHI  = %.*E \t",PHI(curr_itr),DECIMAL_DIG,prevPhi,DECIMAL_DIG);
-                            printf(" currMaxth - prevMAxPhi  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
+                            printf(" currMaxth - prevMaxVec  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
                         }
                                                     
                         prevR = R(curr_itr);
-                        if(m == 0){
 
-                            prevMaxPhi = PHI(curr_itr);
-                        
-                        }else if(m == K){
-
-                            prevMaxPhi = THETA(curr_itr);
-
-                        }
+                        prevMaxVec = currMaxVec;
 
                     }
 
@@ -595,7 +590,7 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
 
             fileIndex++;
 
-
+            free(currMaxVec);
         }
 
         free(rMinMax);

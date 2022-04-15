@@ -15,19 +15,49 @@ Config* getInitVals(){
     char** configLines = readLines(config_f,&length);
 
     Config* config = (Config*)malloc(sizeof(Config));
-   
-    config->itrs = parceInt(configLines[0]);
-    config->init_r = parceDouble(configLines[1]);
-    config->electron_charge = parceDouble(configLines[2]);
-    config->electron_mass = parceDouble(configLines[3]);
-    config->time_intervolt = parceDouble(configLines[4]);
-    config->Hbar = parceDouble(configLines[5]); 
-    config->n = parceInt(configLines[6]);
-    config->k_list = parceIntArray(configLines[7],&(config->k_size));
-    config->m_list = parceIntArray(configLines[8],&(config->m_size));
-    config->type = parceInt(configLines[9]);
-    config->log_p = parceInt(configLines[10]);
-    config->results_path = get_filepath(configLines[11]);
+    for(int i = 0 ; i < length ; i++){
+        
+        char* currLine = configLines[i];
+
+        if(strstr(currLine,"itrs =")!= NULL){
+            config->itrs = parceInt(currLine);
+            continue;
+        }else if(strstr(currLine,"Hbar =")!=NULL){
+            config->Hbar = parceDouble(currLine);
+            continue;
+        }else if(strstr(currLine,"charge =")!=NULL){
+            config->electron_charge = parceDouble(currLine);
+            continue;
+        }else if(strstr(currLine,"mass =")!=NULL){
+            config->electron_mass = parceDouble(currLine);
+            continue;
+        }else if(strstr(currLine,"t =")!=NULL){
+            config->time_intervolt = parceDouble(currLine);
+            continue;
+        }else if(strstr(currLine,"R =")!=NULL){
+            config->init_r = parceDouble(currLine); 
+            continue;
+        }else if(strstr(currLine,"N =")!=NULL){
+            config->n = parceInt(currLine);
+            continue;
+        }else if(strstr(currLine,"K_LIST =")!=NULL){
+            config->k_list = parceIntArray(currLine,&(config->k_size));
+            continue;
+        }else if(strstr(currLine,"M_LIST =")!=NULL){
+            config->m_list = parceIntArray(currLine,&(config->m_size));
+            continue;
+        }else if(strstr(currLine,"Type =")!=NULL){
+            config->type = parceInt(currLine);
+            continue;
+        }else if(strstr(currLine,"logPerod =")!=NULL){
+            config->log_p = parceInt(currLine);
+            continue;
+        }else if(strstr(currLine,"results_path =")!=NULL){
+            config->results_path = get_filepath(currLine);
+            continue;
+        }
+    }
+    
 
     for(int i = 0 ; i <length ; i++){
         free(configLines[i]);
