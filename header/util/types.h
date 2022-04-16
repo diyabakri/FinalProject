@@ -9,7 +9,9 @@ typedef enum{
     POLAR = 1,
     REL_POLAR = 2,
     SPHERICAL = 3,
-    REL_SPHERICAL = 4
+    REL_SPHERICAL = 4,
+    SPIN = 5,
+    REL_SPIN = 6
 
 }simType;
 
@@ -40,11 +42,13 @@ typedef struct {// struct simItr (simulation itration) to hold the current and n
     double r_dot_dot;// itration movment acceleration
     double phi;// itration angle
     double phi_dot;// itration angleular speed
+    double phi_dot_0;
     double gamma;//itration rel mass mult
     double delataphi;//itration angle of the perahelion
     double theta;
     double theta_dot;
     double theta_dot_dot;
+    double epsilon;
 }simItr;
 
 

@@ -2,6 +2,44 @@
 #include <stdio.h>
 #include <float.h>
 
+/*
+*************************************
+**                                 **
+**   repeatative code functions    **
+**                                 **
+*************************************
+*/
+
+//---------------------------------------------
+
+bool skip(Config* config , int k , int m){
+    
+    if(TYPE == SPHERICAL || TYPE == REL_SPHERICAL || TYPE == SPIN || TYPE == REL_SPIN){
+        if(M_LIST[0]!= -1 || M_SIZE !=1){
+            for(int j = 0 ; j < M_SIZE ; j++){
+                if(M_LIST[j] == m ){
+                    return false;
+                }
+            }
+        }else{
+            return false;
+        }
+    }
+        
+    if(K_LIST[0]!= 0 || K_SIZE !=1){
+        for(int j = 0 ; j < K_SIZE ; j++){
+            if(K_LIST[j] == k ){
+                return false;
+            }
+        }
+    }else{
+
+        return false;
+    
+    }
+
+    return true;
+}
 
 void iterate(simItr* curr_itr , simItr* next_itr , Config* config){
 
@@ -17,7 +55,7 @@ void iterate(simItr* curr_itr , simItr* next_itr , Config* config){
     {
         PHI(next_itr) = PHI(next_itr) - _2_PI;
     }
-    if (TYPE == SPHERICAL || TYPE == REL_SPHERICAL)
+    if (TYPE == SPHERICAL || TYPE == REL_SPHERICAL || TYPE == SPIN)
     {
 
         THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL);
@@ -49,16 +87,30 @@ void initItrations(simItr* itr , simType type){
     THETA(itr) = -1.0;
     THETA_DOT(itr)=-1.0;
     THETA_DOT_DOT(itr)=-1.0;
+    EPSILON(itr) = -1.0;
+    PHI_DOT_0(itr) = -1.0;
+
     
-    if(type == REL_POLAR || type == REL_SPHERICAL){
+    if(type == REL_POLAR || type == REL_SPHERICAL || type == REL_SPIN){
+    
         GAMMA(itr) = 0;
         DELTAPHI(itr) = 0;
+    
     }
 
-    if(type == SPHERICAL || type == REL_SPHERICAL){
+    if(type == SPHERICAL || type == REL_SPHERICAL || type == SPIN){
+    
         THETA(itr) = 0;
         THETA_DOT(itr) = 0;
         THETA_DOT_DOT(itr) = 0;
+    
+    }
+
+    if(type == SPIN || type == REL_SPIN){
+
+        EPSILON(itr) = 0;
+        PHI_DOT_0(itr) = 0;
+
     }
     
 }
@@ -74,7 +126,11 @@ void logItration(FILE *result_f ,simItr* itr){
     
     fprintf(result_f, "phi= %E\t", PHI(itr) );
     fprintf(result_f, "phi'= %E\t", PHI_DOT(itr));
-
+    
+    if(PHI_DOT_0(itr) != -1.0){ 
+        fprintf(result_f, "phi'_0= %E\t", PHI_DOT_0(itr));
+        
+    }
     if(THETA(itr) != -1.0){
         fprintf(result_f,"theta= %E\t",THETA(itr));
     }
@@ -84,16 +140,31 @@ void logItration(FILE *result_f ,simItr* itr){
     if(THETA_DOT_DOT(itr) != -1.0){
         fprintf(result_f,"theta''= %E\t",THETA_DOT_DOT(itr));
     }
-    if (GAMMA(itr) != -1.0){ 
+    if(GAMMA(itr) != -1.0){ 
         fprintf(result_f, "gamma= %E\t", GAMMA(itr));
     }
     if(DELTAPHI(itr) != -1.0){
         fprintf(result_f, "deltaPhi= %E\t", DELTAPHI(itr));
     }
+    if(EPSILON(itr) != -1.0){
+        fprintf(result_f, "epsilon= %E\t", EPSILON(itr));
+    }
 
     fprintf(result_f, "\n");
     
 }
+
+//---------------------------------------------
+
+/*
+*************************************
+**                                 **
+**   simulation code functions     **
+**                                 **
+*************************************
+*/
+
+//---------------------------------------------
 
 void polar_sim_ele(FILE **result_files, Config *config){
     
@@ -106,25 +177,15 @@ void polar_sim_ele(FILE **result_files, Config *config){
     long double Hbar_sqr = HBAR*HBAR;
 
     for (int i = 1 ; i <= N ; i++){
-
-        if(K_LIST[0]!= 0 || K_SIZE !=1){
         
-            bool isSimulated = false;
-            
-            for(int j = 0 ; j < K_SIZE ; j++){
-                if(K_LIST[j] == i ){
-                    isSimulated = true;
-                    break;
-                }
-            }
-            if(isSimulated==false){
-                continue;
-            }
+        double K = i;
+
+        if(skip(config,K,0)){
+            continue;
         }
         
         FILE* res_f = result_files[N-i];
 
-        double K = i;
         double* rMinMax = calc_rmin_rmax(N,K);
         double curr_l = HBAR*K;
         double K_sqr = K*K;
@@ -176,19 +237,10 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
     // start calculationg
     for (int i = 1 ; i <= N ; i++){
         
-        if(K_LIST[0]!= 0 || K_SIZE !=1){
+        double K = i;
         
-            bool isSimulated = false;
-            
-            for(int j = 0 ; j < K_SIZE ; j++){
-                if(K_LIST[j] == i ){
-                    isSimulated = true;
-                    break;
-                }
-            }
-            if(isSimulated==false){
-                continue;
-            }
+        if(skip(config,K,0)){
+            continue;
         }
         
         FILE* res_f = result_files[N-i];
@@ -196,7 +248,6 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
 
 
         // The multiplier of H_BAR
-        double K = i;
         double* rMinMax = calc_rmin_rmax(N,K);
         // L is the value of H_Bar
         double curr_l = HBAR*K;
@@ -306,23 +357,15 @@ void spherical_sim_ele(FILE **result_files , Config *config){
 
     for (int i = 1 ; i <=N ; i++){
 
-        if(K_LIST[0]!= 0 || K_SIZE !=1){
+        double K = i;
+
+        if(skip(config,K,0)){
         
-            bool isSimulated = false;
-            
-            for(int j = 0 ; j < K_SIZE ; j++){
-                if(K_LIST[j] == i ){
-                    isSimulated = true;
-                    break;
-                }
-            }
-            if(isSimulated==false){
-                fileIndex+=(i+1);
-                continue;
-            }
+            fileIndex+=(i+1);
+            continue;
+        
         }
         
-        double K = i;
         double curr_l = HBAR*K;
         double K_sqr = K*K;
 
@@ -330,21 +373,11 @@ void spherical_sim_ele(FILE **result_files , Config *config){
 
         for(double m = 0 ; m <= K ; m++){
        
-            if(M_LIST[0]!= -1 || M_SIZE !=1){
+            if(skip(config,K,m)){
+            
+                fileIndex++;
+                continue;
         
-            bool isSimulated = false;
-            
-            for(int j = 0 ; j < M_SIZE ; j++){
-            
-                if(M_LIST[j] == m ){
-                    isSimulated = true;
-                    break;
-                }
-            }
-                if(isSimulated==false){
-                    fileIndex++;
-                    continue;
-                }
             }
             
             double Nphi = K-m;
@@ -432,27 +465,20 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
 
     for (int i = 1 ; i <=N ; i++){
 
-        if(K_LIST[0]!= 0 || K_SIZE !=1){
+        double K = i;
+
+        if(skip(config,K,0)){
         
-            bool isSimulated = false;
-            
-            for(int j = 0 ; j < K_SIZE ; j++){
-                if(K_LIST[j] == i ){
-                    isSimulated = true;
-                    break;
-                }
-            }
-            if(isSimulated==false){
-                fileIndex+=(i+1);
-                continue;
-            }
+            fileIndex+=(i+1);
+            continue;
+        
         }
         
-        double K = i;
         double curr_l = HBAR*K;
         double K_sqr = K*K;
 
         double alpha = calc_alpha(CHARGE,HBAR);
+        
         double w = calc_rel_w(N,K,MASS,alpha);
 
         double a = calc_rel_A(MASS,w);
@@ -471,21 +497,11 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
         for(double m = 0 ; m <= K ; m++){
             
             
-            if(M_LIST[0]!= -1 || M_SIZE !=1){
+            if(skip(config,K,m)){
         
-            bool isSimulated = false;
-            
-            for(int j = 0 ; j < M_SIZE ; j++){
-            
-                if(M_LIST[j] == m ){
-                    isSimulated = true;
-                    break;
-                }
-            }
-                if(isSimulated==false){
-                    fileIndex++;
-                    continue;
-                }
+                fileIndex++;
+                continue;
+        
             }
             
             double prevPhi = 0;
@@ -601,3 +617,101 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
     free(next_itr);
 
 }
+
+void spin_sim_ele(FILE **result_files , Config *config){
+
+    simItr *curr_itr , *next_itr;
+
+    curr_itr = (simItr*)malloc(sizeof(simItr));
+    next_itr = (simItr*)malloc(sizeof(simItr));
+
+    long double Hbar_sqr = HBAR*HBAR;
+    int fileIndex = 0;
+
+    for (int i = 1 ; i <=N ; i++){
+        
+        
+        double K = i;
+        
+        if(skip(config,K,0)){
+        
+            fileIndex+=(i+1);
+            continue;
+        
+        }
+        
+        double curr_l = HBAR*K;
+        double K_sqr = K*K;
+
+        double* rMinMax = calc_rmin_rmax(N,K);
+
+        for(double m = 0 ; m <= K ; m++){
+                
+            if(skip(config,K,m)){
+               
+                fileIndex++;
+                continue;
+            
+            }
+
+            double Nphi = K-m;
+
+            double thetamin= sphere_calc_theta_min(Nphi,K);
+            
+            FILE* res_f = result_files[fileIndex];
+            
+            initItrations(curr_itr,TYPE);
+            initItrations(next_itr,TYPE);
+
+
+
+            R(curr_itr) = R_MIN;
+            THETA(curr_itr) = thetamin;
+            
+            PHI_DOT_0(curr_itr) = spin_calc_phi_dot_0(R(curr_itr),MASS,Nphi,HBAR,THETA(curr_itr));
+            EPSILON(curr_itr) = spin_calc_epsilon(R(curr_itr),MASS,CHARGE,THETA(curr_itr),Nphi);
+
+            PHI_DOT(curr_itr) = spin_calc_phi_dot(PHI_DOT_0(curr_itr),EPSILON(curr_itr));
+            THETA_DOT_DOT(curr_itr) = spin_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA(curr_itr),PHI_DOT_0(curr_itr),EPSILON(curr_itr));
+            R_DOT_DOT(curr_itr) = spin_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT_0(curr_itr),EPSILON(curr_itr),MASS,CHARGE);
+            
+            logItration(res_f,curr_itr);
+
+            for (int it = 1; it < config->itrs; it++){
+            
+                    
+                iterate(curr_itr,next_itr,config);
+                
+                PHI_DOT_0(next_itr) = spin_calc_phi_dot_0(R(curr_itr),MASS,Nphi,HBAR,THETA(curr_itr));
+                EPSILON(next_itr) = spin_calc_epsilon(R(curr_itr),MASS,CHARGE,THETA(curr_itr),Nphi);
+
+                PHI_DOT(next_itr) = spin_calc_phi_dot(PHI_DOT_0(curr_itr),EPSILON(curr_itr));
+                THETA_DOT_DOT(next_itr) = spin_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA(curr_itr),PHI_DOT_0(curr_itr),EPSILON(curr_itr));
+                R_DOT_DOT(next_itr) = spin_calc_r_dot_dot(R(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT_0(curr_itr),EPSILON(curr_itr),MASS,CHARGE);
+            
+                if(it % LOG_P == 0){
+                    logItration(res_f,curr_itr);
+                }
+                simItr* temp = curr_itr;
+                curr_itr = next_itr;
+                next_itr = temp;
+            }
+
+            logItration(res_f,curr_itr);
+
+            fileIndex++;
+
+
+        }
+
+        free(rMinMax);
+
+    }
+    
+    free(curr_itr);
+    free(next_itr);
+            printf("here\n");
+
+}
+
+//---------------------------------------------

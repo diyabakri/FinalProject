@@ -30,7 +30,7 @@ int main()
         FILE **results_f;
         int fileCount = 0;
         //---------- SPHERICAL SIMULATION ---------
-        if(TYPE == SPHERICAL || TYPE == REL_SPHERICAL){
+        if(TYPE == SPHERICAL || TYPE == REL_SPHERICAL || TYPE == SPIN || TYPE == REL_SPIN){
 
             fileCount = getFileNum(energy_level);
 
@@ -98,10 +98,18 @@ int main()
 
             break;
             case SPHERICAL:
+
                 spherical_sim_ele(results_f,config);
+            
             break;
             case REL_SPHERICAL:
+            
                 rel_spherical_sim_ele(results_f,config);
+            
+            break;
+            case SPIN:
+                spin_sim_ele(results_f,config);
+            
             break;
         }
         // stop timer
