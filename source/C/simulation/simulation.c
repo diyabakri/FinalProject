@@ -467,12 +467,12 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
 
         double K = i;
 
-        if(skip(config,K,0)){
+        // if(skip(config,K,0)){
         
-            fileIndex+=(i+1);
-            continue;
+            // fileIndex+=(i+1);
+            // continue;
         
-        }
+        // }
         
         double curr_l = HBAR*K;
         double K_sqr = K*K;
@@ -497,12 +497,12 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
         for(double m = 0 ; m <= K ; m++){
             
             
-            if(skip(config,K,m)){
+            // if(skip(config,K,m)){
         
-                fileIndex++;
-                continue;
+                // fileIndex++;
+                // continue;
         
-            }
+            // }
             
             double prevPhi = 0;
             double* prevMaxVec= NULL;
@@ -567,10 +567,13 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
                     if(at_max){
                         
                         currMaxVec = stoc(R(curr_itr),PHI(curr_itr),THETA(curr_itr));
-     
+                        // printf("r = %e  ,theta = %e, phi = %.*e \n",R(curr_itr),THETA(curr_itr),PHI(curr_itr),DECIMAL_DIG);
+                        // printf("x = %.*e , y = %.*e , z = %.*e atan(y/x) = %.*e\n",currMaxVec[0],DECIMAL_DIG,currMaxVec[1],DECIMAL_DIG,currMaxVec[2],DECIMAL_DIG,atan2(currMaxVec[1],currMaxVec[0])+_2_PI,DECIMAL_DIG);
+                        printf("N= %d ,K = %e, M = %e \n",N,K,m);
                         if(prevMaxVec != NULL){
                             
                             DELTAPHI(curr_itr) = rel_sphere_calc_deltaPhi(currMaxVec,prevMaxVec,R_MAX);
+                            // printf("Rmax = %.*e\n",R(curr_itr),DECIMAL_DIG);
                             DELTAPHI(next_itr) = DELTAPHI(curr_itr);
 
                             free(prevMaxVec);

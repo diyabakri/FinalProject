@@ -67,7 +67,7 @@ def sphericalPlot(config:Config , reader:ResultsReader):
             continue
 
         fig = plt.figure()
-        ax = plt.axes(projection = '3d')
+        ax = fig.add_subplot(projection = '3d')
         ax.set_xlabel("X($\AA$)")
         ax.set_ylabel("Y($\AA$)")
         ax.set_zlabel("Z($\AA$)")

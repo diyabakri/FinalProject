@@ -109,7 +109,12 @@ double rel_sphere_calc_deltaPhi(double* currMaxVec , double* prevMaxVec, double 
 
     double arg1 = sclarMult(currMaxVec , prevMaxVec, 3);
 
-    arg1 /= (rMax*rMax);
+    // printf("scalar Mult = %e\n",arg1);
+    double rmax_curr = sqrt(currMaxVec[0]*currMaxVec[0] + currMaxVec[1]*currMaxVec[1] + currMaxVec[2]*currMaxVec[2]);
+    double rmax_prev = sqrt(prevMaxVec[0]*prevMaxVec[0] + prevMaxVec[1]*prevMaxVec[1] + prevMaxVec[2]*prevMaxVec[2]);
+    arg1 /= (rmax_curr*rmax_prev);
+    // printf("rmax_curr %.*e , rmax_prev %.*e \n",rmax_curr,DECIMAL_DIG,rmax_prev,DECIMAL_DIG);
+    // printf("cos(psi) = %.*e\n",arg1,DECIMAL_DIG);
     
     return(acos(arg1));
 
