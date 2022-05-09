@@ -55,7 +55,7 @@ double calc_rel_r_dot_dot(double l_sqr , double mass , double gamma , double r ,
  * @param energy_level 
  * @return double 
  */
-double calc_rel_chi(double h_bar ,double e,double r ,double energy_level);
+double calc_rel_chi(double h_bar ,double e,double energy_level);
 /**
  * @brief Calculates Rmin with relativty incorporated the starting point of the simulation
  *          

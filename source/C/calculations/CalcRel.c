@@ -137,7 +137,7 @@ long double calc_rel_w(long double energy_level ,long double h_mult ,long double
     return(arg1*arg2);
 }
 
-double calc_rel_chi(double h_bar ,double e,double r ,double energy_level)
+double calc_rel_chi(double h_bar ,double e,double energy_level)
 {
     
 

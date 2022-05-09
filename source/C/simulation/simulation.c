@@ -13,14 +13,16 @@
 //---------------------------------------------
 
 bool skip(Config* config , int k , int m){
+
     
-    if(TYPE == SPHERICAL || TYPE == REL_SPHERICAL || TYPE == SPIN || TYPE == REL_SPIN){
+    if(m != -1){
         if(M_LIST[0]!= -1 || M_SIZE !=1){
             for(int j = 0 ; j < M_SIZE ; j++){
                 if(M_LIST[j] == m ){
                     return false;
                 }
             }
+            return true;
         }else{
             return false;
         }
@@ -32,13 +34,10 @@ bool skip(Config* config , int k , int m){
                 return false;
             }
         }
+        return true;
     }else{
-
         return false;
-    
     }
-
-    return true;
 }
 
 void iterate(simItr* curr_itr , simItr* next_itr , Config* config){
@@ -57,7 +56,6 @@ void iterate(simItr* curr_itr , simItr* next_itr , Config* config){
     }
     if (TYPE == SPHERICAL || TYPE == REL_SPHERICAL || TYPE == SPIN)
     {
-
         THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL);
         THETA_DOT(next_itr) = THETA_DOT(curr_itr)+(THETA_DOT_DOT(curr_itr)*T_INTERVAL);
         
@@ -180,7 +178,7 @@ void polar_sim_ele(FILE **result_files, Config *config){
         
         double K = i;
 
-        if(skip(config,K,0)){
+        if(skip(config,K,-1)){
             continue;
         }
         
@@ -239,7 +237,7 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
         
         double K = i;
         
-        if(skip(config,K,0)){
+        if(skip(config,K,-1)){
             continue;
         }
         
@@ -297,7 +295,7 @@ void polar_sim_rel_ele(FILE **result_files , Config *config){
                 at_max = !(at_max);
                 if(at_max){
                     
-                    double  chi = calc_rel_chi(HBAR,CHARGE,R(curr_itr),(double)(K));
+                    double  chi = calc_rel_chi(HBAR,CHARGE,(double)(K));
                     // double test += ((2*PI)/chi)-2*PI;
                     
                     if (PHI(curr_itr) > _2_PI)
@@ -359,7 +357,7 @@ void spherical_sim_ele(FILE **result_files , Config *config){
 
         double K = i;
 
-        if(skip(config,K,0)){
+        if(skip(config,K,-1)){
         
             fileIndex+=(i+1);
             continue;
@@ -370,6 +368,10 @@ void spherical_sim_ele(FILE **result_files , Config *config){
         double K_sqr = K*K;
 
         double* rMinMax = calc_rmin_rmax(N,K);
+
+        int sign = 1;
+        bool theta_flag = false;
+
 
         for(double m = 0 ; m <= K ; m++){
        
@@ -422,7 +424,20 @@ void spherical_sim_ele(FILE **result_files , Config *config){
                 iterate(curr_itr,next_itr,config);
 
                 if(m == K){
-                    THETA_DOT(next_itr) = sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr));
+                    THETA_DOT(curr_itr) = (sign)*sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr));
+                    THETA_DOT(next_itr) = THETA_DOT(curr_itr);
+
+                    if (THETA(curr_itr)>= PI && !(theta_flag)){
+                        theta_flag = true;
+                        sign = -1;
+                        PHI(curr_itr) = -PHI(curr_itr);
+                        PHI(next_itr) = -PHI(next_itr);
+                    }else if(THETA(curr_itr) <= 0 && theta_flag){
+                        theta_flag = false;
+                        sign = 1;
+                        PHI(curr_itr) = -PHI(curr_itr);
+                        PHI(next_itr) = -PHI(next_itr);
+                    }
                 }else{
                     PHI_DOT(next_itr) = sphere_calc_phi_dot(Nphi,HBAR,THETA(curr_itr),MASS,R(curr_itr));
                     THETA_DOT_DOT(next_itr) = sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr)); 
@@ -461,18 +476,19 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
     next_itr = (simItr*)malloc(sizeof(simItr));
 
     long double Hbar_sqr = HBAR*HBAR;
+
     int fileIndex = 0;
 
     for (int i = 1 ; i <=N ; i++){
 
         double K = i;
 
-        // if(skip(config,K,0)){
+        if(skip(config,K,-1)){
         
-            // fileIndex+=(i+1);
-            // continue;
+            fileIndex+=(i+1);
+            continue;
         
-        // }
+        }
         
         double curr_l = HBAR*K;
         double K_sqr = K*K;
@@ -491,18 +507,20 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
 
         double* rMinMax = calc_rmin_rmax(N,K);
 
+        double  chi = calc_rel_chi(HBAR,CHARGE,(double)(K));
 
-        double  chi = calc_rel_chi(HBAR,CHARGE,R(curr_itr),(double)(K));
+        int sign = 1;
+        bool theta_flag = false;
 
         for(double m = 0 ; m <= K ; m++){
             
             
-            // if(skip(config,K,m)){
+            if(skip(config,K,m)){
         
-                // fileIndex++;
-                // continue;
+                fileIndex++;
+                continue;
         
-            // }
+            }
             
             double prevPhi = 0;
             double* prevMaxVec= NULL;
@@ -528,12 +546,19 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
             THETA(curr_itr) = thetamin;
 
             if(m == K){
-            
+                
                 PHI(next_itr) = PI/2;
                 PHI(curr_itr) = PI/2;
-                THETA_DOT(curr_itr) = rel_sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr),GAMMA(curr_itr));
+                
+                THETA_DOT(curr_itr) = (sign)*rel_sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr),GAMMA(curr_itr));
                 THETA_DOT(next_itr) = THETA_DOT(curr_itr);
                 
+                if (THETA(curr_itr)>= PI && !(theta_flag)){
+                    sign = -1;
+                }else if(THETA(curr_itr) <= 0 && theta_flag){
+                    sign = 1;
+                }
+
                 PHI_DOT(curr_itr) = 0;
                 THETA_DOT_DOT(curr_itr) = 0;
 
@@ -554,8 +579,25 @@ void rel_spherical_sim_ele(FILE **result_files , Config *config){
                 iterate(curr_itr,next_itr,config);
 
                 if(m == K){
-                    THETA_DOT(next_itr) = rel_sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr),GAMMA(curr_itr));
-                }else{
+    
+                    THETA_DOT(curr_itr) = (sign)*rel_sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr),GAMMA(curr_itr));
+                    THETA_DOT(next_itr) = THETA_DOT(curr_itr);
+
+                    if (THETA(curr_itr)>= PI && !(theta_flag)){
+
+                        theta_flag = true;
+                        sign = -1;
+                        PHI(curr_itr) = -PHI(curr_itr);
+                        PHI(next_itr) = -PHI(next_itr);
+                    
+                    }else if(THETA(curr_itr) <= 0 && theta_flag){
+                        theta_flag = false;
+                        sign = 1;
+                        PHI(curr_itr) = -PHI(curr_itr);
+                        PHI(next_itr) = -PHI(next_itr);
+                    }
+
+                }else{ 
                     PHI_DOT(next_itr) = rel_sphere_calc_phi_dot(Nphi,HBAR,THETA(curr_itr),MASS,R(curr_itr),GAMMA(curr_itr));
                     THETA_DOT_DOT(next_itr) = rel_sphere_calc_theta_dot_dot(R(curr_itr),R_DOT(curr_itr),THETA(curr_itr),THETA_DOT(curr_itr),PHI_DOT(curr_itr),CHARGE,MASS,GAMMA(curr_itr));
                 }
