@@ -1,7 +1,7 @@
 unsed/LongFloat.c
 unsed/LongFloat.h
 token.txt
-.vscode/settings.json
+.vscode
 electronSimulation
 deltaPlot.py
 __pycache__/Config.cpython-38.pyc
