@@ -6,9 +6,12 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <stdbool.h>
-#include "../util/types.h"
-#include "../util/Reads.h"
-#include "../util/strParce.h"
+#include "../utility/linkedList.h"
+#include "../utility/Reads.h"
+#include "../utility/strParce.h"
+#include "../utility/types.h"
+#include "../utility/macros.h"
+#include "filter.h"
 #define CONFIG_PATH "config.ini" // url of where the values are saved
 
 
@@ -18,13 +21,5 @@
  * @return Config* with the config values
  */
 Config* getInitVals();
-/**
- * @brief Create the results diroctarioes 
- * 
- * @param path = "file path format"
- * @param energy_levels  = number of files to create
- * @return int 0 if succesful -1 if faild
- */
-int createResultPath(char* path , int energy_levels);
 
 #endif // CONFIG_H_

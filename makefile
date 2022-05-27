@@ -11,17 +11,21 @@ endif
 SOURCE_P = source/C/
 
 config_path = $(SOURCE_P)config/
-util_path = $(SOURCE_P)util/
-simulation_path = $(SOURCE_P)simulation/
-calculations_path = $(SOURCE_P)calculations/
+util_path = $(SOURCE_P)utility/
+polar_path = $(SOURCE_P)Polar/
+spherical_path = $(SOURCE_P)Spherical/
+spin_path = $(SOURCE_P)Spin/
 
-calculations_files = $(calculations_path)Calc.c $(calculations_path)SphericalCalc.c $(calculations_path)CalcRel.c $(calculations_path)RelSphericalCalc.c $(calculations_path)SpinCalc.c
-simulation_files = $(simulation_path)simulation.c
-util_files = $(util_path)Reads.c $(util_path)strParce.c $(util_path)linkedList.c
-config_files = $(config_path)Config.c
+calculations_wildCard = calculations/*.c
+
+calculations_files = $(polar_path)$(calculations_wildCard) $(spherical_path)$(calculations_wildCard) $(spin_path)$(calculations_wildCard)
+simulation_files = $(polar_path)*.c $(spherical_path)*.c $(spin_path)*.c
+util_files = $(util_path)*.c 
+config_files = $(config_path)*.c
 main_file = $(SOURCE_P)main.c
 
-source_files = $(calculations_files) $(config_files) $(main_file) $(simulation_files) $(util_files)
+source_files = $(util_files) $(config_files) $(calculations_files) $(simulation_files) $(main_file)
+
 
 
 defult: 
@@ -30,6 +34,6 @@ run:
 	./$(EXE)
 plot:
 	$(RUN_P)
-clean: 
-	rm	*.o
+val: 
+	valgrind  --leak-check=full --show-leak-kinds=all ./$(EXE)
 	

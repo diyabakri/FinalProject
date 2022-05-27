@@ -120,6 +120,5 @@ def main():
 
         plotPolar(config,reader)
     
-
 if(__name__ == "__main__"):
     main()
