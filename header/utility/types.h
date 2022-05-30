@@ -26,6 +26,7 @@ typedef enum{
 typedef struct Config{
 
     simType type; // idicator to the type of equations to use 0 use regular 1 use reletivity 
+    int revolutions; 
     int log_p; // the number of ittrations to skip before logging
     int itrs; // number of iteration to run
     double init_r; // statring value of R in cm

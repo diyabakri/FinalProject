@@ -13,7 +13,9 @@ int main()
     
     
     // start timer
+    
     long begin_time = clock();
+
     switch (TYPE)
     {
         case POLAR:
@@ -43,7 +45,9 @@ int main()
         break;
     }
         // stop timer
+    
         long end_time = clock();
+    
         //-----------------------------------------
 
         // close results.txt file

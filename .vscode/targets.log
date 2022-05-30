@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 27 23:41:51 2022
+# Make data base, printed on Mon May 30 11:57:19 2022
 
 # Variables
 
@@ -53,7 +53,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 # makefile (from 'makefile', line 27)
 source_files = $(util_files) $(config_files) $(calculations_files) $(simulation_files) $(main_file)
 # environment
-JOURNAL_STREAM = 8:63494
+JOURNAL_STREAM = 8:61127
 # makefile (from 'makefile', line 3)
 CFLAGS = -mhard-float -O3 -lm 
 # environment
@@ -77,7 +77,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 _ = /usr/bin/code
 # environment
-MANAGERPID = 1678
+MANAGERPID = 1530
 # makefile (from 'makefile', line 24)
 config_files = $(config_path)*.c
 # environment
@@ -91,7 +91,7 @@ PATH = /home/diya/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/ubuntu:@/tmp/.ICE-unix/1899,unix/ubuntu:/tmp/.ICE-unix/1899
+SESSION_MANAGER = local/ubuntu:@/tmp/.ICE-unix/1741,unix/ubuntu:/tmp/.ICE-unix/1741
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -101,7 +101,7 @@ VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 7bdf14adfd0f493d96508ed4bd195376
+INVOCATION_ID = 010c3e46e17c49f589f31c083c1211a0
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # makefile (from 'makefile', line 13)
@@ -123,7 +123,7 @@ PWD = /home/diya/Desktop/Final_Project
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1863
+SSH_AGENT_PID = 1704
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -137,7 +137,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 VSCODE_CLI = 1
 # environment
-VSCODE_CODE_CACHE_PATH = /home/diya/.config/Code/CachedData/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
+VSCODE_CODE_CACHE_PATH = /home/diya/.config/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
 LOGNAME = diya
 # environment
@@ -169,7 +169,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-9494b097-d9e9-44f9-b4c6-fb07ec268029.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-67c3d1fe-e9b3-4e7c-a7ab-3d430c870153.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -183,13 +183,13 @@ XDG_CURRENT_DESKTOP = Unity
 # default
 MAKE_COMMAND := make
 # environment
-OLDPWD = /home/diya
+OLDPWD = /home/diya/Desktop
 # default
 .VARIABLES := 
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-4a082016-1.67.1-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-4a082016-1.67.2-main.sock
 # makefile (from 'makefile', line 11)
 SOURCE_P = source/C/
 # makefile
@@ -223,11 +223,11 @@ spherical_path = $(SOURCE_P)Spherical/
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/a58ffc10_4dfd_4bdf_a1dc_c2994b7064e7
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/afc8a776_da52_4333_b832_6b1130222cc2
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.107
+GNOME_TERMINAL_SERVICE = :1.109
 # default
 SUFFIXES := 
 # environment
@@ -251,7 +251,7 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 2738
+VSCODE_PID = 2592
 # variable set hash-table stats:
 # Load=120/1024=12%, Rehash=0, Collisions=18/146=12%
 
@@ -261,9 +261,9 @@ VSCODE_PID = 2738
 
 # Directories
 
-# . (device 2053, inode 1970274): 35 files, no impossibilities.
+# . (device 2053, inode 1970274): 18 files, no impossibilities.
 
-# 35 files, no impossibilities in 1 directories.
+# 18 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -279,14 +279,12 @@ all:
 #  File has not been updated.
 
 val:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 38):
 	valgrind  --leak-check=full --show-leak-kinds=all ./$(EXE)
 	
- 
 
 # Not a target:
 makefile:
@@ -330,12 +328,12 @@ plot:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 44 / storage = 554 B / avg = 12 B
-# current buf: size = 8162 B / used = 554 B / count = 44 / avg = 12 B
+# strcache buffers: 1 (0) / strings = 27 / storage = 248 B / avg = 9 B
+# current buf: size = 8162 B / used = 248 B / count = 27 / avg = 9 B
 
-# strcache performance: lookups = 52 / hit rate = 15%
+# strcache performance: lookups = 35 / hit rate = 22%
 # hash-table stats:
-# Load=44/8192=1%, Rehash=0, Collisions=1/52=2%
-# Finished Make data base on Fri May 27 23:41:51 2022
+# Load=27/8192=0%, Rehash=0, Collisions=1/35=3%
+# Finished Make data base on Mon May 30 11:57:19 2022
 
  

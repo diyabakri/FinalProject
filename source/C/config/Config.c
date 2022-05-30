@@ -23,7 +23,7 @@ FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
         
     }else{
 
-        sprintf(orbitPath,"%s/results_N%hi/results_K%hi/results_m%hi.txt",genratedTimeStamp,orbit.n,orbit.k,orbit.m);
+        sprintf(orbitPath,"%s/results_N%hi/results_K%hi/results_M%hi.txt",genratedTimeStamp,orbit.n,orbit.k,orbit.m);
 
     }
     printf("%s\n",orbitPath);
@@ -113,8 +113,10 @@ Config* getInitVals(){
     for(int i = 0 ; i < length ; i++){
         
         char* currLine = configLines[i];
-
-        if(strstr(currLine,"itrs =") == currLine){
+        if(strstr(currLine,"revolutions =") == currLine){
+            config->revolutions = parceInt(currLine);
+            continue;
+        }else if(strstr(currLine,"itrs =") == currLine){
             config->itrs = parceInt(currLine);
             continue;
         }else if(strstr(currLine,"Hbar =") == currLine){

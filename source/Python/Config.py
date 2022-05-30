@@ -1,19 +1,22 @@
 from array import ArrayType
+from distutils.command.config import config
+from importlib.resources import path
+from sqlite3 import Timestamp
 import numpy as np
+from .filter import Filter
 
 class Config:
     
     itrations:int
     log_p:int
     energyLevel:int
-    kList:ArrayType
-    mList:ArrayType
+    filter:Filter
     spherical:bool
     resultFormat:str
-    restultsPath:ArrayType
+    resultsPath = []
+    timeStamp:str
 
-
-    def __init__(self,configPath:str):
+    def __init__(self,configPath:str,filterpath:str):
 
         config = open(configPath,"r")
         configLines = config.readlines()
@@ -25,10 +28,6 @@ class Config:
                 self.itrations = (int)(currLine[valueIndex:])
             elif "N" in currLine:
                 self.energyLevel = (int)(currLine[valueIndex:])
-            elif "K_LIST" in currLine:
-                self.kList = self.parceIntArray(currLine)
-            elif "M_LIST" in currLine:
-                self.mList = self.parceIntArray(currLine)
             elif "logPerod" in currLine:
                 self.log_p = (int)(currLine[valueIndex:])
             elif "Type" in currLine:
@@ -37,40 +36,29 @@ class Config:
                     self.spherical = True
                 else:
                     self.spherical =False
-            elif "results_path" in currLine:
-                self.restultsPath = []
-                self.resultFormat = currLine[valueIndex+1:-2]
-                self.createListFiles(currLine[valueIndex+1:-2])
-
-    def parceIntArray(self,str:str):
+            elif "TimeStamp" in currLine:
+                self.timeStamp = currLine[valueIndex:-1]
+            
+        pathStr = self.timeStamp+"/results_N%d/results_K%d"
         
-        numList = []
-        start_index = str.find("=")+1
-        numberStr = str[start_index:]
-        while True:
-            endindex = numberStr.find(",")
-            if endindex == -1:
-                numList.append(int(numberStr))
-                break
+        if self.spherical:
+            pathStr+= "/results_M%d.txt"
+        else:
+            pathStr+= ".txt"
+
+        self.resultFormat = pathStr
+
+        self.filter = Filter(filterpath,self.spherical)
+        self.createListFiles()
+        
+
+
+    def createListFiles(self):
+
+        for i in range(len(self.filter.orbitList)):            
+            orbit = self.filter.orbitList[i]
+            if  self.spherical:
+
+                self.resultsPath.append(self.resultFormat%(orbit[0],orbit[1],orbit[2]))
             else:
-                numList.append(int(numberStr[:endindex]))
-                numberStr = numberStr[numberStr.find(",")+1:]
-        return np.array(numList)
-
-    def createListFiles(self,str:str):
-
-        for n in range(1,self.energyLevel+1):
-            if self.kList[0] != 0 :
-                if n < np.min(self.kList):
-                    continue
-            for k in range(1,n+1):
-                if (not (k  in self.kList)) and self.kList.all() != 0:
-                    continue
-                if self.spherical:
-                    for m in range(k+1):
-                        if (not (m  in self.mList)) and self.mList.all() != 0:
-                            continue
-                        self.restultsPath.append(str%(n,k,m))
-                else:
-                    self.restultsPath.append(str%(n,k,0))
-
+                self.resultsPath.append(self.resultFormat%(orbit[0],orbit[1]))

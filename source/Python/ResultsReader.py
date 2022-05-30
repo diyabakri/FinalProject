@@ -9,8 +9,11 @@ class ResultsReader:
         self.config = config
 
     def getResultsByNKM(self,n:int,k:int,m:int):
-        
-        resultFile = open(self.config.resultFormat%(n,k,m),"r")
+        if(self.config.spherical):
+            resultFile = open(self.config.resultFormat%(n,k,m),"r")
+        else:
+            resultFile = open(self.config.resultFormat%(n,k),"r")
+
         resultLines = resultFile.readlines()
 
         resultsArr = []
