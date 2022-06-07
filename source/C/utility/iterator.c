@@ -1,7 +1,23 @@
 #include "../../../header/utility/iterator.h"
+#include <time.h>
 
+static long begin_time;
+static long end_time;
 
-void iterate(simItr* curr_itr , simItr* next_itr , Config* config){
+void beginTime(){
+    
+    begin_time = clock();
+
+}
+
+void endTime(Orbit orbit){
+    
+    end_time = clock();
+    printf("\n\nfinished calculation for orbit N = %hi , K = %hi , M = %hi time = %f s \n\n",orbit.n,orbit.k,orbit.m, (double)(end_time - begin_time) / CLOCKS_PER_SEC);
+
+}
+
+bool iterate(simItr* curr_itr , simItr* next_itr , Config* config){
 
     T(next_itr) += T_INTERVAL;
     R(next_itr) = R(curr_itr)+(R_DOT(curr_itr)* T_INTERVAL);
@@ -16,6 +32,11 @@ void iterate(simItr* curr_itr , simItr* next_itr , Config* config){
         THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL);
         THETA_DOT(next_itr) = THETA_DOT(curr_itr)+(THETA_DOT_DOT(curr_itr)*T_INTERVAL);
     }
+    if(R_DOT(next_itr) * R_DOT(curr_itr) < 0){
+        // printf("r' next = %E , r' curr = %E T = %E\n",R_DOT(next_itr),R_DOT(curr_itr),T(curr_itr));
+        return true;
+    }
+    return false;
 
 }
 

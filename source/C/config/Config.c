@@ -26,11 +26,9 @@ FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
         sprintf(orbitPath,"%s/results_N%hi/results_K%hi/results_M%hi.txt",genratedTimeStamp,orbit.n,orbit.k,orbit.m);
 
     }
-    printf("%s\n",orbitPath);
+    
     FILE* logFile =  fopen(orbitPath,"w");
-    if(logFile == NULL){
-        printf("heree\n");
-    }
+    
     return logFile;
 }
 
@@ -111,10 +109,13 @@ Config* getInitVals(){
 
     Config* config = (Config*)malloc(sizeof(Config));
     for(int i = 0 ; i < length ; i++){
-        
+    
         char* currLine = configLines[i];
         if(strstr(currLine,"revolutions =") == currLine){
-            config->revolutions = parceInt(currLine);
+            config->revolutions = parceDouble(currLine);
+            continue;
+        }else if(strstr(currLine,"iterationMode =") == currLine){
+            config->itr_mode = (bool)parceInt(currLine);
             continue;
         }else if(strstr(currLine,"itrs =") == currLine){
             config->itrs = parceInt(currLine);
@@ -131,9 +132,6 @@ Config* getInitVals(){
         }else if(strstr(currLine,"t =") == currLine){
             config->time_intervolt = parceDouble(currLine);
             continue;
-        }else if(strstr(currLine,"R =") == currLine){
-            config->init_r = parceDouble(currLine); 
-            continue;
         }else if(strstr(currLine,"Type =") == currLine){
             config->type = parceInt(currLine);
             continue;
@@ -145,12 +143,14 @@ Config* getInitVals(){
     
     config->filtterList = getFilterList(config->type);
     
+    
+
     TIME_STAMP = createResultsPath(config->filtterList);
 
     int listSize = L_Size(FILTTER);
 
     LOG_FILES = newLinkedList();
-
+    
     for(int i = 0 ; i < listSize ; i++){
         
         Orbit* orbit = (Orbit*)L_Pop(FILTTER);

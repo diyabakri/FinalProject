@@ -1,11 +1,11 @@
 CC = gcc
 EXE = electronSimulation
 CFLAGS = -mhard-float -O3 -lm 
-
+MAIN_PY = main.py
 ifeq ($(OS),Windows_NT)
-RUN_P = python plot.py
+RUN_P = python $(MAIN_PY)
 else
-RUN_P = python3 plot.py
+RUN_P = python3 $(MAIN_PY)
 endif
 
 SOURCE_P = source/C/

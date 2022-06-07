@@ -6,14 +6,16 @@ void spherical_sim_ele(Config *config){
 
     simItr *curr_itr , *next_itr;
 
+
     curr_itr = (simItr*)malloc(sizeof(simItr));
     next_itr = (simItr*)malloc(sizeof(simItr));
 
     long double Hbar_sqr = HBAR*HBAR;
     int listSize = L_Size(FILTTER);
+    bool at_intrest = false; 
     
     for (int i = 0 ; i < listSize ; i++){
-        
+        beginTime();
         Orbit* currOrbit = L_Pop(FILTTER);
 
         double N = currOrbit->n;
@@ -39,6 +41,9 @@ void spherical_sim_ele(Config *config){
 
         R(curr_itr) = R_MIN;
         THETA(curr_itr) = thetamin;
+
+        double revolutions = REVOLUTIONS;
+
         
         if(m == K){
         
@@ -58,14 +63,13 @@ void spherical_sim_ele(Config *config){
 
         }
             R_DOT_DOT(next_itr) = sphere_calc_r_dot_dot(MASS, R(curr_itr), CHARGE, K_sqr , Hbar_sqr);
-
-
-
         
         logItration(res_f,curr_itr);
-        for (int it = 1; it < config->itrs; it++){
-                
-            iterate(curr_itr,next_itr,config);
+        
+        unsigned long j = 1;
+        for (unsigned long it = 1; j < config->itrs;it++){
+            
+            at_intrest = iterate(curr_itr,next_itr,config);
 
             if(m == K){
                 THETA_DOT(curr_itr) = (sign)*sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr));
@@ -91,13 +95,24 @@ void spherical_sim_ele(Config *config){
             if(it % LOG_P == 0){
                 logItration(res_f,curr_itr);
             }
+            
+            if(config->itr_mode){
+                j++;
+            }else if(at_intrest){
+                revolutions -= 0.5;
+                if(revolutions <= 0){
+                    break;
+                }
+            }
             simItr* temp = curr_itr;
             curr_itr = next_itr;
             next_itr = temp;
+
         }
+    
 
         logItration(res_f,curr_itr);
-
+        endTime(*currOrbit);
         free(rMinMax);
         fclose(res_f);
         free(currOrbit);
@@ -113,6 +128,8 @@ void rel_spherical_sim_ele(Config *config){
 
     simItr *curr_itr , *next_itr;
 
+    bool at_intrest = false; 
+
     curr_itr = (simItr*)malloc(sizeof(simItr));
     next_itr = (simItr*)malloc(sizeof(simItr));
 
@@ -121,9 +138,9 @@ void rel_spherical_sim_ele(Config *config){
     int listSize = L_Size(FILTTER);
     
     for (int i = 0 ; i < listSize ; i++){
-        
+        beginTime();
         Orbit* currOrbit = L_Pop(FILTTER);
-
+        
         double N = currOrbit->n;
         double K = currOrbit->k;
         double m = currOrbit->m;
@@ -159,13 +176,14 @@ void rel_spherical_sim_ele(Config *config){
         double Nphi = K-m;
 
         double thetamin= rel_sphere_calc_theta_min(Nphi,K);
+        double revolutions = REVOLUTIONS;
         
         FILE* res_f = (FILE*)L_Pop(LOG_FILES);
         
         initItrations(curr_itr,TYPE);
         initItrations(next_itr,TYPE);
 
-        R(curr_itr) = R_MIN;
+        R(curr_itr) = rel_rmin;
 
         GAMMA(curr_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
 
@@ -200,9 +218,10 @@ void rel_spherical_sim_ele(Config *config){
 
         logItration(res_f,curr_itr);
         
-        for (int it = 1; it < config->itrs; it++){
+        unsigned long j = 1;
+        for (unsigned long it = 1; j < config->itrs;it++){
 
-            iterate(curr_itr,next_itr,config);
+            at_intrest = iterate(curr_itr,next_itr,config);
 
             if(m == K){
 
@@ -272,6 +291,14 @@ void rel_spherical_sim_ele(Config *config){
             if(it % LOG_P == 0){
                 logItration(res_f,next_itr);
             }
+            if(config->itr_mode){
+                j++;
+            }else if(at_intrest){
+                revolutions -= 0.5;
+                if(revolutions <= 0){
+                    break;
+                }
+            }
             simItr* temp = curr_itr;
             curr_itr = next_itr;
             next_itr = temp;
@@ -282,7 +309,7 @@ void rel_spherical_sim_ele(Config *config){
 
         free(currMaxVec);
     
-
+        endTime(*currOrbit);
         free(rMinMax);
         fclose(res_f);
         free(currOrbit);

@@ -12,9 +12,10 @@ void spin_sim_ele(Config *config){
     long double Hbar_sqr = HBAR*HBAR;
     
     int listSize = L_Size(FILTTER);
+    bool at_intrest = false; 
 
-     for (int i = 0 ; i < listSize ; i++){
-        
+    for (int i = 0 ; i < listSize ; i++){
+        beginTime();
         Orbit* currOrbit = L_Pop(FILTTER);
 
         double N = currOrbit->n;
@@ -50,10 +51,13 @@ void spin_sim_ele(Config *config){
         
         logItration(res_f,curr_itr);
 
-        for (int it = 1; it < config->itrs; it++){
+        double revolutions = REVOLUTIONS;
+
+        unsigned long j = 1;
+        for (unsigned long it = 1; j < config->itrs;it++){
         
                 
-            iterate(curr_itr,next_itr,config);
+            at_intrest = iterate(curr_itr,next_itr,config);
             
             PHI_DOT_0(next_itr) = spin_calc_phi_dot_0(R(curr_itr),MASS,Nphi,HBAR,THETA(curr_itr));
             EPSILON(next_itr) = spin_calc_epsilon(R(curr_itr),MASS,CHARGE,THETA(curr_itr),Nphi);
@@ -65,16 +69,25 @@ void spin_sim_ele(Config *config){
             if(it % LOG_P == 0){
                 logItration(res_f,curr_itr);
             }
+            if(config->itr_mode){
+                j++;
+            }else if(at_intrest){
+                revolutions -= 0.5;
+                if(revolutions <= 0){
+                    break;
+                }
+            }
             simItr* temp = curr_itr;
             curr_itr = next_itr;
             next_itr = temp;
         }
 
+        endTime(*currOrbit);
         logItration(res_f,curr_itr);
 
         free(rMinMax);
         fclose(res_f);
-
+        
         free(currOrbit);
 
 

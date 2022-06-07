@@ -51,7 +51,6 @@ int main()
         //-----------------------------------------
 
         // close results.txt file
-        // printf("finished calculation for energy level = %d time = %f s  with %d itrations\n\n",energy_level, (double)(end_time - begin_time) / CLOCKS_PER_SEC ,config->itrs);
 
     free(FILTTER);
     free(LOG_FILES);

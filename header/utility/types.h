@@ -1,6 +1,6 @@
 #ifndef TYPE_H_
 #define TYPE_H_
-
+#include <stdbool.h>
 
 typedef struct _linkedList LinkedList;
 
@@ -24,12 +24,11 @@ typedef enum{
 }simType;
 
 typedef struct Config{
-
+    bool itr_mode;
     simType type; // idicator to the type of equations to use 0 use regular 1 use reletivity 
-    int revolutions; 
     int log_p; // the number of ittrations to skip before logging
     int itrs; // number of iteration to run
-    double init_r; // statring value of R in cm
+    double revolutions; 
     double electron_charge; // electron charge value = 4.803e-10 esu
     double electron_mass;  // electron maxx value = 9.109383e-28 g
     double time_intervolt; // time elapsed between each iteration  
