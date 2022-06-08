@@ -3,6 +3,7 @@ import numpy as np
 from tkinter import *  
 from .ResultsReader import ResultsReader
 from .Config import Config
+from .macro import*
 
 class Ploter:
 

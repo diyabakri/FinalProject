@@ -4,6 +4,7 @@ from .Ploter import Ploter
 from .ResultsReader import ResultsReader
 from .UI import UI
 from tkinter import *
+from .macro import*
 
 class Simulation:
     

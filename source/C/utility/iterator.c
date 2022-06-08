@@ -31,11 +31,12 @@ bool iterate(simItr* curr_itr , simItr* next_itr , Config* config){
     {
         THETA(next_itr) = THETA(curr_itr)+ (THETA_DOT(curr_itr)*T_INTERVAL);
         THETA_DOT(next_itr) = THETA_DOT(curr_itr)+(THETA_DOT_DOT(curr_itr)*T_INTERVAL);
+        
     }
     if(R_DOT(next_itr) * R_DOT(curr_itr) < 0){
-        // printf("r' next = %E , r' curr = %E T = %E\n",R_DOT(next_itr),R_DOT(curr_itr),T(curr_itr));
         return true;
     }
+    
     return false;
 
 }

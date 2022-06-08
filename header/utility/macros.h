@@ -40,6 +40,6 @@
     #define _2_PI               (2 * PI)
     #define BOHR_R              (0.0000000052977210903)     //5.29*10^-9 = a_0 bohr radios 0.0000000052977210903
     #define C                   (double)(29979245800)
-
+    #define RESULT_P            ("results")
 //----------------------------------------
 #endif//MACROS_H_

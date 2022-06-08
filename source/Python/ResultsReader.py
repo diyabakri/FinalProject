@@ -2,6 +2,7 @@ from distutils.command.config import config
 import numpy as np
 from source.Python.Config import Config
 import os
+from .macro import*
 
 class ResultsReader:
 
@@ -87,6 +88,7 @@ class ResultsReader:
     
     def changeTimeStamp(self,timeStamp:str = None):
         
+
         self.config.filter.orbitList = []
         
         newOrbitList = []
@@ -95,19 +97,19 @@ class ResultsReader:
         if timeStamp == None:
             timeStamp = self.config.timeStamp
 
-        nFileList = sorted(os.listdir("./"+timeStamp))
+        nFileList = sorted(os.listdir(RESULT_P+timeStamp))
         
         kLists = []
 
         for nDir in nFileList:
-            kLists.append(sorted(os.listdir("./"+timeStamp+"/"+nDir)))
+            kLists.append(sorted(os.listdir(RESULT_P+timeStamp+"/"+nDir)))
         
         if(".txt" not in kLists[0][0]):
             mLists = []
             spherical = True
             for i in range(len(nFileList)):
                 for j in range(len(kLists[i])):
-                    mLists.append(sorted(os.listdir("./"+timeStamp+"/"+nFileList[i] +"/"+kLists[i][j])))
+                    mLists.append(sorted(os.listdir(RESULT_P+timeStamp+"/"+nFileList[i] +"/"+kLists[i][j])))
 
 
             m_index = 0

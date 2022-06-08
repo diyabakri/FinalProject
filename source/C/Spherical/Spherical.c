@@ -70,7 +70,7 @@ void spherical_sim_ele(Config *config){
         for (unsigned long it = 1; j < config->itrs;it++){
             
             at_intrest = iterate(curr_itr,next_itr,config);
-
+           
             if(m == K){
                 THETA_DOT(curr_itr) = (sign)*sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr));
                 THETA_DOT(next_itr) = THETA_DOT(curr_itr);
@@ -222,7 +222,7 @@ void rel_spherical_sim_ele(Config *config){
         for (unsigned long it = 1; j < config->itrs;it++){
 
             at_intrest = iterate(curr_itr,next_itr,config);
-
+          
             if(m == K){
 
                 THETA_DOT(next_itr) = (sign)*rel_sphere_calc_spc_case_theta_dot(K,HBAR,MASS,R(curr_itr),GAMMA(curr_itr));

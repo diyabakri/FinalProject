@@ -1,6 +1,11 @@
 #include "../../../header/config/Config.h"
 #include <time.h>
 
+bool file_exists (char *filename) {
+  struct stat   buffer;   
+  return (stat (filename, &buffer) == 0);
+}
+
 char* genrateTimeStamp(){
 
     time_t pctime = time(NULL);
@@ -19,11 +24,11 @@ FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
 
     if(orbit.m == -1){
         
-        sprintf(orbitPath,"%s/results_N%hi/results_K%hi.txt",genratedTimeStamp,orbit.n,orbit.k);
+        sprintf(orbitPath,"%s/%s/results_N%hi/results_K%hi.txt",RESULT_P,genratedTimeStamp,orbit.n,orbit.k);
         
     }else{
 
-        sprintf(orbitPath,"%s/results_N%hi/results_K%hi/results_M%hi.txt",genratedTimeStamp,orbit.n,orbit.k,orbit.m);
+        sprintf(orbitPath,"%s/%s/results_N%hi/results_K%hi/results_M%hi.txt",RESULT_P,genratedTimeStamp,orbit.n,orbit.k,orbit.m);
 
     }
     
@@ -35,7 +40,6 @@ FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
 char* createResultsPath(LinkedList* filterList){
     
     char* path = genrateTimeStamp(); 
-    
     char command[200];
     
     memset(command,0,200);
@@ -43,24 +47,31 @@ char* createResultsPath(LinkedList* filterList){
     int last_n = 0;
     int last_k = 0;
     int listSize = L_Size(filterList);
-    
-    sprintf(command,"mkdir %s",path);
-
-    if(system(command)<0){
-        return NULL;
+    if (!file_exists(RESULT_P)){
+        sprintf(command,"mkdir %s",RESULT_P);
+        if(system(command)<0){
+            return NULL;
+        }
     }
-
+    #ifdef _WIN32 // make dir for windows
+        sprintf(command,"mkdir %s\\%s",RESULT_P,path);
+    #endif
+    #ifndef _WIN32
+        sprintf(command,"mkdir %s/%s",RESULT_P,path);
+    #endif
+        if(system(command)<0){
+            return NULL;
+        }
     for(int i = 0 ; i < listSize ; i++){
         Orbit* orbit = (Orbit*)L_Pop(filterList);
 
         if(orbit->n > last_n){
-        // printf("n= %hi last_n = %d\n",orbit->n,last_n);             
             #ifdef _WIN32 // make dir for windows
-                sprintf(command,"mkdir %s\\results_N%hi",path,orbit->n);
+                sprintf(command,"mkdir %s\\%s\\results_N%hi",RESULT_P,path,orbit->n);
             #endif
 
             #ifndef _WIN32
-                sprintf(command,"mkdir %s/results_N%hi",path,orbit->n);
+                sprintf(command,"mkdir %s/%s/results_N%hi",RESULT_P,path,orbit->n);
             #endif
             
             if(system(command)<0){
@@ -72,11 +83,11 @@ char* createResultsPath(LinkedList* filterList){
         }
         if(orbit->k > last_k && orbit->m != -1){
             #ifdef _WIN32 // make dir for windows
-                sprintf(command,"mkdir %s\\results_N%hi\\results_K%hi",path,orbit->n,orbit->k);
+                sprintf(command,"mkdir %s\\%s\\results_N%hi\\results_K%hi",RESULT_P,path,orbit->n,orbit->k);
             #endif
 
             #ifndef _WIN32
-                sprintf(command,"mkdir %s/results_N%hi/results_K%hi",path,orbit->n,orbit->k);
+                sprintf(command,"mkdir %s/%s/results_N%hi/results_K%hi",RESULT_P,path,orbit->n,orbit->k);
             #endif
                     
             if(system(command)<0){

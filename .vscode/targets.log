@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Jun  7 20:52:28 2022
+# Make data base, printed on Wed Jun  8 20:38:24 2022
 
 # Variables
 
@@ -57,7 +57,7 @@ _ = /usr/share/code/code
 # makefile (from 'makefile', line 3)
 CFLAGS = -mhard-float -O3 -lm 
 # environment
-JOURNAL_STREAM = 8:61014
+JOURNAL_STREAM = 8:62605
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # makefile (from 'makefile', line 25)
@@ -77,7 +77,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-MANAGERPID = 1515
+MANAGERPID = 1524
 # makefile (from 'makefile', line 24)
 config_files = $(config_path)*.c
 # environment
@@ -91,7 +91,7 @@ PATH = /home/diya/.local/bin:/home/diya/.local/bin:/usr/local/sbin:/usr/local/bi
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/ubuntu:@/tmp/.ICE-unix/1729,unix/ubuntu:/tmp/.ICE-unix/1729
+SESSION_MANAGER = local/ubuntu:@/tmp/.ICE-unix/1734,unix/ubuntu:/tmp/.ICE-unix/1734
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -101,7 +101,7 @@ VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 75e2e0b81fb844ddad7d4e0917af1d77
+INVOCATION_ID = 7acce09390ab46719bc184181765a707
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # makefile (from 'makefile', line 13)
@@ -113,7 +113,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 7224
+GIO_LAUNCHED_DESKTOP_FILE_PID = 4373
 # automatic
 %F = $(notdir $%)
 # environment
@@ -125,7 +125,7 @@ PWD = /home/diya/Desktop/Final_Project
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1693
+SSH_AGENT_PID = 1699
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -165,7 +165,7 @@ CC = gcc
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-59b31614-88dd-4be1-9933-1f6d0a89b799.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ecda22c4-849f-4b09-a91f-9e7fca8769ad.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -241,7 +241,7 @@ EXE = electronSimulation
 # environment
 LANG = C
 # environment
-VSCODE_PID = 7224
+VSCODE_PID = 4373
 # variable set hash-table stats:
 # Load=115/1024=11%, Rehash=0, Collisions=17/141=12%
 
@@ -251,9 +251,9 @@ VSCODE_PID = 7224
 
 # Directories
 
-# . (device 2053, inode 1970274): 31 files, no impossibilities.
+# . (device 2053, inode 1970274): 16 files, no impossibilities.
 
-# 31 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -281,13 +281,13 @@ makefile:
 #  Implicit rule search has been done.
 #  Last modified 2022-06-06 20:27:56.340179492
 #  File has been updated.
+ 
 #  Successfully updated.
 
 defult:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
- 
 #  recipe to execute (from 'makefile', line 32):
 	$(CC) $(CFLAGS) $(source_files) -lm -o $(EXE)
 
@@ -319,12 +319,12 @@ plot:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 40 / storage = 502 B / avg = 12 B
-# current buf: size = 8162 B / used = 502 B / count = 40 / avg = 12 B
+# strcache buffers: 1 (0) / strings = 25 / storage = 213 B / avg = 8 B
+# current buf: size = 8162 B / used = 213 B / count = 25 / avg = 8 B
 
-# strcache performance: lookups = 48 / hit rate = 16%
+# strcache performance: lookups = 33 / hit rate = 24%
 # hash-table stats:
-# Load=40/8192=0%, Rehash=0, Collisions=1/48=2%
-# Finished Make data base on Tue Jun  7 20:52:28 2022
+# Load=25/8192=0%, Rehash=0, Collisions=1/33=3%
+# Finished Make data base on Wed Jun  8 20:38:24 2022
 
  

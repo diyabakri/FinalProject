@@ -1,20 +1,14 @@
-from ast import Num
-from cProfile import label
-from ctypes import alignment
-from curses import textpad
+
 import os
 from tkinter import *
-from turtle import width
-from matplotlib.pyplot import title
 
-from numpy import number
-from pyparsing import col
-
+from click import command
 from .Ploter import Ploter
 from .Config import Config
 from .ResultsReader import ResultsReader
 import platform
 import subprocess as sp
+from .macro import*
 
 class UI:
 
@@ -23,6 +17,7 @@ class UI:
     root:Tk
     listbox:Listbox
     configWin:Toplevel
+    selectText: StringVar
 
     def __init__(self,config:Config,reader:ResultsReader,ploter:Ploter):
 
@@ -30,7 +25,11 @@ class UI:
         self.reader = reader
         self.ploeter = ploter
         self.root = Tk()
+        self.root.title("Bohr's Spin Simulation")
+        self.root.iconphoto(False, PhotoImage(file='icon.png'))
         self.listbox = Listbox()
+        self.selectText = StringVar()
+        self.selectText.set("Selected Results :"+config.timeStamp)
         self.configWin = None
         self.initUi()
 
@@ -38,8 +37,9 @@ class UI:
     
         for i in self.listbox.curselection():
             newTimeStamp = self.listbox.get(i)
-
+        
         self.reader.changeTimeStamp(newTimeStamp)
+        self.selectText.set("Selected Results :"+newTimeStamp)
 
     def showRes(self):
         
@@ -53,9 +53,10 @@ class UI:
 
     def refresh(self):
 
+
         resultsList = []
 
-        ls = os.listdir("./")
+        ls = os.listdir(RESULT_P)
 
         for i in range(len(ls)):
             if '22' in ls[i]:
@@ -70,9 +71,10 @@ class UI:
 
     def resultListInit(self):
 
+
         resultsList = []
         
-        ls = os.listdir("./")
+        ls = os.listdir(RESULT_P)
         
         resultsFrame = LabelFrame(self.root,text="Results List")
         
@@ -114,13 +116,44 @@ class UI:
 
         buttonFrame.grid(column=0,row=1)
 
-    def initUi(self):
+    def saveComand(self,saveButton:Button,itrs:Text,revelutions:Text,itrationMode:Text,timestep:Text,type:Text,log_p:Text):
+        
+        self.config.itrations = (int)(itrs.get("1.0","end-1c"))                     
+        self.config.revolutions = (int)(revelutions.get("1.0","end-1c"))
+        if "T" in itrationMode.get("1.0","end-1c") or "t" in itrationMode.get("1.0","end-1c"):       
+            self.config.iterationMode = 1
+        else:
+            self.config.iterationMode = 0
+        self.config.t_inrev = (float)(timestep.get("1.0","end-1c"))
+        self.config.type = (int)(type.get("1.0","end-1c"))
+        self.config.log_p = (int)(log_p.get("1.0","end-1c"))
+        
+        self.config.writeToFile()
+        saveButton['state'] = DISABLED
 
-        self.resultListInit()
+    def enableBtn(self,btn:Button):
+        btn['state'] = NORMAL
 
-        self.btnInit()
+    def initFillter(self):
+        
+        filterFrame = LabelFrame(self.root,text="Filter")
+        filterTextBox = Text(filterFrame,width= 80,height=20)
+        filterTextBox.pack()
+        filterFile = open(self.config.fillterPath,"r")
+        filterLines = filterFile.readlines()
+        for line in filterLines:
+            filterTextBox.insert(END,line)
+        filterFile.close()
+        saveBtn = Button(filterFrame,state=DISABLED,text="Save",width=78,command = lambda : self.saveBtnFilter(saveBtn,filterTextBox.get('1.0',END)))
+        saveBtn.pack(side=BOTTOM)    
+        filterFrame.grid(column=0,row=2,columnspan=2,rowspan=2)
+        filterTextBox.bind("<Key>",lambda event:  self.enableBtn(saveBtn))
+    def saveBtnFilter(self,btn:Button,text:str):
 
-        self.configUiInit()
+        filterFile = open(self.config.fillterPath,"w")
+        filterFile.write(text)
+        btn['state'] = DISABLED
+        filterFile.close()
 
     def configUiInit(self):
 
@@ -163,6 +196,15 @@ class UI:
         logText.grid(column=1,row=5)
         logLabel = Label(configFrame,text = "Log perod:").grid(column=0,row=5)
         #----------
+        saveButton = Button(configFrame,text="Save",width=15,pady=10,state=DISABLED,command=lambda:self.saveComand(saveButton,itrsTextB,revTextBox,revModeText,timeText,typeText,logText))
+        saveButton.grid(column=0,row=6,columnspan=2,rowspan=2)
+        
+        itrsTextB.bind("<Key>",lambda event:  self.enableBtn(saveButton))
+        revModeText.bind("<Key>",lambda event:  self.enableBtn(saveButton))
+        revTextBox.bind("<Key>",lambda event:  self.enableBtn(saveButton))
+        timeText.bind("<Key>",lambda event:  self.enableBtn(saveButton))
+        typeText.bind("<Key>",lambda event:  self.enableBtn(saveButton))
+        logText.bind("<Key>",lambda event:  self.enableBtn(saveButton))
 
         configFrame.grid(column=1,row=0)
 
@@ -197,7 +239,18 @@ class UI:
         
         self.configWin = Toplevel()
         
-        
+    def initUi(self):
+
+        self.resultListInit()
+
+        self.btnInit()
+
+        self.configUiInit()
+
+        selectLeble = Label(self.root,textvariable=self.selectText)
+        selectLeble.grid(column=1,row=1) 
+
+        self.initFillter()
 
 
         
