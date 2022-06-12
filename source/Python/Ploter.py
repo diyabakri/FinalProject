@@ -38,15 +38,12 @@ class Ploter:
         
         unit = 1e-8
         
-        colors = ['b.','g.','r.','c.','m.','y.','k.','w.']# ploting colors
-        
-
-
         for i in range(len(self.config.filter.orbitList)): 
 
             orbit = self.config.filter.orbitList[i]
             n= orbit[0]
             k= orbit[1]
+            
             if (i > 0 and  n!= self.config.filter.orbitList[i-1][0]) or i==0 :
                 plt.figure()
                 plt.axes(projection = 'polar')
@@ -55,8 +52,79 @@ class Ploter:
             results = self.reader.getResultsByNKM(n,k,0)
             plt.polar(results[0],results[1]/unit,label = ('l = '+(str)(k)+'$\hbar$'))
             plt.legend(frameon=True, loc='lower center', ncol=3)
-                
+        if  self.config.type ==2 :
+            self.plotDeltaPhi()
         plt.show()
+
+    def plotDeltaPhi(self):
+
+        sortedOrbitList = sorted(self.config.filter.orbitList,key=lambda x:x[1])
+
+        for i in range(len(sortedOrbitList)): 
+
+            orbit = sortedOrbitList[i]
+            n= orbit[0]
+            k= orbit[1]
+            analical_val = self.calc_accrute_deltaPHi(k)
+            if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
+                plt.figure()
+                plt.ylabel("(${rad}$)")
+                plt.xlabel("revelution")
+
+            results = np.unique(self.reader.getResultsByNKM(n,k,0,reletive=True))
+            analitcal = []
+            for j in range(len(results)):
+                analitcal.append(analical_val*j)
+            plt.plot(results,label = ('simulated N = '+(str)(n)+' K = '+str(k)))
+            if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
+                plt.plot(analitcal,label = ('accurate K = '+(str)(k)))
+            plt.legend(frameon=True, loc='lower center', ncol=3)
+    
+    def plotDeltaPhiSpherical(self):
+
+        
+        sortedOrbitList = sorted(self.config.filter.orbitList,key=lambda x:x[1])
+        for i in range(len(self.config.filter.orbitList)): 
+
+            orbit = sortedOrbitList[i]
+
+            n= orbit[0]
+            k= orbit[1]
+            m= orbit[2]
+            analical_val = self.calc_accrute_deltaPHi(k)
+            if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
+                plt.figure()
+                plt.ylabel("(${rad}$)")
+                plt.xlabel("revelution")
+
+            results = np.unique(self.reader.getResultsByNKM(n,k,m,reletive=True))
+
+            analitcal = []
+            
+            for j in range(len(results)):
+                analitcal.append(analical_val*j)
+
+            plt.plot(results,label = ('simulated N = '+(str)(n)+'k ='+str(k) + 'm ='+str(m)))
+            
+            if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
+
+                plt.plot(analitcal,label = ('accurate K = '+(str)(k)))
+
+            plt.legend(frameon=True, loc='lower center', ncol=3)
+        
+    def calc_accrute_deltaPHi(self,k:int):
+        
+        C =29979245800
+        e =4.8032068E-10
+        h_bar =1.05457266E-27
+
+        arg1 = h_bar*C*k
+        arg1 = (e*e)/arg1
+        arg1*=arg1
+        arg1 = 1-arg1
+        arg1 = np.sqrt(arg1)
+
+        return (((2*np.pi)/arg1)-2*np.pi)
 
     def sphericalPlot(self):
 
@@ -87,6 +155,7 @@ class Ploter:
             convertedResults = self.convertToSpherical(results) 
             ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m))
             plt.legend(frameon=True, loc='lower center', ncol=3)
-            
+        if self.config.type == 4:
+            self.plotDeltaPhiSpherical()
         plt.show()
 

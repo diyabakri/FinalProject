@@ -155,6 +155,7 @@ Config* getInitVals(){
     config->filtterList = getFilterList(config->type);
     
     
+    
 
     TIME_STAMP = createResultsPath(config->filtterList);
 

@@ -39,16 +39,16 @@ typedef struct Config{
     
 }Config;
 
-typedef struct {// struct simItr (simulation itration) to hold the current and next itration values
-    double t;// itration time
-    double r;// itration distance
-    double r_dot;// itration movment speed
-    double r_dot_dot;// itration movment acceleration
-    double phi;// itration angle
-    double phi_dot;// itration angleular speed
+typedef struct {// struct simItr (simulation iteration) to hold the current and next iteration values
+    double t;// iteration time
+    double r;// iteration distance
+    double r_dot;// iteration movment speed
+    double r_dot_dot;// iteration movment acceleration
+    double phi;// iteration angle
+    double phi_dot;// iteration angleular speed
     double phi_dot_0;
-    double gamma;//itration rel mass mult
-    double delataphi;//itration angle of the perahelion
+    double gamma;//iteration rel mass mult
+    double delataphi;//iteration angle of the perahelion
     double theta;
     double theta_dot;
     double theta_dot_dot;

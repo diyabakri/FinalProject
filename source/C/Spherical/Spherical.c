@@ -100,7 +100,7 @@ void spherical_sim_ele(Config *config){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions <= 0){
+                if(revolutions < 0){
                     break;
                 }
             }
@@ -183,7 +183,7 @@ void rel_spherical_sim_ele(Config *config){
         initItrations(curr_itr,TYPE);
         initItrations(next_itr,TYPE);
 
-        R(curr_itr) = rel_rmin;
+        R(curr_itr) = R_MIN;
 
         GAMMA(curr_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
 
@@ -295,7 +295,7 @@ void rel_spherical_sim_ele(Config *config){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions <= 0){
+                if(revolutions < 0){
                     break;
                 }
             }

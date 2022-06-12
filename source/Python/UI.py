@@ -53,7 +53,6 @@ class UI:
 
     def refresh(self):
 
-
         resultsList = []
 
         ls = os.listdir(RESULT_P)
@@ -68,6 +67,10 @@ class UI:
 
         for filename in resultsList:
             self.listbox.insert(0, filename)
+
+        newTimeStamp = self.listbox.get(0)
+        self.reader.changeTimeStamp(newTimeStamp)
+        self.selectText.set("Selected Results :"+newTimeStamp)
 
     def resultListInit(self):
 
@@ -148,6 +151,7 @@ class UI:
         saveBtn.pack(side=BOTTOM)    
         filterFrame.grid(column=0,row=2,columnspan=2,rowspan=2)
         filterTextBox.bind("<Key>",lambda event:  self.enableBtn(saveBtn))
+
     def saveBtnFilter(self,btn:Button,text:str):
 
         filterFile = open(self.config.fillterPath,"w")

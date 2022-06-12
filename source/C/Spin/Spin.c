@@ -73,7 +73,7 @@ void spin_sim_ele(Config *config){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions <= 0){
+                if(revolutions < 0){
                     break;
                 }
             }

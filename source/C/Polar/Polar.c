@@ -53,7 +53,7 @@ void polar_sim_ele(Config *config){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions <= 0){
+                if(revolutions < 0){
                     break;
                 }
             }
@@ -165,9 +165,9 @@ void polar_sim_rel_ele(Config *config){
                     }
                     if(prevMaxVec != 0){
 
-                        DELTAPHI(curr_itr) = PHI(curr_itr) - prevMaxVec;
+                        DELTAPHI(curr_itr) += PHI(curr_itr) - prevMaxVec;
                         // printf("curr PHI = %.*E , prev PHI  = %.*E \t",PHI(curr_itr),DECIMAL_DIG,prevPhi,DECIMAL_DIG);
-                        printf(" currMaxth - prevMaxVec  %E, acurrate %E \n",DELTAPHI(curr_itr), (((2*PI)/chi)-2*PI));
+                        printf(" currMaxth - prevMaxVec  %E, acurrate %E \n",PHI(curr_itr) - prevMaxVec, (((2*PI)/chi)-2*PI));
                     }
                                                 
                     prevR = R(curr_itr);
@@ -192,7 +192,7 @@ void polar_sim_rel_ele(Config *config){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions <= 0){
+                if(revolutions < 0){
                     break;
                 }
             }

@@ -122,6 +122,21 @@ void N_Block(simType type , LinkedList* list , char** filterLines , int lineCoun
 
 }
 
+
+char* printFilter(void* data){
+    
+    Orbit* orbit = (Orbit*) data;
+
+    char* printStr = malloc(20);
+    
+    memset(printStr,(int)'\0',20);
+
+    sprintf(printStr,"[%hi %hi %hi]",orbit->n,orbit->k,orbit->m);
+    
+    return printStr;
+
+}
+
 LinkedList* getFilterList(simType type){
     
     LinkedList* list = newLinkedList();
@@ -139,20 +154,7 @@ LinkedList* getFilterList(simType type){
     }
     free(filterLines);
     fclose(filterFile);
+    LinkedList_print(list,printFilter);
     return list;
-
-}
-
-char* printFilter(void* data){
-    
-    Orbit* orbit = (Orbit*) data;
-
-    char* printStr = malloc(20);
-    
-    memset(printStr,(int)'\0',20);
-
-    sprintf(printStr,"[%hi %hi %hi]",orbit->n,orbit->k,orbit->m);
-    
-    return printStr;
 
 }
