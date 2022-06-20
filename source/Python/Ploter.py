@@ -75,7 +75,7 @@ class Ploter:
             analitcal = []
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
-            plt.plot(results,label = ('simulated N = '+(str)(n)+' K = '+str(k)))
+            plt.plot(results,label = ('simulated N='+(str)(n)+' K = '+str(k)))
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
                 plt.plot(analitcal,label = ('accurate K = '+(str)(k)))
             plt.legend(frameon=True, loc='lower center', ncol=3)
@@ -104,7 +104,7 @@ class Ploter:
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
 
-            plt.plot(results,label = ('simulated N = '+(str)(n)+'k ='+str(k) + 'm ='+str(m)))
+            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)))
             
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
 

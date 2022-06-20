@@ -21,34 +21,41 @@ pip install matplotlib
 To change the settings of the simulation you need to edit the "config.ini" file
 
 ```python
-# number of itrations to run for each orbit
+# number of the full revelutions to simulate for each orbit (only used when iterationMode = 0 )
+revolutions =5
+# flag for which mode to run the code according to the value in revolutions (False / 0 ) or the value in itrs (True / 1) 
+iterationMode =0
+# number of itrations to run for each orbit (only used when iterationMode = 1 )
 itrs =10000000
-# bohrs radios this line is only needed to determine the unit of  distance
-r =5.29E-9
 # used as the value of the charge of the electron in every equation
 charge =4.803E-10
 # used as the value of the mass of the electron in every equation
 mass =9.109383E-28
 # used as the time interval for between each itration
 t =1E-21
-# the base value of l to be used in the equations
-Hbar =1.05435246E-27
-# the number of orbits to simulate
-N =2
-# the spific orbit to simulate if set to 0 all orbits will be simulated note: this value also effects the ploting of the results
-K_LIST =1,2,3
-# the spific angle to simulate if set to 0 all orbits will be simulated note: this value also effects the ploting of the results
-M_LIST =1,2,3
-# flag for which equations to use 0 regular equations 1 relativity equations 
-reltive =0
-# flag for which equations to use 0 2d polar projection 1 3d Spherical projection 
-Spherical =0
 # the logging for how many itrations to actually store in the results files
 logPerod =10000
-# path and sub path for all result files must be in c format
-results_path ="results/result_n%d/result_k%d/result_m%d.txt"
-
 ```
+## Filter 
+
+To choose which orbits to simulate you need to edit the "filter.ini" file
+
+input to this file needs to be in this format 
+```C
+N1{
+    K1{
+        M0
+        M1
+    }
+}
+N2{
+    K2{
+        M2
+    }
+}
+N3{}
+```
+Where (0<=N<=9) and for each N (1<=K<=N) and for each K (0<=M<=K)
 
 ## Run
 
@@ -57,6 +64,10 @@ Run the python script to plot the results through the terminal
 ```bash
 make plot
 ```
+## UI
+
+Running the make plot command opens this window
+![alt text](./imgs/Ui.png)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
