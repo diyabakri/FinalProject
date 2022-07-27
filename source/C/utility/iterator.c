@@ -50,7 +50,7 @@ void initItrations(simItr* itr , simType type){
     PHI(itr) = 0;
     PHI_DOT(itr) = 0;
     GAMMA(itr) = -1.0;
-    DELTAPHI(itr)= -1.0;
+    DELTAPHI(itr)= 0;
     THETA(itr) = -1.0;
     THETA_DOT(itr)=-1.0;
     THETA_DOT_DOT(itr)=-1.0;
@@ -61,8 +61,7 @@ void initItrations(simItr* itr , simType type){
     if(type == REL_POLAR || type == REL_SPHERICAL || type == REL_SPIN){
     
         GAMMA(itr) = 0;
-        DELTAPHI(itr) = 0;
-    
+
     }
 
     if(type == SPHERICAL || type == REL_SPHERICAL || type == SPIN){

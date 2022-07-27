@@ -4,7 +4,8 @@ from tkinter import *
 from .ResultsReader import ResultsReader
 from .Config import Config
 from .macro import*
-
+from matplotlib import colors, rcParams
+# rcParams['grid.alpha'] = 0.0
 class Ploter:
 
     reader:ResultsReader
@@ -50,9 +51,11 @@ class Ploter:
                 plt.xlabel("R($\AA$)")
 
             results = self.reader.getResultsByNKM(n,k,0)
-            plt.polar(results[0],results[1]/unit,label = ('l = '+(str)(k)+'$\hbar$'))
+            plt.polar(results[0],results[1]/unit,label = ('k = '+(str)(k)),linewidth=5)
             plt.legend(frameon=True, loc='lower center', ncol=3)
-        if  self.config.type ==2 :
+            plt.savefig("fig_%s_N_%d_2D.svg"%(self.config.timeStamp,n))
+
+        # if  self.config.type ==2 :
             self.plotDeltaPhi()
         plt.show()
 
@@ -72,12 +75,13 @@ class Ploter:
                 plt.xlabel("revelution")
 
             results = np.unique(self.reader.getResultsByNKM(n,k,0,reletive=True))
+            print(results)
             analitcal = []
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
-            plt.plot(results,label = ('simulated N='+(str)(n)+' K = '+str(k)))
+            plt.plot(results,label = ('simulated N='+(str)(n)+' K = '+str(k)),linewidth=5)
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
-                plt.plot(analitcal,label = ('accurate K = '+(str)(k)))
+                plt.plot(analitcal,'r.',label = ('accurate K = '+(str)(k)))
             plt.legend(frameon=True, loc='lower center', ncol=3)
     
     def plotDeltaPhiSpherical(self):
@@ -98,17 +102,15 @@ class Ploter:
                 plt.xlabel("revelution")
 
             results = np.unique(self.reader.getResultsByNKM(n,k,m,reletive=True))
-
             analitcal = []
-            
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
-
-            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)))
+            
+            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)),linewidth=3)
             
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
 
-                plt.plot(analitcal,label = ('accurate K = '+(str)(k)))
+                plt.plot(analitcal,'r.',label = ('accurate K = '+(str)(k)))
 
             plt.legend(frameon=True, loc='lower center', ncol=3)
         
@@ -153,8 +155,9 @@ class Ploter:
 
             results = self.reader.getResultsByNKM(n,k,m)
             convertedResults = self.convertToSpherical(results) 
-            ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m))
+            ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m),linewidth=4)
             plt.legend(frameon=True, loc='lower center', ncol=3)
+            plt.savefig("fig_%s_N_%d_3D.svg"%(self.config.timeStamp,n))
         if self.config.type == 4:
             self.plotDeltaPhiSpherical()
         plt.show()

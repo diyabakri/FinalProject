@@ -11,6 +11,7 @@ void polar_sim_ele(Config *config){
     next_itr = (simItr*)malloc(sizeof(simItr));
 
     bool at_intrest = false; 
+    bool at_max = true;
 
 
     long double Hbar_sqr = HBAR*HBAR;
@@ -22,12 +23,17 @@ void polar_sim_ele(Config *config){
 
         double N = currOrbit->n;
         double K = currOrbit->k;
+
         
         FILE* res_f = (FILE*)L_Pop(LOG_FILES);
 
         double* rMinMax = calc_rmin_rmax(N,K);
         double curr_l = HBAR*K;
         double K_sqr = K*K;
+
+        double prevPhi = 0;
+        double prevMaxVec= 0;
+        double prevR = 0;
 
         initItrations(curr_itr,TYPE);
         initItrations(next_itr,TYPE);
@@ -41,11 +47,29 @@ void polar_sim_ele(Config *config){
         unsigned long j = 1;
         for (unsigned long it = 1; j < config->itrs;it++){
                 
-            at_intrest = at_intrest = iterate(curr_itr,next_itr,config);
+            at_intrest = iterate(curr_itr,next_itr,config);
 
             R_DOT_DOT(next_itr) = calc_R_dot_dot(MASS, R(curr_itr), CHARGE,K_sqr , Hbar_sqr);
             PHI_DOT(next_itr) = calc_phi_dot(curr_l, MASS, R(curr_itr));
+            
+            if (at_intrest){
+                at_max = !(at_max);
+                
+                if(at_max){
+                    
+                    if(prevMaxVec != 0){
 
+                        DELTAPHI(curr_itr) += PHI(curr_itr) - prevMaxVec;
+                        DELTAPHI(next_itr) = DELTAPHI(curr_itr);
+                    }
+                                                
+                    prevR = R(curr_itr);
+                    printf("r = %E PHI = %E\n", prevR , prevMaxVec);
+                    prevMaxVec = PHI(curr_itr);
+
+                }
+
+            }
             if(it % LOG_P == 0){
                 logItration(res_f,curr_itr);
             }
@@ -93,6 +117,7 @@ void polar_sim_rel_ele(Config *config){
     bool at_intrest = false; 
 
     for (int i = 0 ; i < listSize ; i++){
+        
         beginTime();
         Orbit* currOrbit = L_Pop(FILTTER);
 
@@ -152,21 +177,16 @@ void polar_sim_rel_ele(Config *config){
             PHI_DOT(next_itr) = calc_rel_phi_dot(curr_l,GAMMA(curr_itr),R(curr_itr),MASS);
             
 
-            if (R_DOT(curr_itr)*R_DOT(next_itr) <= 0){
+            if (at_intrest){
                 at_max = !(at_max);
                 if(at_max){
                     
                     double  chi = calc_rel_chi(HBAR,CHARGE,(double)(K));
-                    // double test += ((2*PI)/chi)-2*PI;
                     
-                    if (PHI(curr_itr) > _2_PI)
-                    {
-                        PHI(curr_itr) = PHI(curr_itr) - _2_PI;
-                    }
                     if(prevMaxVec != 0){
 
                         DELTAPHI(curr_itr) += PHI(curr_itr) - prevMaxVec;
-                        // printf("curr PHI = %.*E , prev PHI  = %.*E \t",PHI(curr_itr),DECIMAL_DIG,prevPhi,DECIMAL_DIG);
+                  
                         printf(" currMaxth - prevMaxVec  %E, acurrate %E \n",PHI(curr_itr) - prevMaxVec, (((2*PI)/chi)-2*PI));
                     }
                                                 
