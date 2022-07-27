@@ -55,7 +55,7 @@ class Ploter:
             plt.legend(frameon=True, loc='lower center', ncol=3)
             plt.savefig("fig_%s_N_%d_2D.svg"%(self.config.timeStamp,n))
 
-        # if  self.config.type ==2 :
+        if  self.config.type ==2 :
             self.plotDeltaPhi()
         plt.show()
 
@@ -110,7 +110,7 @@ class Ploter:
             
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
 
-                plt.plot(analitcal,'r.',label = ('accurate K = '+(str)(k)))
+                plt.plot(analitcal,'.',label = ('accurate K = '+(str)(k)))
 
             plt.legend(frameon=True, loc='lower center', ncol=3)
         

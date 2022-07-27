@@ -12,15 +12,16 @@ char* genrateTimeStamp(){
     struct tm localTime = *localtime(&pctime);
     char* timeStr = (char*) malloc(100);
 
-    sprintf(timeStr,"%02d.%02d.%02d_%02d:%02d:%02d", localTime.tm_year - 100  , localTime.tm_mon + 1, localTime.tm_mday, localTime.tm_hour, localTime.tm_min, localTime.tm_sec);
+    sprintf(timeStr,"%02d.%02d.%02d_%02d.%02d.%02d", localTime.tm_year - 100  , localTime.tm_mon + 1, localTime.tm_mday, localTime.tm_hour, localTime.tm_min, localTime.tm_sec);
 
     return timeStr;
 
 }
 
 FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
-    
-    char orbitPath[strlen(genratedTimeStamp)+100];
+
+    int len = strlen(genratedTimeStamp);
+    char orbitPath[len+100];
 
     if(orbit.m == -1){
         
@@ -55,6 +56,7 @@ char* createResultsPath(LinkedList* filterList){
     }
     #ifdef _WIN32 // make dir for windows
         sprintf(command,"mkdir %s\\%s",RESULT_P,path);
+        printf("mkdir %s\\%s\n",RESULT_P,path);
     #endif
     #ifndef _WIN32
         sprintf(command,"mkdir %s/%s",RESULT_P,path);

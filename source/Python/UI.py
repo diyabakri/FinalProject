@@ -2,7 +2,6 @@
 import os
 from tkinter import *
 
-from click import command
 from .Ploter import Ploter
 from .Config import Config
 from .ResultsReader import ResultsReader
