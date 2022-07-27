@@ -5,7 +5,8 @@ from .ResultsReader import ResultsReader
 from .Config import Config
 from .macro import*
 from matplotlib import colors, rcParams
-# rcParams['grid.alpha'] = 0.0
+
+lineWidth = 3
 class Ploter:
 
     reader:ResultsReader
@@ -51,12 +52,12 @@ class Ploter:
                 plt.xlabel("R($\AA$)")
 
             results = self.reader.getResultsByNKM(n,k,0)
-            plt.polar(results[0],results[1]/unit,label = ('k = '+(str)(k)),linewidth=5)
+            plt.polar(results[0],results[1]/unit,label = ('k = '+(str)(k)),linewidth=lineWidth)
             plt.legend(frameon=True, loc='lower center', ncol=3)
-            plt.savefig("fig_%s_N_%d_2D.svg"%(self.config.timeStamp,n))
+            plt.savefig("./plots/fig_%s_N_%d_2D.svg"%(self.config.timeStamp,n))
 
-        if  self.config.type ==2 :
-            self.plotDeltaPhi()
+        
+        self.plotDeltaPhi()
         plt.show()
 
     def plotDeltaPhi(self):
@@ -79,7 +80,7 @@ class Ploter:
             analitcal = []
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
-            plt.plot(results,label = ('simulated N='+(str)(n)+' K = '+str(k)),linewidth=5)
+            plt.plot(results,label = ('simulated N='+(str)(n)+' K = '+str(k)),linewidth=lineWidth)
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
                 plt.plot(analitcal,'r.',label = ('accurate K = '+(str)(k)))
             plt.legend(frameon=True, loc='lower center', ncol=3)
@@ -106,7 +107,7 @@ class Ploter:
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
             
-            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)),linewidth=3)
+            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)),linewidth=lineWidth)
             
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
 
@@ -155,7 +156,7 @@ class Ploter:
 
             results = self.reader.getResultsByNKM(n,k,m)
             convertedResults = self.convertToSpherical(results) 
-            ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m),linewidth=4)
+            ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m),linewidth=lineWidth)
             plt.legend(frameon=True, loc='lower center', ncol=3)
             plt.savefig("fig_%s_N_%d_3D.svg"%(self.config.timeStamp,n))
         if self.config.type == 4:

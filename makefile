@@ -1,7 +1,8 @@
 CC = gcc
 EXE = electronSimulation
-CFLAGS = -mhard-float -O3 -lm 
+CFLAGS = -mhard-float -O3 -lm  
 MAIN_PY = main.py
+
 ifeq ($(OS),Windows_NT)
 RUN_P = python $(MAIN_PY)
 else
@@ -29,7 +30,7 @@ source_files = $(util_files) $(config_files) $(calculations_files) $(simulation_
 
 
 defult: 
-	$(CC) $(CFLAGS) $(source_files) -lm -o $(EXE)
+	$(CC) $(CFLAGS) $(source_files) -o $(EXE)
 run:
 	./$(EXE)
 plot:

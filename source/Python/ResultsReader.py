@@ -20,14 +20,8 @@ class ResultsReader:
             resultFile = open(self.config.resultFormat%(n,k),"r")
 
         resultLines = resultFile.readlines()
-
-        if reletive == False and "deltaPhi=" in resultLines[0]:
-
-            if self.config.spherical:
-                self.config.type = 4
-            else:
-                self.config.type = 2
-        elif reletive == False and "theta= " in resultLines[0]:
+        
+        if reletive == False and "theta= " in resultLines[0]:
             self.config.type = 3
         else:
             self.config.type = 1       
@@ -123,6 +117,8 @@ class ResultsReader:
             timeStamp = self.config.timeStamp
 
         nFileList = sorted(os.listdir(RESULT_P+timeStamp))
+        if("meta.txt" in nFileList):
+            nFileList.remove("meta.txt")
         
         kLists = []
 

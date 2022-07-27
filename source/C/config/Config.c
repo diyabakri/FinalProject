@@ -2,8 +2,8 @@
 #include <time.h>
 
 bool file_exists (char *filename) {
-  struct stat   buffer;   
-  return (stat (filename, &buffer) == 0);
+    struct stat   buffer;   
+    return (stat (filename, &buffer) == 0);
 }
 
 char* genrateTimeStamp(){
@@ -38,6 +38,33 @@ FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
     return logFile;
 }
 
+int saveMetaData(char* path){
+
+    FILE* config_f = fopen(CONFIG_PATH,"r");
+    if (config_f == NULL){
+        printf("ERROR opening Config file");
+        exit(EXIT_FAILURE);
+    }
+
+    FILE* meta = fopen(path,"w");
+
+    if (meta == NULL){
+        printf("ERROR opening meta file");
+        exit(EXIT_FAILURE);
+    }
+    int n = -1;
+    char** configLines = readLines(config_f,&n);
+    
+    for (int i = 0 ;i < n ; i++ ){
+        fprintf(meta,"%s\n",configLines[i]);
+        free(configLines[i]);
+    }
+    free(configLines);
+    fclose(config_f);
+    fclose(meta);
+    return 1;
+}
+
 char* createResultsPath(LinkedList* filterList){
     
     char* path = genrateTimeStamp(); 
@@ -51,17 +78,18 @@ char* createResultsPath(LinkedList* filterList){
     if (!file_exists(RESULT_P)){
         sprintf(command,"mkdir %s",RESULT_P);
         if(system(command)<0){
+            printf("error creating file");
             return NULL;
         }
     }
     #ifdef _WIN32 // make dir for windows
         sprintf(command,"mkdir %s\\%s",RESULT_P,path);
-        printf("mkdir %s\\%s\n",RESULT_P,path);
     #endif
     #ifndef _WIN32
         sprintf(command,"mkdir %s/%s",RESULT_P,path);
     #endif
         if(system(command)<0){
+            printf("error creating file");
             return NULL;
         }
     for(int i = 0 ; i < listSize ; i++){
@@ -77,6 +105,7 @@ char* createResultsPath(LinkedList* filterList){
             #endif
             
             if(system(command)<0){
+                printf("error creating file");
                 return NULL;
             }
 
@@ -93,8 +122,10 @@ char* createResultsPath(LinkedList* filterList){
             #endif
                     
             if(system(command)<0){
+                printf("error creating file");
                 return NULL;
             }
+
             
             last_k = orbit->k;
         }
@@ -102,7 +133,7 @@ char* createResultsPath(LinkedList* filterList){
         L_Append(filterList,orbit);
 
     }
-
+    
     return path;
 }
 
@@ -177,6 +208,7 @@ Config* getInitVals(){
     }
 
     fclose(config_f);
+
     config_f = fopen(CONFIG_PATH,"w");
 
     for(int i = 0 ; i <length ; i++){
@@ -189,7 +221,14 @@ Config* getInitVals(){
     }
     free(configLines);
     fclose(config_f);
+    char metapath[100];
+    sprintf(metapath,"%s/%s/meta.txt",RESULT_P,TIME_STAMP);
 
+    if(saveMetaData(metapath)<0){
+        printf("error saving meta data");
+        return NULL;
+    }
+    
 
     return config;
 
