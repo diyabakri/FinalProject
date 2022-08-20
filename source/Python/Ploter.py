@@ -1,12 +1,15 @@
+from ast import Lambda
+from matplotlib.markers import MarkerStyle
 import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import *  
 from .ResultsReader import ResultsReader
 from .Config import Config
-from .macro import*
+from .Globals import*
 from matplotlib import colors, rcParams
+from matplotlib.ticker import FormatStrFormatter
 
-lineWidth = 3
+
 class Ploter:
 
     reader:ResultsReader
@@ -16,48 +19,48 @@ class Ploter:
 
         self.config = config
         self.reader = reader
-        
-    def getlimits(slef,N):
-
-        a = N**4
-        b = N**2
-
-        c = (a-b)**0.5
-
-        a = N**2 + c
-        b = N**2 - c
-
-        return (-a*0.52977210903 , a * 0.52977210903)
-
-    def convertToSpherical(self,results):
-
-        X_list = results[2]*np.cos(results[0])*np.sin(results[1])
-        Y_list = results[2]*np.sin(results[0])*np.sin(results[1])
-        Z_list = results[2]*np.cos(results[1])
-        return np.vstack((X_list,Y_list,Z_list))
-
+              
     def plotPolar(self):
-        
+        # Anit Armstrong 
         unit = 1e-8
-        
+
+        plotTitles = 'abcdefghijklmn'
+
         for i in range(len(self.config.filter.orbitList)): 
 
             orbit = self.config.filter.orbitList[i]
             n= orbit[0]
             k= orbit[1]
-            
+            lim = getlimits(n)
             if (i > 0 and  n!= self.config.filter.orbitList[i-1][0]) or i==0 :
+
                 plt.figure()
-                plt.axes(projection = 'polar')
-                plt.xlabel("R($\AA$)")
+                plt.xlabel("x ($\AA$)",fontdict=font)
+                plt.ylabel("y ($\AA$)",fontdict=font)
+                plt.title(("(%c)")%plotTitles[n-1],fontdict=titleFont)
+                plt.xticks(fontsize=TICKS_FONT_SIZE)
+                plt.yticks(fontsize=TICKS_FONT_SIZE)
+                # plt.ylim(lim)
 
-            results = self.reader.getResultsByNKM(n,k,0)
-            plt.polar(results[0],results[1]/unit,label = ('k = '+(str)(k)),linewidth=lineWidth)
-            plt.legend(frameon=True, loc='lower center', ncol=3)
-            plt.savefig("./plots/fig_%s_N_%d_2D.svg"%(self.config.timeStamp,n))
+            # results = [Phi , Roh]
+            results = self.reader.getResults(n,k,0)
+            # results = [x , y]
+            results = polarToCartzaian(results)
 
-        
+            lineType = getLineType(k)
+            # exg k = 1
+            #plt.plot(   X          ,          Y     , "-"   , label = "k = 1" )
+            plt.plot(results[0]/unit,results[1]/unit,lineType,label = ('k = '+(str)(k)),linewidth = LINE_WIDTH-2)
+            
+            # uncomment to show plot legend
+            ''' plt.legend(frameon=True, loc='lower center', ncol=3)'''
+            
+            # plt.savefig("./plots/fig_%s_N_%d_2D.eps"%(self.config.timeStamp,n))
+
+        # drow Center point
+        plt.plot(0,0,'ko')
         self.plotDeltaPhi()
+
         plt.show()
 
     def plotDeltaPhi(self):
@@ -69,21 +72,34 @@ class Ploter:
             orbit = sortedOrbitList[i]
             n= orbit[0]
             k= orbit[1]
-            analical_val = self.calc_accrute_deltaPHi(k)
-            if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
+            reletive = True
+            if self.config.type == 1:
+                reletive = False
+            
+            analical_val = calc_accrute_deltaPHi(k,reletive=reletive)
+            # analical_val = 0
+            
+            if (i > 0 and  n!= sortedOrbitList[i-1][0]) or i==0 :
                 plt.figure()
-                plt.ylabel("(${rad}$)")
-                plt.xlabel("revelution")
-
-            results = np.unique(self.reader.getResultsByNKM(n,k,0,reletive=True))
-            print(results)
+                plt.ylabel("$10^8\Delta\psi$",fontdict=font)
+                plt.xlabel("revolution number",fontdict=font)
+                plt.xticks(range(0,11),fontsize=30) 
+                plt.yticks(fontsize=30)
+                # plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%.8f'))
+            
+            results = np.unique(self.reader.getResults(n,k,0,reletive=True))
             analitcal = []
+
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
-            plt.plot(results,label = ('simulated N='+(str)(n)+' K = '+str(k)),linewidth=lineWidth)
+            
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
-                plt.plot(analitcal,'r.',label = ('accurate K = '+(str)(k)))
-            plt.legend(frameon=True, loc='lower center', ncol=3)
+                lineType = getLineType(k)
+                plt.plot(analitcal,lineType,label = ('accurate K = '+(str)(k)),linewidth = LINE_WIDTH)
+            
+            marker = getMarkerType(k)
+
+            plt.plot(results,marker,label = ('simulated N='+(str)(n)+' K = '+str(k)),markersize = MARKER_SIZE)
     
     def plotDeltaPhiSpherical(self):
 
@@ -96,18 +112,23 @@ class Ploter:
             n= orbit[0]
             k= orbit[1]
             m= orbit[2]
-            analical_val = self.calc_accrute_deltaPHi(k)
+            reletive = True
+            if self.config.type == 3:
+                reletive = False
+            
+            analical_val = calc_accrute_deltaPHi(k,reletive=reletive)
+
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
                 plt.figure()
                 plt.ylabel("(${rad}$)")
                 plt.xlabel("revelution")
 
-            results = np.unique(self.reader.getResultsByNKM(n,k,m,reletive=True))
+            results = np.unique(self.reader.getResults(n,k,m,reletive=True))
             analitcal = []
             for j in range(len(results)):
                 analitcal.append(analical_val*j)
             
-            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)),linewidth=lineWidth)
+            plt.plot(results,label = ('simulated N='+(str)(n)+' k='+str(k) + ' m='+str(m)),linewidth = LINE_WIDTH)
             
             if (i > 0 and  k!= sortedOrbitList[i-1][1]) or i==0 :
 
@@ -115,20 +136,6 @@ class Ploter:
 
             plt.legend(frameon=True, loc='lower center', ncol=3)
         
-    def calc_accrute_deltaPHi(self,k:int):
-        
-        C =29979245800
-        e =4.8032068E-10
-        h_bar =1.05457266E-27
-
-        arg1 = h_bar*C*k
-        arg1 = (e*e)/arg1
-        arg1*=arg1
-        arg1 = 1-arg1
-        arg1 = np.sqrt(arg1)
-
-        return (((2*np.pi)/arg1)-2*np.pi)
-
     def sphericalPlot(self):
 
         unit = 1e-8
@@ -144,21 +151,24 @@ class Ploter:
 
                 fig = plt.figure()
                 ax = fig.add_subplot(projection = '3d')
+         
                 ax.set_xlabel("X($\AA$)")
                 ax.set_ylabel("Y($\AA$)")
                 ax.set_zlabel("Z($\AA$)")
 
-                lim = self.getlimits(orbit[0])
+                lim = getlimits(orbit[0])
                 
                 ax.set_xlim(lim)
                 ax.set_ylim(lim)
                 ax.set_zlim(lim)
 
-            results = self.reader.getResultsByNKM(n,k,m)
-            convertedResults = self.convertToSpherical(results) 
-            ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,label = ('k = %d m = %d')%(k,m),linewidth=lineWidth)
-            plt.legend(frameon=True, loc='lower center', ncol=3)
-            plt.savefig("fig_%s_N_%d_3D.svg"%(self.config.timeStamp,n))
+            results = self.reader.getResults(n,k,m)
+            convertedResults = convertToSpherical(results) 
+            ax.plot(-convertedResults[0]/unit,-convertedResults[1]/unit,-convertedResults[2]/unit,getLineType(k),label = ('k = %d m = %d')%(k,m),linewidth = LINE_WIDTH)
+            # plt.legend(frameon=True, loc='lower center', ncol=3)
+
+            # plt.savefig("fig_%s_N_%d_3D.svg"%(self.config.timeStamp,n))
+
         if self.config.type == 4:
             self.plotDeltaPhiSpherical()
         plt.show()

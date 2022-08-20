@@ -152,6 +152,7 @@ LinkedList* getFilterList(simType type){
     for(int i = 0 ; i < lineCount ; i++){
         free(filterLines[i]);
     }
+    
     free(filterLines);
     fclose(filterFile);
     LinkedList_print(list,printFilter);

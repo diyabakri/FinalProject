@@ -15,6 +15,7 @@ void polar_sim_ele(Config *config){
 
 
     long double Hbar_sqr = HBAR*HBAR;
+    
     int listSize = L_Size(FILTTER);
     
     for (int i = 0 ; i < listSize ; i++){
@@ -53,6 +54,7 @@ void polar_sim_ele(Config *config){
             PHI_DOT(next_itr) = calc_phi_dot(curr_l, MASS, R(curr_itr));
             
             if (at_intrest){
+
                 at_max = !(at_max);
                 
                 if(at_max){
@@ -60,7 +62,13 @@ void polar_sim_ele(Config *config){
                     if(prevMaxVec != 0){
 
                         DELTAPHI(curr_itr) += PHI(curr_itr) - prevMaxVec;
+                        
+                        if(config->deltaPsi_mode){
+                            logItration(res_f,curr_itr);
+                        }
+                        
                         DELTAPHI(next_itr) = DELTAPHI(curr_itr);
+
                     }
                                                 
                     prevR = R(curr_itr);
@@ -70,17 +78,19 @@ void polar_sim_ele(Config *config){
                 }
 
             }
-            if(it % LOG_P == 0){
+            if(it % LOG_P == 0 && !(config->deltaPsi_mode)){
                 logItration(res_f,curr_itr);
             }
+
             if(config->itr_mode){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions < 0){
+                if(revolutions <= 0){
                     break;
                 }
             }
+            
             simItr* temp = curr_itr;
             curr_itr = next_itr;
             next_itr = temp;
@@ -186,7 +196,11 @@ void polar_sim_rel_ele(Config *config){
                     if(prevMaxVec != 0){
 
                         DELTAPHI(curr_itr) += PHI(curr_itr) - prevMaxVec;
-                  
+                        if(config->deltaPsi_mode){
+                            logItration(res_f,curr_itr);
+                        }
+                        DELTAPHI(next_itr) = DELTAPHI(curr_itr);
+
                         printf(" currMaxth - prevMaxVec  %E, acurrate %E \n",PHI(curr_itr) - prevMaxVec, (((2*PI)/chi)-2*PI));
                     }
                                                 
@@ -201,10 +215,9 @@ void polar_sim_rel_ele(Config *config){
             
             GAMMA(next_itr) = calc_rel_gamma(curr_l,MASS,R(curr_itr),R_DOT(curr_itr));
 
-            DELTAPHI(next_itr) = DELTAPHI(curr_itr);
 
             
-            if(it % LOG_P == 0){
+            if(it % LOG_P == 0 && !(config->deltaPsi_mode)){
                 logItration(res_f,curr_itr);
 
             } 
@@ -212,7 +225,7 @@ void polar_sim_rel_ele(Config *config){
                 j++;
             }else if(at_intrest){
                 revolutions -= 0.5;
-                if(revolutions < 0){
+                if(revolutions <= 0){
                     break;
                 }
             }

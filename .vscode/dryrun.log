@@ -1,5 +1,4 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/diya/Desktop/Final_Project'
-gcc -mhard-float -O3 -lm  source/C/utility/*.c  source/C/config/*.c source/C/Polar/calculations/*.c source/C/Spherical/calculations/*.c source/C/Spin/calculations/*.c source/C/Polar/*.c source/C/Spherical/*.c source/C/Spin/*.c source/C/main.c -lm -o electronSimulation
-make: Leaving directory '/home/diya/Desktop/Final_Project'
- 
+make.exe --dry-run --always-make --keep-going --print-directory
+'make.exe' is not recognized as an internal or external command,
+operable program or batch file.
+

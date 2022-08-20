@@ -1,12 +1,13 @@
 from distutils.command.config import config
 import numpy as np
 from .filter import Filter
-from .macro import*
+from .Globals import*
 
 class Config:
     
-    revolutions:int
+    revolutions:float
     iterationMode:bool
+    deltaPsiMode:bool
     t_inrev:float
     itrations:int
     log_p:int
@@ -14,80 +15,21 @@ class Config:
     type:int
     spherical:bool
     resultFormat:str
-    resultsPath = []
     timeStamp:str
     filePath:str
     fillterPath:str
 
     def __init__(self,configPath:str,filterpath:str = None):
 
-        config = open(configPath,"r")
-        configLines = config.readlines()
         
         self.filePath = configPath
         self.fillterPath = filterpath
-
-        for i in range(len(configLines)):
-            currLine = configLines[i]
-            valueIndex = currLine.find('=')+1
-            if "itrs" in  currLine:
-                self.itrations = (int)(currLine[valueIndex:])
-            elif "logPerod" in currLine:
-                self.log_p = (int)(currLine[valueIndex:])
-            elif "Type" in currLine:
-                self.type = (int)(currLine[valueIndex:])
-                if self.type > 2:
-                    self.spherical = True
-                else:
-                    self.spherical =False
-            elif "TimeStamp" in currLine:
-                self.timeStamp = currLine[valueIndex:-1]
-            elif "revolutions" in currLine:
-                self.revolutions = (int)(currLine[valueIndex:])
-            elif "iterationMode" in currLine:
-                self.iterationMode = (bool)((int)(currLine[valueIndex:])) 
-            elif "t =" in currLine:
-                self.t_inrev =  (float)(currLine[valueIndex:])
-                 
-       
-        pathStr = RESULT_P+self.timeStamp+"/results_N%d/results_K%d"
-        
-        if self.spherical:
-            pathStr+= "/results_M%d.txt"
-        else:
-            pathStr+= ".txt"
-
-        self.resultFormat = pathStr
+        self.filter = None
+        self.readFromFile(configPath)
 
         if(filterpath != None):
         
             self.filter = Filter(filterpath,self.spherical)
-            self.createListFiles()
-        
-    def setTimeStamp(self,timeStamp:str,spherical:bool):
-        
-        self.timeStamp = timeStamp
-
-        pathStr = RESULT_P+self.timeStamp+"/results_N%d/results_K%d"
-        
-        if spherical:
-            pathStr+= "/results_M%d.txt"
-        else:
-            pathStr+= ".txt"
-
-        self.resultFormat = pathStr
-
-        self.spherical = spherical
-    
-    def createListFiles(self):
-
-        for i in range(len(self.filter.orbitList)):            
-            orbit = self.filter.orbitList[i]
-            if  self.spherical:
-
-                self.resultsPath.append(self.resultFormat%(orbit[0],orbit[1],orbit[2]))
-            else:
-                self.resultsPath.append(self.resultFormat%(orbit[0],orbit[1]))
 
     def writeToFile(self):
         
@@ -105,6 +47,8 @@ class Config:
                 currLine = "revolutions ="+(str)(self.revolutions)+"\n"
             elif "iterationMode" in currLine:
                 currLine = "iterationMode ="+(str)(self.iterationMode) +"\n"
+            elif "deltaPsiMode" in currLine:
+                currLine = "deltaPsiMode ="+(str)(self.deltaPsiMode) +"\n"
             elif "t =" in currLine:
                 currLine = "t =%E\n"%(self.t_inrev)
 
@@ -116,7 +60,57 @@ class Config:
         configFile.writelines(configLines)
         configFile.close()
 
+    def readFromFile(self,filePath):
+        
+        metaFile = open(filePath,'r')
+        configLines = metaFile.readlines()
+        for i in range(len(configLines)):
+            
+            currLine = configLines[i]
+            valueIndex = currLine.find('=')+1
+            if "itrs" in  currLine:
+                self.itrations = (int)(currLine[valueIndex:])
+            elif "logPerod" in currLine:
+                self.log_p = (int)(currLine[valueIndex:])
+            elif "Type" in currLine:
+                self.type = (int)(currLine[valueIndex:])
+                if self.type > 2:
+                    self.spherical = True
+                else:
+                    self.spherical =False
+            elif "TimeStamp" in currLine:
+                self.timeStamp = currLine[valueIndex:-1]
+            elif "revolutions" in currLine:
+                self.revolutions = (float)(currLine[valueIndex:])
+            elif "iterationMode" in currLine:
+                self.iterationMode = (bool)((int)(currLine[valueIndex:])) 
+            elif "deltaPsiMode" in currLine:
+                self.deltaPsiMode = (bool)((int)(currLine[valueIndex:])) 
+            elif "t =" in currLine:
+                self.t_inrev =  (float)(currLine[valueIndex:])
+                 
+       
+        pathStr = RESULT_P+self.timeStamp+"/results_N%d/results_K%d"
+        
+        if self.spherical:
+            pathStr+= "/results_M%d.txt"
+        else:
+            pathStr+= ".txt"
+
+        self.resultFormat = pathStr
+        if self.filter != None:
+
+            self.filter.changeTimeStamp(self.timeStamp)
 
     def __str__(self) -> str:
-        string = (str)(self.revolutions)+"\n"+(str)(self.itrations)+"\n"+(str)(self.iterationMode)+"\n"+(str)(self.t_inrev)+"\n"+(str)(self.type)+"\n"+(str)(self.log_p)+"\n"+(str)(self.timeStamp)+"\n"
+        
+        string ="Revolutions: "+(str)(self.revolutions)+"\n"
+        string +="Iterirations: "+(str)(self.itrations)+"\n"
+        string +="Iterirations mode:"+(str)(self.iterationMode)+"\n"
+        string +="deltaPsi mode:"+(str)(self.deltaPsiMode)+"\n"
+        string +="Time Step :"+(str)(self.t_inrev)+"\n"
+        string +="Type :"+(str)(self.type)+"\n"
+        string +="Log Period :"+(str)(self.log_p)+"\n"
+        string +="Time Stamp :"+(str)(self.timeStamp)+"\n"
+        
         return string
