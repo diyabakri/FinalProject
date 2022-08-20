@@ -31,6 +31,4 @@ void polar_sim_ele(Config *config);
  */
 void polar_sim_rel_ele(Config *config);
 
-void logItration(FILE *result_f ,simItr* itr);
-
 #endif //POLAR_H_

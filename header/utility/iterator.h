@@ -18,5 +18,6 @@ void initItrations(simItr* itr , simType type);
 bool iterate(simItr* curr_itr , simItr* next_itr , Config* config);
 
 void logItration(FILE* result_f ,simItr* itr);
+ 
 
 #endif//ITERATOR_H_

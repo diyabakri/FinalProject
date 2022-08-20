@@ -47,7 +47,9 @@ double calc_rel_gamma(double l , double mass , double r, double r_dot);
  */
 double calc_rel_r_dot_dot(double l_sqr , double mass , double gamma , double r , double charge , double r_dot);
 /**
- * @brief 
+ * @brief calcuates the analitcal ratio of the apocenter
+ * 
+ *          CHI = (1 - (e^2 / (h_bar*C*energy_level))^2)
  * 
  * @param h_bar 
  * @param charge 

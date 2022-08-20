@@ -4,7 +4,7 @@ Bohr's Model Electron Simulation is program for simulationg the movment of an el
 in a given orbit path that is determinant by Bohr constant aka "H bar"
 
 ## Installation
-Use the terminal to install [Python](https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe)
+Use the terminal to install [Python3](https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe)
 
 ```bash
 sudo apt-get install python
@@ -25,6 +25,8 @@ To change the settings of the simulation you need to edit the "config.ini" file
 revolutions =5
 # flag for which mode to run the code according to the value in revolutions (False / 0 ) or the value in itrs (True / 1) 
 iterationMode =0
+# flag for which mode to only log the itartions on full revelutions 0 log acrroding to logPerod 1 Log once every revelution 
+deltaPsiMode =0
 # number of itrations to run for each orbit (only used when iterationMode = 1 )
 itrs =10000000
 # used as the value of the charge of the electron in every equation

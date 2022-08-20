@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
-#include "../config/Config.h"
 #include "calculations/SpinCalc.h"
+#include "../config/Config.h"
 #include "../utility/macros.h"
 #include "../utility/types.h"
 #include "../utility/iterator.h"
@@ -17,6 +17,5 @@
 
 void spin_sim_ele(Config *config);
 
-void logItration(FILE *result_f ,simItr* itr);
 
 #endif //SPIN_H_
