@@ -4,6 +4,13 @@
 
 typedef struct _linkedList LinkedList;
 
+
+/**
+ * @brief typedef struct Orbit contains the quantom numbers for an orbit {n,k,m} 
+ * @param n energy level
+ * @param k 
+ * @param m
+ */
 typedef struct {
     
     short n;
@@ -11,6 +18,16 @@ typedef struct {
     short m;
 
 }Orbit;
+/**
+ * @brief Enum of the simulation type 
+ * @param POLAR  1
+ * @param REL_POLAR  2
+ * @param SPHERICAL  3
+ * @param REL_SPHERICAL  4
+ * @param SPIN  5
+ * @param REL_SPIN  6
+*/
+
 
 typedef enum{
 
@@ -22,9 +39,13 @@ typedef enum{
     REL_SPIN = 6
 
 }simType;
-
+/**
+ * @brief 
+ * 
+ */
 typedef struct Config{
     bool itr_mode;
+    bool deltaPsi_mode;
     simType type; // idicator to the type of equations to use 0 use regular 1 use reletivity 
     int log_p; // the number of ittrations to skip before logging
     int itrs; // number of iteration to run
@@ -38,7 +59,10 @@ typedef struct Config{
     char* timeStamp;// the id of the test results 
     
 }Config;
-
+/**
+ * @brief 
+ * 
+ */
 typedef struct {// struct simItr (simulation iteration) to hold the current and next iteration values
     double t;// iteration time
     double r;// iteration distance

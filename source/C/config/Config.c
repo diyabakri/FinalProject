@@ -1,11 +1,23 @@
 #include "../../../header/config/Config.h"
 #include <time.h>
 
+
+/**
+ * @brief  check if a given folder exists 
+ * 
+ * @param filename :path to file 
+ * @return true if file exists
+ * @return false if file does not exist 
+ */
 bool file_exists (char *filename) {
     struct stat   buffer;   
     return (stat (filename, &buffer) == 0);
 }
-
+/**
+ * @brief generates the time stamp combining the current date and time 
+ * 
+ * @return char* current time in formatt YY.MM.DD_HH.MM.SS
+ */
 char* genrateTimeStamp(){
 
     time_t pctime = time(NULL);
@@ -17,7 +29,13 @@ char* genrateTimeStamp(){
     return timeStr;
 
 }
-
+/**
+ * @brief returns pointer to the results file for given orbit
+ * 
+ * @param orbit Struct orbit {n,k,m}
+ * @param genratedTimeStamp time stamp used to finde approprite file
+ * @return FILE* 
+ */
 FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
 
     int len = strlen(genratedTimeStamp);
@@ -37,7 +55,12 @@ FILE* getOrbitFile(Orbit orbit,char* genratedTimeStamp){
     
     return logFile;
 }
-
+/**
+ * @brief creates a copy of the current config file as meta.txt
+ * 
+ * @param path path to save copy
+ * @return int 1 succses -1 fail
+ */
 int saveMetaData(char* path){
 
     FILE* config_f = fopen(CONFIG_PATH,"r");
@@ -64,7 +87,12 @@ int saveMetaData(char* path){
     fclose(meta);
     return 1;
 }
-
+/**
+ * @brief Create a Results Path for all the folders and subfolders for results txt files
+ * 
+ * @param filterList LinkedList* of the current orbits to simulate
+ * @return char* the current time stamp
+ */
 char* createResultsPath(LinkedList* filterList){
     
     char* path = genrateTimeStamp(); 
@@ -92,6 +120,7 @@ char* createResultsPath(LinkedList* filterList){
             printf("error creating file");
             return NULL;
         }
+
     for(int i = 0 ; i < listSize ; i++){
         Orbit* orbit = (Orbit*)L_Pop(filterList);
 
@@ -155,11 +184,15 @@ Config* getInitVals(){
     for(int i = 0 ; i < length ; i++){
     
         char* currLine = configLines[i];
+
         if(strstr(currLine,"revolutions =") == currLine){
             config->revolutions = parceDouble(currLine);
             continue;
         }else if(strstr(currLine,"iterationMode =") == currLine){
             config->itr_mode = (bool)parceInt(currLine);
+            continue;
+        }else if(strstr(currLine,"deltaPsiMode =") == currLine){
+            config->deltaPsi_mode = (bool)parceInt(currLine);
             continue;
         }else if(strstr(currLine,"itrs =") == currLine){
             config->itrs = parceInt(currLine);
@@ -186,7 +219,6 @@ Config* getInitVals(){
     }
     
     config->filtterList = getFilterList(config->type);
-    
     
     
 

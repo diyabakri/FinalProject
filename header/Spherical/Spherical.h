@@ -30,6 +30,5 @@ void spherical_sim_ele(Config *config);
  */
 void rel_spherical_sim_ele(Config *config);
 
-void logItration(FILE *result_f ,simItr* itr);
 
 #endif //SPHERICAL_H_

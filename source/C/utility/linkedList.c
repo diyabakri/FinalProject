@@ -152,7 +152,7 @@ int LinkedList_insert(LinkedList* list , int index , void* data){
     
     }else if(index == list->size){
     
-        return LinkedList_prepend(list,data);
+        return LinkedList_append(list,data);
     
     }else{
         
@@ -241,6 +241,7 @@ void* LinkedList_remove(LinkedList* list , int index){
         return NULL;
     
     }else{
+    
         NodeToDel = list->head;
        
         for(int i = 1 ; i <=index ; i++){
@@ -256,6 +257,7 @@ void* LinkedList_remove(LinkedList* list , int index){
         nextNode->prev = prevNode;
 
     }
+
     void* data = NodeToDel->data;
     free(NodeToDel);
     list->size--;

@@ -17,12 +17,28 @@ void endTime(Orbit orbit){
 
 }
 
+double calc_4_Runge_Kutta(double x , double dx){
+
+    double k1 = x;
+    double k2 = x+0.5*dx ;
+    double k3 = x+0.5*dx ;
+    double k4 = x+dx;    
+    double res = x+((dx/6.0)*(k1+(2*k2)+(2*k3)+k4));
+    // printf("k1 = %e , k2 = %e, k3 = %e, k4 = %e , res = %e\n",k1,k2,k3,k4,res);
+
+    return res;
+}
+
 bool iterate(simItr* curr_itr , simItr* next_itr , Config* config){
 
     T(next_itr) += T_INTERVAL;
-    R(next_itr) = R(curr_itr)+(R_DOT(curr_itr)* T_INTERVAL);
+
+    R(next_itr) = R(curr_itr) + (R_DOT(curr_itr)*T_INTERVAL);
+
     R_DOT(next_itr) = R_DOT(curr_itr) + (R_DOT_DOT(curr_itr) * T_INTERVAL);
+    
     PHI(next_itr) = PHI(curr_itr) + (PHI_DOT(curr_itr)* T_INTERVAL);
+    
     if (PHI(next_itr) > _2_PI)
     {
         PHI(next_itr) = PHI(next_itr) - _2_PI;
@@ -41,6 +57,8 @@ bool iterate(simItr* curr_itr , simItr* next_itr , Config* config){
 
 }
 
+
+
 void initItrations(simItr* itr , simType type){
     
     T(itr) = 0;
@@ -49,11 +67,14 @@ void initItrations(simItr* itr , simType type){
     R_DOT_DOT(itr) = 0;
     PHI(itr) = 0;
     PHI_DOT(itr) = 0;
+    // REL
     GAMMA(itr) = -1.0;
     DELTAPHI(itr)= 0;
+    // 3D
     THETA(itr) = -1.0;
     THETA_DOT(itr)=-1.0;
     THETA_DOT_DOT(itr)=-1.0;
+    // spin
     EPSILON(itr) = -1.0;
     PHI_DOT_0(itr) = -1.0;
 
